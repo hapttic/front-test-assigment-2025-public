@@ -1,13 +1,13 @@
 # Hapttic Frontend Challenge: Analytics Dashboard
 
-## 🚀 The Mission
+## The Mission
 At **Hapttic**, we build high-performance, data-driven applications. We don't just install libraries; we engineer solutions.
 
 Your task is to build a **Campaign Analytics Dashboard** from scratch. We are looking for architectural maturity, strict typing, and the ability to process raw data on the client side.
 
 ---
 
-## 🛑 Submission Protocol (Strictly Enforced)
+## Submission Protocol (Strictly Enforced)
 We evaluate your Git workflow as much as your code.
 
 1.  **FORK this repository** to your personal GitHub account.
