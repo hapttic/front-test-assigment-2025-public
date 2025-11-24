@@ -78,6 +78,6 @@ We will be reviewing:
 3.  Use the `data.json` provided below.
 4.  Start coding.
 
-For question please reach me out on Telegram: `@lukalortk`
+For questions please reach me out on Telegram: `@lukalortk`
 
 Good luck!
