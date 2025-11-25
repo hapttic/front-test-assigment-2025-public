@@ -1,0 +1,19 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+.link {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  border: 0;
+  background-color: transparent;
+}
