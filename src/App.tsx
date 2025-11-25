@@ -6,6 +6,7 @@ import { StatsOverview } from './components/StatsOverview';
 import { Chart } from './components/Chart';
 import { DataGrid } from './components/DataGrid';
 import { ThemeToggle } from './components/ThemeToggle';
+import { LoadingSkeleton } from './components/LoadingSkeleton';
 import type { SortField } from './types';
 import './App.css';
 
@@ -47,7 +48,7 @@ function App() {
           <ThemeToggle theme={theme} onToggle={toggleTheme} />
         </header>
         <main className="app-main">
-          <div className="loading">Loading data...</div>
+          <LoadingSkeleton />
         </main>
       </div>
     );
