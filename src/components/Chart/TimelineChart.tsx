@@ -1,10 +1,37 @@
 import React from "react";
 import "./TimelineChart.scss";
 
-const TimelineChart: React.FC = () => {
+type MetricType = "Clicks" | "Revenue";
+
+interface TimelineChartProps {
+  selectedMetric: MetricType;
+  onSelectMetric: (type: MetricType) => void;
+}
+
+const TimelineChart: React.FC<TimelineChartProps> = ({
+  selectedMetric,
+  onSelectMetric,
+}) => {
+  const options: MetricType[] = ["Clicks", "Revenue"];
+
   return (
     <div className="timeline-chart-container">
-      <h3>Performance Timeline</h3>
+      <div className="chart-header">
+        <h3>Performance Timeline</h3>
+        <div className="button-group">
+          {options.map((option) => (
+            <button
+              key={option}
+              className={`control-btn ${
+                selectedMetric === option ? "active" : ""
+              }`}
+              onClick={() => onSelectMetric(option)}
+            >
+              {option}
+            </button>
+          ))}
+        </div>
+      </div>
       <div className="chart-wrapper">
         <svg className="chart-svg" viewBox="0 0 800 300">
           <line

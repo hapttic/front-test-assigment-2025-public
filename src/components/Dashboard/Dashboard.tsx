@@ -6,8 +6,12 @@ import "./Dashboard.scss";
 
 type AggregationType = "Hourly" | "Daily" | "Weekly" | "Monthly";
 
+type MetricType = "Clicks" | "Revenue";
+
 const Dashboard: React.FC = () => {
   const [aggregation, setAggregation] = useState<AggregationType>("Daily");
+
+  const [metric, setMetric] = useState<MetricType>("Clicks");
 
   return (
     <div className="dashboard">
@@ -17,7 +21,6 @@ const Dashboard: React.FC = () => {
           <h1>Dashboard</h1>
         </div>
       </header>
-
       <main className="dashboard-content">
         <div className="controls-section">
           <AggregationControls
@@ -25,11 +28,9 @@ const Dashboard: React.FC = () => {
             onSelect={setAggregation}
           />
         </div>
-
         <div className="chart-section">
-          <TimelineChart />
+          <TimelineChart selectedMetric={metric} onSelectMetric={setMetric} />
         </div>
-
         <div className="grid-section">
           <DataGrid />
         </div>
