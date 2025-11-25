@@ -48,7 +48,7 @@ export function Chart({ data, metric }: ChartProps) {
 
     // Generate line path
     const linePath = data
-      .map((d, i) => {
+      .map((_d, i) => {
         const x = xScale(i);
         const y = yScale(values[i] ?? 0);
         return i === 0 ? `M ${x} ${y}` : `L ${x} ${y}`;

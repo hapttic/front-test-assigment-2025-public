@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useAggregatedData } from './hooks/useAggregatedData';
 import { useTheme } from './hooks/useTheme';
-import { AggregationControls } from './components/AggregationControls';
 import { StatsOverview } from './components/StatsOverview';
 import { Chart } from './components/Chart';
 import { DataGrid } from './components/DataGrid';
