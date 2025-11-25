@@ -7,7 +7,7 @@ import DataGrid from "./components/DataGrid";
 import useAggrigatedData from "../../lib/hooks/useAggrigatedData";
 
 export default function Dashboard() {
-  const { data: aggregatedData, period, isLoading } = useAggrigatedData();
+  const { data: aggregatedData, period } = useAggrigatedData();
 
   return (
     <Wrapper className="min-h-screen bg-background space-y-8 py-12">
@@ -16,14 +16,9 @@ export default function Dashboard() {
         <AggregationControls />
         <MetricControls />
       </div>
+
       <CampaignMetrics data={aggregatedData} />
-      {isLoading ? (
-        <p>Loading data...</p>
-      ) : (
-        <>
-          <DataGrid data={aggregatedData} period={period} />
-        </>
-      )}
+      <DataGrid data={aggregatedData} period={period} />
     </Wrapper>
   );
 }

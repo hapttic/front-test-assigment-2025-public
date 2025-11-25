@@ -47,7 +47,7 @@ export default function DataGrid({ data, period }: props) {
   } = useSort(data);
 
   return (
-    <div className="rounded-xl border border-border bg-card">
+    <div className="rounded-xl border border-border bg-card max-h-[500px] overflow-y-scroll">
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead>
@@ -67,58 +67,6 @@ export default function DataGrid({ data, period }: props) {
                   </button>
                 </th>
               ))}
-
-              {/* <th className={thClass}>
-                <button
-                  onClick={() => handleSort("date")}
-                  className={btnClass + " " + activeSortClass("date")}
-                >
-                  Date
-                  <SortIcon
-                    field="date"
-                    sortField={sortBy}
-                    sortDirection={sortOrder}
-                  />
-                </button>
-              </th>
-              <th className={thClass}>
-                <button
-                  onClick={() => handleSort("campaigns")}
-                  className={btnClass + " " + activeSortClass("campaigns")}
-                >
-                  Campaigns Active
-                </button>
-              </th>
-              <th className={thClass}>
-                <button
-                  onClick={() => handleSort("impressions")}
-                  className={
-                    "ml-auto " + btnClass + " " + activeSortClass("impressions")
-                  }
-                >
-                  Total Impressions
-                </button>
-              </th>
-              <th className={thClass}>
-                <button
-                  onClick={() => handleSort("clicks")}
-                  className={
-                    "ml-auto " + btnClass + " " + activeSortClass("clicks")
-                  }
-                >
-                  Total Clicks
-                </button>
-              </th>
-              <th className={thClass}>
-                <button
-                  onClick={() => handleSort("revenue")}
-                  className={
-                    "ml-auto " + btnClass + " " + activeSortClass("revenue")
-                  }
-                >
-                  Total Revenue
-                </button>
-              </th> */}
             </tr>
           </thead>
 

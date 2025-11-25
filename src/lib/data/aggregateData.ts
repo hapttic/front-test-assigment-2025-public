@@ -1,9 +1,7 @@
 import { data } from "../../lib/data/data";
 import type { AggregatedData, AggregationPeriod, Metric } from "../types";
 
-export async function aggregateData(period: AggregationPeriod) {
-  await new Promise((resolve) => setTimeout(resolve, 500)); // fake delay for loading
-
+export function aggregateData(period: AggregationPeriod) {
   const metrics: Metric[] = data.metrics;
   const grouped = new Map<string, Metric[]>();
 
