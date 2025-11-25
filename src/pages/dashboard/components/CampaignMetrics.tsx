@@ -1,34 +1,34 @@
 export default function CampaignMetrics() {
   const metrics = [
     {
-      label: "Label 1",
+      label: "Total Revenue",
       value: 125,
       color: "text-chart-1",
     },
     {
-      label: "Label 2",
+      label: "Total Clicks",
       value: 125,
       color: "text-chart-2",
     },
     {
-      label: "Label 3",
+      label: "Total Impressions",
       value: 125,
       color: "text-chart-3",
     },
-    {
-      label: "Label 4",
-      value: 125,
-      color: "text-chart-4",
-    },
-    {
-      label: "Label 5",
-      value: 125,
-      color: "text-chart-5",
-    },
   ];
 
+  function formatValue(value: number, label: string) {
+    if (label === "Total Revenue") {
+      return `$ ${value.toLocaleString("en-US", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      })}`;
+    }
+    return value.toLocaleString();
+  }
+
   return (
-    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+    <div className="grid gap-4 sm:grid-cols-2  lg:grid-cols-3">
       {metrics.map((metric) => (
         <div
           key={metric.label}
@@ -36,7 +36,7 @@ export default function CampaignMetrics() {
         >
           <p className="text-sm text-muted-foreground">{metric.label}</p>
           <p className={`mt-2 text-3xl font-semibold ${metric.color}`}>
-            {metric.value}
+            {formatValue(metric.value, metric.label)}
           </p>
         </div>
       ))}

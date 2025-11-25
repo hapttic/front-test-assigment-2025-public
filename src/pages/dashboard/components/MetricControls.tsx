@@ -1,14 +1,16 @@
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
-export default function Metrics() {
-  const [selectedMetric, setSelectedMetric] = useState<"clicks" | "revenue">(
-    "revenue"
-  );
+type MetricType = "clicks" | "revenue";
 
+export default function MetricControls() {
   const [searchParams, setSearchParams] = useSearchParams("");
+  const metric: MetricType =
+    (searchParams.get("metric") as MetricType) || "revenue";
 
-  function handleChangeMetric(metric: "clicks" | "revenue") {
+  const [selectedMetric, setSelectedMetric] = useState<MetricType>(metric);
+
+  function handleChangeMetric(metric: MetricType) {
     setSelectedMetric(metric);
 
     if (metric === "revenue") {

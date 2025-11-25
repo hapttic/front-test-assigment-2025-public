@@ -2,7 +2,7 @@ import { useState } from "react";
 import type { AggregationPeriod } from "../../../lib/types";
 import { useSearchParams } from "react-router-dom";
 
-export default function AggregationPeriod() {
+export default function AggregationControls() {
   const [aggregationPeriod, setAggregationPeriod] =
     useState<AggregationPeriod>("daily");
   const [searchParams, setSearchParams] = useSearchParams();
