@@ -1,0 +1,60 @@
+.data-grid-container {
+  background: #1f2329;
+  padding: 1.5rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  border: 1px solid #2a2e35;
+  flex-grow: 1;
+
+  h3 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    color: #e0e0e0;
+    font-size: 1.1rem;
+  }
+
+  .table-responsive {
+    overflow-x: auto;
+  }
+
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 400px;
+
+    th,
+    td {
+      padding: 12px 10px;
+      text-align: left;
+      border-bottom: 1px solid #2a2e35;
+      font-size: 0.9rem;
+    }
+
+    th {
+      background-color: transparent;
+      font-weight: 600;
+      color: #9ca3af;
+
+      &.sortable {
+        cursor: pointer;
+        &:hover {
+          color: #ffffff;
+        }
+      }
+    }
+
+    td {
+      color: #e0e0e0;
+    }
+
+    tr:hover {
+      background-color: #2a2e35;
+    }
+
+    .empty-state {
+      text-align: center;
+      color: #6b7280;
+      padding: 2rem;
+    }
+  }
+}
