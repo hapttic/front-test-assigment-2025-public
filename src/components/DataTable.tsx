@@ -1,8 +1,8 @@
-import type { Metric } from "../types";
+import type { AggregatedSlot, Metric } from "../types";
 
-export default function DataTable({ rows }: { rows: Metric[] }) {
+export default function DataTable({ rows }: { rows: AggregatedSlot[] }) {
   return (
-    <div className="overflow-x-auto">
+    <div className="overflow-x-auto max-h-[500px] border border-gray-500 rounded-2xl">
       <table className="min-w-full text-sm">
         <thead>
           <tr className="border-b bg-gray-50">
@@ -17,8 +17,8 @@ export default function DataTable({ rows }: { rows: Metric[] }) {
         <tbody>
           {rows.map((r, i) => (
             <tr key={i} className="border-b hover:bg-gray-100">
-              <td className="p-2">{r.timestamp}</td>
-              <td className="p-2">{}</td>
+              <td className="p-2">{r.start.toISOString()}</td>
+              <td className="p-2">{r.campaignsActive}</td>
               <td className="p-2">{r.impressions}</td>
               <td className="p-2">{r.clicks}</td>
               <td className="p-2">${r.revenue.toFixed(2)}</td>
