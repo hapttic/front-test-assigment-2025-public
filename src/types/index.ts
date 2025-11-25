@@ -1,0 +1,1 @@
+export type TimeInterval = 'hourly' | 'daily' | 'weekly' | 'monthly';
