@@ -1,11 +1,14 @@
 import { useState } from "react";
 import type { AggregationPeriod } from "../../../lib/types";
 import { useSearchParams } from "react-router-dom";
+import { capitalizeFirstLetter } from "../../../lib/utils";
 
 export default function AggregationControls() {
-  const [aggregationPeriod, setAggregationPeriod] =
-    useState<AggregationPeriod>("daily");
   const [searchParams, setSearchParams] = useSearchParams();
+  const period = (searchParams.get("period") as AggregationPeriod) || "daily";
+
+  const [aggregationPeriod, setAggregationPeriod] =
+    useState<AggregationPeriod>(period);
 
   function handleChangePeriod(period: AggregationPeriod) {
     setAggregationPeriod(period);
@@ -33,7 +36,7 @@ export default function AggregationControls() {
                 : "text-muted-foreground hover:text-foreground"
             }`}
           >
-            {period.charAt(0).toUpperCase() + period.slice(1)}
+            {capitalizeFirstLetter(period)}
           </button>
         ))}
       </div>

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import { capitalizeFirstLetter } from "../../../lib/utils";
 
 type MetricType = "clicks" | "revenue";
 
@@ -35,7 +36,7 @@ export default function MetricControls() {
                 : "text-muted-foreground hover:text-foreground"
             }`}
           >
-            {metric.charAt(0).toUpperCase() + metric.slice(1)}
+            {capitalizeFirstLetter(metric)}
           </button>
         ))}
       </div>
