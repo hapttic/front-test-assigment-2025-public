@@ -3,6 +3,7 @@ import Header from "./components/Header"
 import KPIStats from "./components/stats/KPIStats"
 import TimeIntervalSelector from "./components/TimeIntervalSelector"
 import type { TimeInterval } from "./types";
+import CampaignPerformanceTable from "./components/campaign-table/CampaignPerformanceTable";
 
 function App() {
 
@@ -21,6 +22,7 @@ function App() {
         />
       </div>
       <KPIStats totalRevenue={12345} totalClicks={6789} totalImpressions={101112} />
+      <CampaignPerformanceTable />
     </div>
   )
 }
