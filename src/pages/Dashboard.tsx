@@ -1,9 +1,12 @@
 import { useState } from "react";
+import { useFetchCampaignData } from "../hooks/useFetchCampaignData";
+import DataTable from "../components/DataTable";
 
 export default function Dashboard() {
   const [aggregation, setAggregation] = useState<
     "hourly" | "daily" | "weekly" | "monthly"
   >("daily");
+  const { metrics } = useFetchCampaignData();
   return (
     <main className="w-full">
       <div className="flex">
@@ -20,6 +23,7 @@ export default function Dashboard() {
           </select>
         </div>
       </div>
+      <DataTable rows={metrics} />
     </main>
   );
 }
