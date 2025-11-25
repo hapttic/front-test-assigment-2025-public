@@ -1,32 +1,32 @@
 /* CSS Variables for theming */
 :root[data-theme="dark"] {
-  --bg-primary: #0f0f0f;
-  --bg-secondary: #1a1a1a;
-  --bg-tertiary: #252525;
-  --bg-elevated: #2a2a2a;
+  --bg-primary: #1e1e1e;
+  --bg-secondary: #2d2d2d;
+  --bg-tertiary: #3a3a3a;
+  --bg-elevated: #404040;
   
-  --text-primary: #e0e0e0;
-  --text-secondary: #999;
-  --text-tertiary: #666;
+  --text-primary: #e8e8e8;
+  --text-secondary: #b0b0b0;
+  --text-tertiary: #808080;
   
-  --border-color: #2a2a2a;
-  --border-secondary: #333;
+  --border-color: #404040;
+  --border-secondary: #4a4a4a;
   
-  --control-bg: #252525;
-  --control-hover-bg: #2a2a2a;
+  --control-bg: #353535;
+  --control-hover-bg: #404040;
   
   --accent-color: #646cff;
   --accent-hover: #535bf2;
   
   --chart-line: #646cff;
-  --chart-area: rgba(100, 108, 255, 0.1);
-  --chart-grid: #333;
+  --chart-area: rgba(100, 108, 255, 0.12);
+  --chart-grid: #4a4a4a;
   
-  --shadow-sm: rgba(0, 0, 0, 0.3);
-  --shadow-md: rgba(0, 0, 0, 0.4);
+  --shadow-sm: rgba(0, 0, 0, 0.2);
+  --shadow-md: rgba(0, 0, 0, 0.3);
   
-  --table-stripe: #181818;
-  --table-hover: #222;
+  --table-stripe: #282828;
+  --table-hover: #353535;
 }
 
 :root[data-theme="light"] {

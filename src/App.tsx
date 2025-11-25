@@ -75,7 +75,6 @@ function App() {
       <header className="app-header">
         <div className="app-header-content">
           <h1>Campaign Analytics Dashboard</h1>
-          <p className="app-subtitle">Analyze campaign performance across different time periods</p>
         </div>
         <ThemeToggle theme={theme} onToggle={toggleTheme} />
       </header>
