@@ -1,42 +1,119 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
+.app {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #1a1a1a;
+}
+
+.app-header {
   padding: 2rem;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+  border-bottom: 2px solid #333;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.app-header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 0 0.5rem 0;
+}
+
+.app-subtitle {
+  color: #aaa;
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.app-main {
+  flex: 1;
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.loading,
+.error {
   text-align: center;
+  padding: 3rem;
+  font-size: 1.2rem;
+  color: #aaa;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.error {
+  color: #ff6b6b;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+.metric-selector {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: #2a2a2a;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.metric-selector label {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.metric-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.metric-buttons button {
+  padding: 0.6rem 1.2rem;
+  font-size: 0.9rem;
+  background-color: #1a1a1a;
+  color: #aaa;
+  border: 1px solid #444;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-weight: 500;
+}
+
+.metric-buttons button:hover {
+  border-color: #646cff;
+  color: #fff;
+}
+
+.metric-buttons button.active {
+  background-color: #646cff;
+  color: #fff;
+  border-color: #646cff;
+}
+
+@media (max-width: 768px) {
+  .app-header {
+    padding: 1.5rem;
   }
-  to {
-    transform: rotate(360deg);
+
+  .app-header h1 {
+    font-size: 1.5rem;
   }
-}
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
+  .app-main {
+    padding: 1rem;
   }
-}
 
-.card {
-  padding: 2em;
-}
+  .metric-selector {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 
-.read-the-docs {
-  color: #888;
+  .metric-buttons {
+    width: 100%;
+  }
+
+  .metric-buttons button {
+    flex: 1;
+    font-size: 0.85rem;
+    padding: 0.5rem 0.8rem;
+  }
 }

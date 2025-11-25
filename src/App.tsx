@@ -1,35 +1,110 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from 'react';
+import { useAggregatedData } from './hooks/useAggregatedData';
+import { AggregationControls } from './components/AggregationControls';
+import { Chart } from './components/Chart';
+import { DataGrid } from './components/DataGrid';
+import type { SortField } from './types';
+import './App.css';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const {
+    loading,
+    error,
+    aggregationLevel,
+    setAggregationLevel,
+    aggregatedData,
+    sortField,
+    setSortField,
+    sortDirection,
+    setSortDirection,
+  } = useAggregatedData();
+
+  const [chartMetric, setChartMetric] = useState<'revenue' | 'clicks' | 'impressions'>('revenue');
+
+  const handleSort = (field: SortField) => {
+    if (sortField === field) {
+      // Toggle direction
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+    } else {
+      // New field, default to ascending
+      setSortField(field);
+      setSortDirection('asc');
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="app">
+        <header className="app-header">
+          <h1>Campaign Analytics Dashboard</h1>
+        </header>
+        <main className="app-main">
+          <div className="loading">Loading data...</div>
+        </main>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="app">
+        <header className="app-header">
+          <h1>Campaign Analytics Dashboard</h1>
+        </header>
+        <main className="app-main">
+          <div className="error">Error: {error}</div>
+        </main>
+      </div>
+    );
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div className="app">
+      <header className="app-header">
+        <h1>Campaign Analytics Dashboard</h1>
+        <p className="app-subtitle">Analyze campaign performance across different time periods</p>
+      </header>
+      <main className="app-main">
+        <AggregationControls
+          value={aggregationLevel}
+          onChange={setAggregationLevel}
+        />
+
+        <div className="metric-selector">
+          <label>Chart Metric:</label>
+          <div className="metric-buttons">
+            <button
+              className={chartMetric === 'revenue' ? 'active' : ''}
+              onClick={() => setChartMetric('revenue')}
+            >
+              Revenue
+            </button>
+            <button
+              className={chartMetric === 'clicks' ? 'active' : ''}
+              onClick={() => setChartMetric('clicks')}
+            >
+              Clicks
+            </button>
+            <button
+              className={chartMetric === 'impressions' ? 'active' : ''}
+              onClick={() => setChartMetric('impressions')}
+            >
+              Impressions
+            </button>
+          </div>
+        </div>
+
+        <Chart data={aggregatedData} metric={chartMetric} />
+
+        <DataGrid
+          data={aggregatedData}
+          sortField={sortField}
+          sortDirection={sortDirection}
+          onSort={handleSort}
+        />
+      </main>
+    </div>
+  );
 }
 
-export default App
+export default App;
