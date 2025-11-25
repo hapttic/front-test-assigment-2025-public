@@ -16,3 +16,11 @@ export interface AggregatedData {
 
 export type AggregationPeriod = "hourly" | "daily" | "weekly" | "monthly";
 export type MetricEnum = "clicks" | "revenue";
+
+export type sortBy =
+  | "date"
+  | "campaigns"
+  | "impressions"
+  | "clicks"
+  | "revenue";
+export type SortOrder = "asc" | "desc";

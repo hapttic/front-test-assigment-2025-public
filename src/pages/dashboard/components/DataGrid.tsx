@@ -1,43 +1,50 @@
-import type { AggregatedData, AggregationPeriod } from "../../../lib/types";
+import type {
+  AggregatedData,
+  AggregationPeriod,
+  sortBy,
+} from "../../../lib/types";
 import { formatDate } from "../../../lib/utils";
+import useSort from "../../../lib/hooks/useSort";
+import SortIcon from "./SortIcon";
 
 interface props {
   data: AggregatedData[];
   period: AggregationPeriod;
 }
-export default function DataGrid({ data, period }: props) {
-  // const data = [
-  //   {
-  //     timestamp: "Wed Nov 25 2025",
-  //     campaign: "c1",
-  //     campaignsActive: 5,
-  //     totalImpressions: 1000,
-  //     totalClicks: 50,
-  //     totalRevenue: 5000,
-  //   },
-  //   {
-  //     timestamp: "Thu Nov 26 2025",
-  //     campaign: "c2",
-  //     campaignsActive: 5,
-  //     totalImpressions: 800,
-  //     totalClicks: 40,
-  //     totalRevenue: 4000,
-  //   },
-  // ];
 
+interface TableHeading {
+  label: string;
+  field: sortBy;
+}
+
+const tableHeadings: TableHeading[] = [
+  { label: "Date", field: "date" },
+  { label: "Campaigns", field: "campaigns" },
+  { label: "Impressions", field: "impressions" },
+  { label: "Clicks", field: "clicks" },
+  { label: "Revenue", field: "revenue" },
+];
+
+export default function DataGrid({ data, period }: props) {
   const btnClass = `flex items-center text-sm font-semibold text-foreground cursor-pointer  hover:text-primary transition-colors`;
   const thClass = "px-6 py-4 text-left";
   const tdClass = `px-6 py-4 text-sm text-foreground`;
 
-  function formatValue(value: number, label: string) {
-    if (label === "Total Revenue") {
-      return `$ ${value.toLocaleString("en-US", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      })}`;
-    }
-    return value.toLocaleString();
+  function tableHeadButtonClass(field: sortBy) {
+    if (field === "impressions" || field === "clicks" || field === "revenue")
+      return btnClass + " ml-auto" + " " + activeSortClass(field);
+
+    return btnClass + " " + activeSortClass(field);
   }
+
+  const {
+    sortedData,
+    handleSort,
+    activeSortClass,
+    formatValue,
+    sortBy,
+    sortOrder,
+  } = useSort(data);
 
   return (
     <div className="rounded-xl border border-border bg-card">
@@ -45,28 +52,78 @@ export default function DataGrid({ data, period }: props) {
         <table className="w-full">
           <thead>
             <tr className="border-b border-border">
-              <th className={thClass}>
-                <button className={btnClass}>Date</button>
+              {tableHeadings.map((heading) => (
+                <th key={heading.field} className={thClass}>
+                  <button
+                    onClick={() => handleSort(heading.field)}
+                    className={tableHeadButtonClass(heading.field)}
+                  >
+                    {heading.label}
+                    <SortIcon
+                      field={heading.field}
+                      sortField={sortBy}
+                      sortDirection={sortOrder}
+                    />
+                  </button>
+                </th>
+              ))}
+
+              {/* <th className={thClass}>
+                <button
+                  onClick={() => handleSort("date")}
+                  className={btnClass + " " + activeSortClass("date")}
+                >
+                  Date
+                  <SortIcon
+                    field="date"
+                    sortField={sortBy}
+                    sortDirection={sortOrder}
+                  />
+                </button>
               </th>
               <th className={thClass}>
-                <button className={btnClass}>Campaigns Active</button>
+                <button
+                  onClick={() => handleSort("campaigns")}
+                  className={btnClass + " " + activeSortClass("campaigns")}
+                >
+                  Campaigns Active
+                </button>
               </th>
               <th className={thClass}>
-                <button className={"ml-auto " + btnClass}>
+                <button
+                  onClick={() => handleSort("impressions")}
+                  className={
+                    "ml-auto " + btnClass + " " + activeSortClass("impressions")
+                  }
+                >
                   Total Impressions
                 </button>
               </th>
               <th className={thClass}>
-                <button className={"ml-auto " + btnClass}>Total Clicks</button>
+                <button
+                  onClick={() => handleSort("clicks")}
+                  className={
+                    "ml-auto " + btnClass + " " + activeSortClass("clicks")
+                  }
+                >
+                  Total Clicks
+                </button>
               </th>
               <th className={thClass}>
-                <button className={"ml-auto " + btnClass}>Total Revenue</button>
-              </th>
+                <button
+                  onClick={() => handleSort("revenue")}
+                  className={
+                    "ml-auto " + btnClass + " " + activeSortClass("revenue")
+                  }
+                >
+                  Total Revenue
+                </button>
+              </th> */}
             </tr>
           </thead>
 
           <tbody>
-            {data.map((row, i) => (
+            {sortedData.map((row, i) => (
               <tr
                 key={i}
                 className="border-b border-border last:border-0 hover:bg-muted/50 transition-colors"
