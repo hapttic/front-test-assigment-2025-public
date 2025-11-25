@@ -3,24 +3,25 @@
   align-items: center;
   gap: 1.5rem;
   padding: 1.5rem;
-  background-color: #1a1a1a;
+  background-color: var(--bg-secondary);
   border-radius: 12px;
   margin-bottom: 1.5rem;
-  border: 1px solid #2a2a2a;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 2px 4px var(--shadow-sm);
 }
 
 .aggregation-controls label {
   font-weight: 600;
   font-size: 1rem;
-  color: #e0e0e0;
+  color: var(--text-primary);
 }
 
 .aggregation-select {
   padding: 0.75rem 1.25rem;
   font-size: 1rem;
-  background-color: #252525;
-  color: #fff;
-  border: 1px solid #333;
+  background-color: var(--control-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-secondary);
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -29,13 +30,14 @@
 }
 
 .aggregation-select:hover {
-  border-color: #646cff;
-  background-color: #2a2a2a;
+  border-color: var(--accent-color);
+  background-color: var(--control-hover-bg);
+  box-shadow: 0 2px 4px var(--shadow-sm);
 }
 
 .aggregation-select:focus {
   outline: none;
-  border-color: #646cff;
+  border-color: var(--accent-color);
   box-shadow: 0 0 0 3px rgba(100, 108, 255, 0.2);
 }
 

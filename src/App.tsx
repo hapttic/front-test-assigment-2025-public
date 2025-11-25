@@ -1,12 +1,16 @@
 import { useState } from 'react';
 import { useAggregatedData } from './hooks/useAggregatedData';
+import { useTheme } from './hooks/useTheme';
 import { AggregationControls } from './components/AggregationControls';
 import { Chart } from './components/Chart';
 import { DataGrid } from './components/DataGrid';
+import { ThemeToggle } from './components/ThemeToggle';
 import type { SortField } from './types';
 import './App.css';
 
 function App() {
+  const { theme, toggleTheme } = useTheme();
+  
   const {
     loading,
     error,
@@ -36,7 +40,10 @@ function App() {
     return (
       <div className="app">
         <header className="app-header">
-          <h1>Campaign Analytics Dashboard</h1>
+          <div className="app-header-content">
+            <h1>Campaign Analytics Dashboard</h1>
+          </div>
+          <ThemeToggle theme={theme} onToggle={toggleTheme} />
         </header>
         <main className="app-main">
           <div className="loading">Loading data...</div>
@@ -49,7 +56,10 @@ function App() {
     return (
       <div className="app">
         <header className="app-header">
-          <h1>Campaign Analytics Dashboard</h1>
+          <div className="app-header-content">
+            <h1>Campaign Analytics Dashboard</h1>
+          </div>
+          <ThemeToggle theme={theme} onToggle={toggleTheme} />
         </header>
         <main className="app-main">
           <div className="error">Error: {error}</div>
@@ -61,8 +71,11 @@ function App() {
   return (
     <div className="app">
       <header className="app-header">
-        <h1>Campaign Analytics Dashboard</h1>
-        <p className="app-subtitle">Analyze campaign performance across different time periods</p>
+        <div className="app-header-content">
+          <h1>Campaign Analytics Dashboard</h1>
+          <p className="app-subtitle">Analyze campaign performance across different time periods</p>
+        </div>
+        <ThemeToggle theme={theme} onToggle={toggleTheme} />
       </header>
       <main className="app-main">
         <AggregationControls

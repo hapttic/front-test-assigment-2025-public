@@ -1,13 +1,70 @@
+/* CSS Variables for theming */
+:root[data-theme="dark"] {
+  --bg-primary: #0f0f0f;
+  --bg-secondary: #1a1a1a;
+  --bg-tertiary: #252525;
+  --bg-elevated: #2a2a2a;
+  
+  --text-primary: #e0e0e0;
+  --text-secondary: #999;
+  --text-tertiary: #666;
+  
+  --border-color: #2a2a2a;
+  --border-secondary: #333;
+  
+  --control-bg: #252525;
+  --control-hover-bg: #2a2a2a;
+  
+  --accent-color: #646cff;
+  --accent-hover: #535bf2;
+  
+  --chart-line: #646cff;
+  --chart-area: rgba(100, 108, 255, 0.1);
+  --chart-grid: #333;
+  
+  --shadow-sm: rgba(0, 0, 0, 0.3);
+  --shadow-md: rgba(0, 0, 0, 0.4);
+  
+  --table-stripe: #181818;
+  --table-hover: #222;
+}
+
+:root[data-theme="light"] {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8f9fa;
+  --bg-tertiary: #e9ecef;
+  --bg-elevated: #ffffff;
+  
+  --text-primary: #212529;
+  --text-secondary: #6c757d;
+  --text-tertiary: #adb5bd;
+  
+  --border-color: #dee2e6;
+  --border-secondary: #ced4da;
+  
+  --control-bg: #ffffff;
+  --control-hover-bg: #f8f9fa;
+  
+  --accent-color: #4854e0;
+  --accent-hover: #3742c4;
+  
+  --chart-line: #4854e0;
+  --chart-area: rgba(72, 84, 224, 0.08);
+  --chart-grid: #e9ecef;
+  
+  --shadow-sm: rgba(0, 0, 0, 0.08);
+  --shadow-md: rgba(0, 0, 0, 0.12);
+  
+  --table-stripe: #f8f9fa;
+  --table-hover: #e9ecef;
+}
+
 :root {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #0f0f0f;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -25,7 +82,9 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  background-color: #0f0f0f;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 #root {

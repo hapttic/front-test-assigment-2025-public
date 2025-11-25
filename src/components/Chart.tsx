@@ -112,6 +112,15 @@ export function Chart({ data, metric }: ChartProps) {
     }
   };
 
+  const axisColor = getComputedStyle(document.documentElement)
+    .getPropertyValue('--text-secondary').trim();
+  const gridColor = getComputedStyle(document.documentElement)
+    .getPropertyValue('--chart-grid').trim();
+  const lineColor = getComputedStyle(document.documentElement)
+    .getPropertyValue('--chart-line').trim();
+  const areaColor = getComputedStyle(document.documentElement)
+    .getPropertyValue('--chart-area').trim();
+
   return (
     <div className="chart-container">
       <div className="chart-header">
@@ -129,7 +138,7 @@ export function Chart({ data, metric }: ChartProps) {
           y1={chartData.padding.top}
           x2={chartData.padding.left}
           y2={chartData.padding.top + chartData.chartHeight}
-          stroke="#666"
+          stroke={axisColor}
           strokeWidth="2"
         />
 
@@ -139,7 +148,7 @@ export function Chart({ data, metric }: ChartProps) {
           y1={chartData.padding.top + chartData.chartHeight}
           x2={chartData.padding.left + chartData.chartWidth}
           y2={chartData.padding.top + chartData.chartHeight}
-          stroke="#666"
+          stroke={axisColor}
           strokeWidth="2"
         />
 
@@ -153,7 +162,7 @@ export function Chart({ data, metric }: ChartProps) {
                 y1={y}
                 x2={chartData.padding.left + chartData.chartWidth}
                 y2={y}
-                stroke="#333"
+                stroke={gridColor}
                 strokeWidth="1"
                 strokeDasharray="4,4"
               />
@@ -161,7 +170,7 @@ export function Chart({ data, metric }: ChartProps) {
                 x={chartData.padding.left - 10}
                 y={y + 4}
                 textAnchor="end"
-                fill="#aaa"
+                fill={axisColor}
                 fontSize="12"
               >
                 {formatValue(tick)}
@@ -173,14 +182,14 @@ export function Chart({ data, metric }: ChartProps) {
         {/* Area under line */}
         <path
           d={chartData.areaPath}
-          fill="rgba(100, 108, 255, 0.1)"
+          fill={areaColor}
         />
 
         {/* Line */}
         <path
           d={chartData.linePath}
           fill="none"
-          stroke="#646cff"
+          stroke={lineColor}
           strokeWidth="3"
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -196,8 +205,8 @@ export function Chart({ data, metric }: ChartProps) {
               cx={x}
               cy={y}
               r="4"
-              fill="#646cff"
-              stroke="#fff"
+              fill={lineColor}
+              stroke="var(--bg-secondary)"
               strokeWidth="2"
             >
               <title>{`${d.periodLabel}: ${formatValue(chartData.values[i] ?? 0)}`}</title>
@@ -216,7 +225,7 @@ export function Chart({ data, metric }: ChartProps) {
               x={x}
               y={y}
               textAnchor="middle"
-              fill="#aaa"
+              fill={axisColor}
               fontSize="11"
               transform={`rotate(-45, ${x}, ${y})`}
             >

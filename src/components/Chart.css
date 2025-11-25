@@ -1,11 +1,11 @@
 .chart-container {
-  background-color: #1a1a1a;
+  background-color: var(--bg-secondary);
   border-radius: 12px;
   padding: 2rem;
   margin-top: 0;
   overflow-x: auto;
-  border: 1px solid #2a2a2a;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 2px 8px var(--shadow-sm);
 }
 
 .chart-header {
@@ -15,7 +15,7 @@
 .chart-header h3 {
   font-size: 1.35rem;
   font-weight: 600;
-  color: #e0e0e0;
+  color: var(--text-primary);
   margin: 0;
   letter-spacing: -0.3px;
 }
@@ -26,10 +26,31 @@
   display: block;
 }
 
+.chart-svg line {
+  stroke: var(--chart-grid);
+}
+
+.chart-svg text {
+  fill: var(--text-secondary);
+}
+
+.chart-svg path.chart-area {
+  fill: var(--chart-area);
+}
+
+.chart-svg path.chart-line {
+  stroke: var(--chart-line);
+}
+
+.chart-svg circle {
+  fill: var(--chart-line);
+  stroke: var(--bg-secondary);
+}
+
 .chart-empty {
   text-align: center;
   padding: 4rem 2rem;
-  color: #666;
+  color: var(--text-tertiary);
   font-size: 1.1rem;
   font-style: italic;
 }

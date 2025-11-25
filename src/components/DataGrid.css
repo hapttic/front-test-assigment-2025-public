@@ -1,11 +1,11 @@
 .data-grid-container {
   overflow-x: auto;
-  background-color: #1a1a1a;
+  background-color: var(--bg-secondary);
   border-radius: 12px;
   padding: 0;
   margin-top: 2rem;
-  border: 1px solid #2a2a2a;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 2px 8px var(--shadow-sm);
 }
 
 .data-grid {
@@ -15,7 +15,7 @@
 }
 
 .data-grid thead {
-  background-color: #252525;
+  background-color: var(--bg-tertiary);
   position: sticky;
   top: 0;
   z-index: 10;
@@ -25,13 +25,12 @@
   padding: 1.25rem 1.5rem;
   text-align: left;
   font-weight: 600;
-  border-bottom: 2px solid #333;
+  border-bottom: 2px solid var(--border-secondary);
   white-space: nowrap;
-  color: #e0e0e0;
-  font-size: 0.95rem;
+  color: var(--text-primary);
+  font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  font-size: 0.85rem;
 }
 
 .data-grid th.sortable {
@@ -41,8 +40,8 @@
 }
 
 .data-grid th.sortable:hover {
-  background-color: #2a2a2a;
-  color: #646cff;
+  background-color: var(--control-hover-bg);
+  color: var(--accent-color);
 }
 
 .data-grid th.number,
@@ -51,12 +50,12 @@
 }
 
 .data-grid tbody tr {
-  border-bottom: 1px solid #252525;
+  border-bottom: 1px solid var(--border-color);
   transition: background-color 0.15s ease;
 }
 
 .data-grid tbody tr:hover {
-  background-color: #222;
+  background-color: var(--table-hover);
 }
 
 .data-grid tbody tr:last-child {
@@ -65,24 +64,24 @@
 
 .data-grid td {
   padding: 1.1rem 1.5rem;
-  color: #ccc;
+  color: var(--text-primary);
 }
 
 .data-grid td.no-data {
   text-align: center;
   padding: 3rem 2rem;
-  color: #666;
+  color: var(--text-tertiary);
   font-style: italic;
   font-size: 1rem;
 }
 
 /* Zebra striping for better readability */
 .data-grid tbody tr:nth-child(even) {
-  background-color: #181818;
+  background-color: var(--table-stripe);
 }
 
 .data-grid tbody tr:nth-child(even):hover {
-  background-color: #222;
+  background-color: var(--table-hover);
 }
 
 @media (max-width: 1024px) {
