@@ -1,37 +1,48 @@
 .data-grid-container {
   overflow-x: auto;
-  background-color: #2a2a2a;
-  border-radius: 8px;
-  padding: 1rem;
+  background-color: #1a1a1a;
+  border-radius: 12px;
+  padding: 0;
   margin-top: 2rem;
+  border: 1px solid #2a2a2a;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .data-grid {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
 }
 
 .data-grid thead {
-  background-color: #1a1a1a;
+  background-color: #252525;
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
 .data-grid th {
-  padding: 1rem;
+  padding: 1.25rem 1.5rem;
   text-align: left;
   font-weight: 600;
-  border-bottom: 2px solid #444;
+  border-bottom: 2px solid #333;
   white-space: nowrap;
+  color: #e0e0e0;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 0.85rem;
 }
 
 .data-grid th.sortable {
   cursor: pointer;
   user-select: none;
-  transition: background-color 0.2s;
+  transition: all 0.2s ease;
 }
 
 .data-grid th.sortable:hover {
-  background-color: #333;
+  background-color: #2a2a2a;
+  color: #646cff;
 }
 
 .data-grid th.number,
@@ -40,33 +51,66 @@
 }
 
 .data-grid tbody tr {
-  border-bottom: 1px solid #333;
-  transition: background-color 0.2s;
+  border-bottom: 1px solid #252525;
+  transition: background-color 0.15s ease;
 }
 
 .data-grid tbody tr:hover {
-  background-color: #333;
+  background-color: #222;
+}
+
+.data-grid tbody tr:last-child {
+  border-bottom: none;
 }
 
 .data-grid td {
-  padding: 0.9rem 1rem;
+  padding: 1.1rem 1.5rem;
+  color: #ccc;
 }
 
 .data-grid td.no-data {
   text-align: center;
-  padding: 2rem;
-  color: #888;
+  padding: 3rem 2rem;
+  color: #666;
   font-style: italic;
+  font-size: 1rem;
 }
 
-@media (max-width: 768px) {
+/* Zebra striping for better readability */
+.data-grid tbody tr:nth-child(even) {
+  background-color: #181818;
+}
+
+.data-grid tbody tr:nth-child(even):hover {
+  background-color: #222;
+}
+
+@media (max-width: 1024px) {
   .data-grid {
-    font-size: 0.8rem;
+    font-size: 0.9rem;
   }
   
   .data-grid th,
   .data-grid td {
-    padding: 0.6rem 0.5rem;
+    padding: 1rem 1.25rem;
   }
 }
 
+@media (max-width: 768px) {
+  .data-grid-container {
+    margin-top: 1.5rem;
+  }
+
+  .data-grid {
+    font-size: 0.85rem;
+  }
+  
+  .data-grid th,
+  .data-grid td {
+    padding: 0.85rem 1rem;
+  }
+
+  .data-grid th {
+    font-size: 0.75rem;
+  }
+}

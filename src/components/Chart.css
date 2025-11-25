@@ -1,42 +1,57 @@
 .chart-container {
-  background-color: #2a2a2a;
-  border-radius: 8px;
-  padding: 1.5rem;
-  margin-top: 2rem;
+  background-color: #1a1a1a;
+  border-radius: 12px;
+  padding: 2rem;
+  margin-top: 0;
   overflow-x: auto;
+  border: 1px solid #2a2a2a;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .chart-header {
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 .chart-header h3 {
-  font-size: 1.2rem;
+  font-size: 1.35rem;
   font-weight: 600;
-  color: #fff;
+  color: #e0e0e0;
   margin: 0;
+  letter-spacing: -0.3px;
 }
 
 .chart-svg {
   max-width: 100%;
   height: auto;
+  display: block;
 }
 
 .chart-empty {
   text-align: center;
-  padding: 3rem;
-  color: #888;
+  padding: 4rem 2rem;
+  color: #666;
   font-size: 1.1rem;
   font-style: italic;
+}
+
+@media (max-width: 1024px) {
+  .chart-container {
+    padding: 1.5rem;
+  }
 }
 
 @media (max-width: 768px) {
   .chart-container {
     padding: 1rem;
+    margin-top: 0;
   }
   
   .chart-header h3 {
+    font-size: 1.1rem;
+  }
+
+  .chart-empty {
+    padding: 3rem 1rem;
     font-size: 1rem;
   }
 }
-
