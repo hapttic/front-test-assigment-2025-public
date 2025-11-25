@@ -30,7 +30,7 @@ export function DataGrid({ data, sortField, sortDirection, onSort }: DataGridPro
             <th onClick={() => onSort('period')} className="sortable">
               Date {getSortIcon('period')}
             </th>
-            <th>Campaigns Active</th>
+            <th className="center">Campaigns Active</th>
             <th onClick={() => onSort('impressions')} className="sortable number">
               Total Impressions {getSortIcon('impressions')}
             </th>
@@ -51,7 +51,7 @@ export function DataGrid({ data, sortField, sortDirection, onSort }: DataGridPro
             data.map((row) => (
               <tr key={row.period}>
                 <td>{row.periodLabel}</td>
-                <td>
+                <td className="center">
                   <span className="campaign-badge">{row.campaignsActive.size}</span>
                 </td>
                 <td className="number">
