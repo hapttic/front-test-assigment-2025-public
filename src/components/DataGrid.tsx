@@ -51,10 +51,18 @@ export function DataGrid({ data, sortField, sortDirection, onSort }: DataGridPro
             data.map((row) => (
               <tr key={row.period}>
                 <td>{row.periodLabel}</td>
-                <td className="number">{row.campaignsActive.size}</td>
-                <td className="number">{formatNumber(row.totalImpressions)}</td>
-                <td className="number">{formatNumber(row.totalClicks)}</td>
-                <td className="number">{formatCurrency(row.totalRevenue)}</td>
+                <td>
+                  <span className="campaign-badge">{row.campaignsActive.size}</span>
+                </td>
+                <td className="number">
+                  <span className="number-value">{formatNumber(row.totalImpressions)}</span>
+                </td>
+                <td className="number">
+                  <span className="number-value">{formatNumber(row.totalClicks)}</span>
+                </td>
+                <td className="number">
+                  <span className="revenue-value">{formatCurrency(row.totalRevenue)}</span>
+                </td>
               </tr>
             ))
           )}

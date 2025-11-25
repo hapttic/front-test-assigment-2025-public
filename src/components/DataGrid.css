@@ -1,47 +1,65 @@
 .data-grid-container {
   overflow-x: auto;
   background-color: var(--bg-secondary);
-  border-radius: 12px;
+  border-radius: 16px;
   padding: 0;
   margin-top: 2rem;
   border: 1px solid var(--border-color);
-  box-shadow: 0 2px 8px var(--shadow-sm);
+  box-shadow: 0 4px 12px var(--shadow-sm);
 }
 
 .data-grid {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
   font-size: 0.95rem;
 }
 
 .data-grid thead {
-  background-color: var(--bg-tertiary);
+  background: linear-gradient(135deg, var(--bg-tertiary) 0%, var(--bg-secondary) 100%);
   position: sticky;
   top: 0;
   z-index: 10;
 }
 
 .data-grid th {
-  padding: 1.25rem 1.5rem;
+  padding: 1.5rem 1.5rem;
   text-align: left;
-  font-weight: 600;
+  font-weight: 700;
   border-bottom: 2px solid var(--border-secondary);
   white-space: nowrap;
   color: var(--text-primary);
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 1px;
 }
 
 .data-grid th.sortable {
   cursor: pointer;
   user-select: none;
   transition: all 0.2s ease;
+  position: relative;
 }
 
 .data-grid th.sortable:hover {
-  background-color: var(--control-hover-bg);
   color: var(--accent-color);
+  transform: translateY(-1px);
+}
+
+.data-grid th.sortable::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--accent-color);
+  transform: scaleX(0);
+  transition: transform 0.2s ease;
+}
+
+.data-grid th.sortable:hover::after {
+  transform: scaleX(1);
 }
 
 .data-grid th.number,
@@ -51,11 +69,15 @@
 
 .data-grid tbody tr {
   border-bottom: 1px solid var(--border-color);
-  transition: background-color 0.15s ease;
+  transition: all 0.2s ease;
+  position: relative;
 }
 
 .data-grid tbody tr:hover {
   background-color: var(--table-hover);
+  transform: scale(1.01);
+  box-shadow: 0 2px 8px var(--shadow-sm);
+  z-index: 1;
 }
 
 .data-grid tbody tr:last-child {
@@ -63,19 +85,52 @@
 }
 
 .data-grid td {
-  padding: 1.1rem 1.5rem;
+  padding: 1.25rem 1.5rem;
   color: var(--text-primary);
+  font-weight: 500;
+}
+
+.data-grid td:first-child {
+  font-weight: 600;
+  color: var(--accent-color);
 }
 
 .data-grid td.no-data {
   text-align: center;
-  padding: 3rem 2rem;
+  padding: 4rem 2rem;
   color: var(--text-tertiary);
   font-style: italic;
-  font-size: 1rem;
+  font-size: 1.1rem;
 }
 
-/* Zebra striping for better readability */
+/* Campaign badge */
+.campaign-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 32px;
+  padding: 0 0.75rem;
+  background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-hover) 100%);
+  color: white;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  box-shadow: 0 2px 8px rgba(100, 108, 255, 0.3);
+}
+
+/* Number formatting with colors */
+.number-value {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+.revenue-value {
+  color: #10b981;
+  font-weight: 700;
+}
+
+/* Zebra striping (subtle) */
 .data-grid tbody tr:nth-child(even) {
   background-color: var(--table-stripe);
 }
@@ -98,6 +153,7 @@
 @media (max-width: 768px) {
   .data-grid-container {
     margin-top: 1.5rem;
+    border-radius: 12px;
   }
 
   .data-grid {
@@ -106,10 +162,17 @@
   
   .data-grid th,
   .data-grid td {
-    padding: 0.85rem 1rem;
+    padding: 1rem;
   }
 
   .data-grid th {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
+  }
+
+  .campaign-badge {
+    min-width: 28px;
+    height: 28px;
+    font-size: 0.8rem;
+    padding: 0 0.6rem;
   }
 }
