@@ -20,7 +20,7 @@ const columns = [
   }, 
   { 
     label: 'Active Campaigns', 
-    key: 'activeCampaigns', 
+    key: 'campaignId', 
     className: 'hidden lg:table-cell' 
   },
   { 

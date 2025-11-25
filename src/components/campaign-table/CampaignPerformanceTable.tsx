@@ -2,6 +2,7 @@ import React, { useState } from "react"
 import { TableHeader } from "./TableHeader"
 import type { CampaignMetrics } from "../../types"; 
 import { BarChart3 } from "lucide-react";
+import { TableRow } from "./TableRow";
 
 
 const CampaignPerformanceTable: React.FC = () => {
@@ -28,8 +29,10 @@ const CampaignPerformanceTable: React.FC = () => {
             <div className="overflow-x-auto">
                 <table className="w-full text-sm text-left">
                     <TableHeader sortConfig={sortConfig} onSort={handleSort} />
+                    <tbody className="divide-y divide-slate-100">
+                      <TableRow />
+                  </tbody>
                 </table>
-            
             </div>
         </div>
     </div>

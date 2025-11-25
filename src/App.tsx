@@ -22,7 +22,7 @@ function App() {
         />
       </div>
       <KPIStats totalRevenue={12345} totalClicks={6789} totalImpressions={101112} />
-      <CampaignPerformanceTable />
+      <CampaignPerformanceTable  />
     </div>
   )
 }
