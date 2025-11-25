@@ -1,0 +1,132 @@
+.stats-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1.25rem;
+  transition: all 0.3s ease;
+  opacity: 0;
+  transform: translateY(20px);
+  box-shadow: 0 2px 8px var(--shadow-sm);
+}
+
+.stats-card.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.stats-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px var(--shadow-md);
+  border-color: var(--accent-color);
+}
+
+.stats-card-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+.stats-card-revenue .stats-card-icon {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+}
+
+.stats-card-clicks .stats-card-icon {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  color: white;
+}
+
+.stats-card-impressions .stats-card-icon {
+  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+  color: white;
+}
+
+.stats-card-rate .stats-card-icon {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: white;
+}
+
+.stats-card-campaign .stats-card-icon {
+  background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
+  color: white;
+}
+
+.stats-card-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.stats-card-title {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stats-card-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.2;
+  margin-bottom: 0.5rem;
+}
+
+.stats-card-trend {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.stats-card-trend.positive {
+  color: #10b981;
+}
+
+.stats-card-trend.negative {
+  color: #ef4444;
+}
+
+.trend-icon {
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.trend-value {
+  font-size: 0.8rem;
+}
+
+@media (max-width: 768px) {
+  .stats-card {
+    padding: 1.25rem;
+  }
+
+  .stats-card-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .stats-card-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .stats-card-value {
+    font-size: 1.5rem;
+  }
+
+  .stats-card-title {
+    font-size: 0.75rem;
+  }
+}
+
