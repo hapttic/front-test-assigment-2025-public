@@ -1,17 +1,16 @@
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { capitalizeFirstLetter } from "../../../lib/utils";
-
-type MetricType = "clicks" | "revenue";
+import type { MetricEnum } from "../../../lib/types";
 
 export default function MetricControls() {
   const [searchParams, setSearchParams] = useSearchParams("");
-  const metric: MetricType =
-    (searchParams.get("metric") as MetricType) || "revenue";
+  const metric: MetricEnum =
+    (searchParams.get("metric") as MetricEnum) || "revenue";
 
-  const [selectedMetric, setSelectedMetric] = useState<MetricType>(metric);
+  const [selectedMetric, setSelectedMetric] = useState<MetricEnum>(metric);
 
-  function handleChangeMetric(metric: MetricType) {
+  function handleChangeMetric(metric: MetricEnum) {
     setSelectedMetric(metric);
 
     if (metric === "revenue") {

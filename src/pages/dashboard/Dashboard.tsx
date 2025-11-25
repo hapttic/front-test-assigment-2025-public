@@ -1,15 +1,13 @@
-import { useSearchParams } from "react-router-dom";
 import Wrapper from "../../components/shared/Wrapper";
 import AggregationControls from "./components/AggregationControls";
 import CampaignMetrics from "./components/CampaignMetrics";
 import MetricControls from "./components/MetricControls";
 import Header from "./components/Header";
 import DataGrid from "./components/DataGrid";
+import useAggrigatedData from "../../lib/hooks/useAggrigatedData";
 
 export default function Dashboard() {
-  const [searchParams] = useSearchParams();
-  const period = searchParams.get("period") || "daily";
-  const metric = searchParams.get("metric") || "revenue";
+  const { data: aggregatedData, period, isLoading } = useAggrigatedData();
 
   return (
     <Wrapper className="min-h-screen bg-background space-y-8 py-12">
@@ -18,12 +16,14 @@ export default function Dashboard() {
         <AggregationControls />
         <MetricControls />
       </div>
-      <CampaignMetrics />
-      <DataGrid />
-
-      <div>
-        <p>{`period: ${period}, metric: ${metric}`}</p>
-      </div>
+      <CampaignMetrics data={aggregatedData} />
+      {isLoading ? (
+        <p>Loading data...</p>
+      ) : (
+        <>
+          <DataGrid data={aggregatedData} period={period} />
+        </>
+      )}
     </Wrapper>
   );
 }

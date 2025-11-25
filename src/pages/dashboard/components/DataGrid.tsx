@@ -1,22 +1,29 @@
-export default function DataGrid() {
-  const data = [
-    {
-      timestamp: "Wed Nov 25 2025",
-      campaign: "c1",
-      campaignsActive: 5,
-      totalImpressions: 1000,
-      totalClicks: 50,
-      totalRevenue: 5000,
-    },
-    {
-      timestamp: "Thu Nov 26 2025",
-      campaign: "c2",
-      campaignsActive: 5,
-      totalImpressions: 800,
-      totalClicks: 40,
-      totalRevenue: 4000,
-    },
-  ];
+import type { AggregatedData, AggregationPeriod } from "../../../lib/types";
+import { formatDate } from "../../../lib/utils";
+
+interface props {
+  data: AggregatedData[];
+  period: AggregationPeriod;
+}
+export default function DataGrid({ data, period }: props) {
+  // const data = [
+  //   {
+  //     timestamp: "Wed Nov 25 2025",
+  //     campaign: "c1",
+  //     campaignsActive: 5,
+  //     totalImpressions: 1000,
+  //     totalClicks: 50,
+  //     totalRevenue: 5000,
+  //   },
+  //   {
+  //     timestamp: "Thu Nov 26 2025",
+  //     campaign: "c2",
+  //     campaignsActive: 5,
+  //     totalImpressions: 800,
+  //     totalClicks: 40,
+  //     totalRevenue: 4000,
+  //   },
+  // ];
 
   const btnClass = `flex items-center text-sm font-semibold text-foreground cursor-pointer  hover:text-primary transition-colors`;
   const thClass = "px-6 py-4 text-left";
@@ -64,7 +71,7 @@ export default function DataGrid() {
                 key={i}
                 className="border-b border-border last:border-0 hover:bg-muted/50 transition-colors"
               >
-                <td className={tdClass}>{row.timestamp}</td>
+                <td className={tdClass}>{formatDate(row.timestamp, period)}</td>
                 <td className={tdClass}>{row.campaignsActive}</td>
                 <td className={tdClass + " text-right"}>
                   {formatValue(row.totalImpressions, "Total Impressions")}

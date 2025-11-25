@@ -1,18 +1,33 @@
-export default function CampaignMetrics() {
+import type { AggregatedData } from "../../../lib/types";
+
+interface props {
+  data: AggregatedData[];
+}
+export default function CampaignMetrics({ data }: props) {
+  const totals = data.reduce(
+    (acc, curr) => {
+      acc.revenue += curr.totalRevenue;
+      acc.clicks += curr.totalClicks;
+      acc.impressions += curr.totalImpressions;
+      return acc;
+    },
+    { revenue: 0, clicks: 0, impressions: 0 }
+  );
+
   const metrics = [
     {
       label: "Total Revenue",
-      value: 125,
+      value: totals.revenue,
       color: "text-chart-1",
     },
     {
       label: "Total Clicks",
-      value: 125,
+      value: totals.clicks,
       color: "text-chart-2",
     },
     {
       label: "Total Impressions",
-      value: 125,
+      value: totals.impressions,
       color: "text-chart-3",
     },
   ];
