@@ -12,7 +12,7 @@ interface DataGridProps {
 
 export function DataGrid({ data, sortField, sortDirection, onSort }: DataGridProps) {
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(25);
+  const [pageSize, setPageSize] = useState(10);
 
   // Calculate pagination
   const totalPages = Math.ceil(data.length / pageSize);
