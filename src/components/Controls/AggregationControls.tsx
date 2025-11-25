@@ -16,7 +16,7 @@ const AggregationControls: React.FC<AggregationControlsProps> = ({
 
   return (
     <div className="aggregation-controls">
-      <span className="label">Aggregation:</span>
+      <span>Aggregation:</span>
       <div className="button-group">
         {options.map((option) => (
           <button

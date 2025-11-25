@@ -46,19 +46,19 @@
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
-  }
 
-  .controls-section {
-    display: flex;
-    justify-content: flex-end;
-  }
+    .controls-section {
+      display: flex;
+      justify-content: flex-end;
+    }
 
-  .chart-section {
-    width: 100%;
-  }
+    .chart-section {
+      width: 100%;
+    }
 
-  .grid-section {
-    width: 100%;
+    .grid-section {
+      width: 100%;
+    }
   }
 }
 

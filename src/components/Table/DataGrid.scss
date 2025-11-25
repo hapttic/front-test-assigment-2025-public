@@ -15,46 +15,46 @@
 
   .table-responsive {
     overflow-x: auto;
-  }
 
-  .data-table {
-    width: 100%;
-    border-collapse: collapse;
-    min-width: 400px;
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 400px;
 
-    th,
-    td {
-      padding: 12px 10px;
-      text-align: left;
-      border-bottom: 1px solid #2a2e35;
-      font-size: 0.9rem;
-    }
+      th,
+      td {
+        padding: 12px 10px;
+        text-align: left;
+        border-bottom: 1px solid #2a2e35;
+        font-size: 0.9rem;
+      }
 
-    th {
-      background-color: transparent;
-      font-weight: 600;
-      color: #9ca3af;
+      th {
+        background-color: transparent;
+        font-weight: 600;
+        color: #9ca3af;
 
-      &.sortable {
-        cursor: pointer;
-        &:hover {
-          color: #ffffff;
+        &.sortable {
+          cursor: pointer;
+          &:hover {
+            color: #ffffff;
+          }
         }
       }
-    }
 
-    td {
-      color: #e0e0e0;
-    }
+      td {
+        color: #e0e0e0;
+      }
 
-    tr:hover {
-      background-color: #2a2e35;
-    }
+      tr:hover {
+        background-color: #2a2e35;
+      }
 
-    .empty-state {
-      text-align: center;
-      color: #6b7280;
-      padding: 2rem;
+      .empty-state {
+        text-align: center;
+        color: #6b7280;
+        padding: 2rem;
+      }
     }
   }
 }
