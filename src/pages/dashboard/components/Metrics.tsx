@@ -1,9 +1,23 @@
 import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 
 export default function Metrics() {
   const [selectedMetric, setSelectedMetric] = useState<"clicks" | "revenue">(
-    "clicks"
+    "revenue"
   );
+
+  const [searchParams, setSearchParams] = useSearchParams("");
+
+  function handleChangeMetric(metric: "clicks" | "revenue") {
+    setSelectedMetric(metric);
+
+    if (metric === "revenue") {
+      searchParams.delete("metric");
+    } else {
+      searchParams.set("metric", metric);
+    }
+    setSearchParams(searchParams);
+  }
 
   return (
     <div className="flex flex-wrap items-center gap-3">
@@ -12,8 +26,8 @@ export default function Metrics() {
         {(["clicks", "revenue"] as const).map((metric) => (
           <button
             key={metric}
-            onClick={() => setSelectedMetric(metric)}
-            className={`rounded-md px-4 py-2 text-sm font-medium transition-colors ${
+            onClick={() => handleChangeMetric(metric)}
+            className={`rounded-md px-4 py-2 text-sm cursor-pointer font-medium transition-colors ${
               selectedMetric === metric
                 ? "bg-primary text-primary-foreground"
                 : "text-muted-foreground hover:text-foreground"

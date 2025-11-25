@@ -1,9 +1,21 @@
 import { useState } from "react";
 import type { AggregationPeriod } from "../../../lib/types";
+import { useSearchParams } from "react-router-dom";
 
 export default function AggregationPeriod() {
   const [aggregationPeriod, setAggregationPeriod] =
     useState<AggregationPeriod>("daily");
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  function handleChangePeriod(period: AggregationPeriod) {
+    setAggregationPeriod(period);
+    if (period === "daily") {
+      searchParams.delete("period");
+    } else {
+      searchParams.set("period", period);
+    }
+    setSearchParams(searchParams);
+  }
 
   return (
     <div className="flex flex-wrap items-center gap-3">
@@ -14,7 +26,7 @@ export default function AggregationPeriod() {
         {(["hourly", "daily", "weekly", "monthly"] as const).map((period) => (
           <button
             key={period}
-            onClick={() => setAggregationPeriod(period)}
+            onClick={() => handleChangePeriod(period)}
             className={`rounded-md px-4 py-2 text-sm font-medium transition-colors cursor-pointer ${
               aggregationPeriod === period
                 ? "bg-primary text-primary-foreground"
