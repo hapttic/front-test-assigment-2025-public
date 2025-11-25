@@ -81,37 +81,50 @@ function App() {
       </header>
       <main className="app-main">
         <StatsOverview data={aggregatedData} />
-        
-        <AggregationControls
-          value={aggregationLevel}
-          onChange={setAggregationLevel}
-        />
 
-        <div className="metric-selector">
-          <label>Chart Metric:</label>
-          <div className="metric-buttons">
-            <button
-              className={chartMetric === 'revenue' ? 'active' : ''}
-              onClick={() => setChartMetric('revenue')}
-            >
-              Revenue
-            </button>
-            <button
-              className={chartMetric === 'clicks' ? 'active' : ''}
-              onClick={() => setChartMetric('clicks')}
-            >
-              Clicks
-            </button>
-            <button
-              className={chartMetric === 'impressions' ? 'active' : ''}
-              onClick={() => setChartMetric('impressions')}
-            >
-              Impressions
-            </button>
+        <div className="chart-section">
+          <Chart data={aggregatedData} metric={chartMetric} />
+          
+          <div className="chart-controls-panel">
+            <div className="control-group">
+              <label>Time Period</label>
+              <select
+                value={aggregationLevel}
+                onChange={(e) => setAggregationLevel(e.target.value as any)}
+                className="control-select"
+              >
+                <option value="hourly">Hourly</option>
+                <option value="daily">Daily</option>
+                <option value="weekly">Weekly</option>
+                <option value="monthly">Monthly</option>
+              </select>
+            </div>
+
+            <div className="control-group">
+              <label>Chart Metric</label>
+              <div className="control-buttons">
+                <button
+                  className={chartMetric === 'revenue' ? 'active' : ''}
+                  onClick={() => setChartMetric('revenue')}
+                >
+                  Revenue
+                </button>
+                <button
+                  className={chartMetric === 'clicks' ? 'active' : ''}
+                  onClick={() => setChartMetric('clicks')}
+                >
+                  Clicks
+                </button>
+                <button
+                  className={chartMetric === 'impressions' ? 'active' : ''}
+                  onClick={() => setChartMetric('impressions')}
+                >
+                  Impressions
+                </button>
+              </div>
+            </div>
           </div>
         </div>
-
-        <Chart data={aggregatedData} metric={chartMetric} />
 
         <DataGrid
           data={aggregatedData}
