@@ -64,7 +64,7 @@
 
 .data-grid th.number,
 .data-grid td.number {
-  text-align: right;
+  text-align: center;
 }
 
 .data-grid tbody tr {
