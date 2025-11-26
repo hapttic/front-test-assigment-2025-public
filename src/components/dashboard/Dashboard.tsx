@@ -1,60 +1,22 @@
 import React, { useState, useEffect } from 'react'
-import dataJson from '../../data/data.json'
-
-interface Campaign {
-  id: string
-  name: string
-  platform: string
-}
-
-interface Metric {
-  campaignId: string
-  timestamp: string
-  impressions: number
-  clicks: number
-  revenue: number
-}
-
-interface Data {
-  metadata: {
-    generatedAt: string
-    description: string
-  }
-  campaigns: Campaign[]
-  metrics: Metric[]
-}
+import { fetchData, MergedCampaignMetric } from '../../services/dataService'
 
 const Dashboard: React.FC = () => {
-  const [data, setData] = useState<Data | null>(null)
+  const [data, setData] = useState<MergedCampaignMetric[]>([])
 
   useEffect(() => {
-    // Simulate fetching data
-    setData(dataJson as Data)
-  }, [])
+    async function loadData() {
+      const mergedData = await fetchData()
+      setData(mergedData)
+    }
 
-  if (!data) return <div>Loading...</div>
+    loadData()
+  }, [])
 
   return (
     <div>
       <h1>Dashboard</h1>
-
-      <h2>Campaigns:</h2>
-      <ul>
-        {data.campaigns.map((c) => (
-          <li key={c.id}>
-            {c.name} ({c.platform})
-          </li>
-        ))}
-      </ul>
-
-      <h2>Metrics:</h2>
-      <ul>
-        {data.metrics.map((m, index) => (
-          <li key={index}>
-            {m.campaignId} - Impressions: {m.impressions}, Clicks: {m.clicks}, Revenue: ${m.revenue}
-          </li>
-        ))}
-      </ul>
+      <pre>{JSON.stringify(data, null, 2)}</pre>
     </div>
   )
 }
