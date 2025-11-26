@@ -2,19 +2,24 @@ import type { AggregatedBucket } from "../types/data";
 
 type BarChartProps = {
   data: AggregatedBucket[];
+  metric: "clicks" | "revenue";
   width?: number;
   height?: number;
 };
 
 export default function BarChart({
   data,
+  metric,
   width = 720,
   height = 280,
 }: BarChartProps) {
   const margin = { top: 12, right: 12, bottom: 40, left: 40 };
   const chartWidth = width - margin.left - margin.right; // calc full w
   const chartHeight = height - margin.top - margin.bottom; // calc full h
-  const maxClicks = Math.max(...data.map((bucket) => bucket.totalClicks)); // biggest click number
+  const values = data.map((bucket) =>
+    metric === "clicks" ? bucket.totalClicks : bucket.totalRevenue
+  );
+  const maxValue = values.length > 0 ? Math.max(...values) : 1; // biggest value
 
   const minBarWidth = 8;
   const maxBarWidth = 50;
@@ -35,7 +40,14 @@ export default function BarChart({
 
   // detect when it reaches roof so it doesnt go over
   const getBarTop = (value: number) =>
-    chartHeight - (value / maxClicks) * chartHeight;
+    chartHeight - (value / maxValue) * chartHeight;
+
+  const formatValue = (value: number) => {
+    if (metric === "revenue") {
+      return `$${value.toFixed(0)}`;
+    }
+    return value.toLocaleString();
+  };
 
   // labels
   const showLabelEvery =
@@ -48,12 +60,13 @@ export default function BarChart({
         width={svgWidth}
         height={height}
         role="img"
-        aria-label="Clicks bar chart"
+        aria-label={`${metric} bar chart`}
       >
         <g transform={`translate(${margin.left + startX}, ${margin.top})`}>
           {data.map((bucket, index) => {
             const x = index * totalBarWidth;
-            const top = getBarTop(bucket.totalClicks);
+            const value = metric === "clicks" ? bucket.totalClicks : bucket.totalRevenue;
+            const top = getBarTop(value);
             const barHeight = chartHeight - top;
             const showLabel =
               index % showLabelEvery === 0 || index === data.length - 1;
@@ -84,7 +97,7 @@ export default function BarChart({
                     fill="#e2e8f0"
                     fontSize={11}
                   >
-                    {bucket.totalClicks}
+                    {formatValue(value)}
                   </text>
                 )}
                 {showLabel && (

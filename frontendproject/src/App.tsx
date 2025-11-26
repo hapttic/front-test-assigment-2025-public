@@ -12,8 +12,11 @@ const aggregationOptions: AggregationLevel[] = [
   "monthly",
 ];
 
+type MetricType = "clicks" | "revenue";
+
 function App() {
   const [aggregation, setAggregation] = useState<AggregationLevel>("daily");
+  const [metric, setMetric] = useState<MetricType>("clicks");
   const [metrics, setMetrics] = useState<MetricRecord[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -60,14 +63,29 @@ function App() {
               ))}
             </select>
           </label>
+          <label className="flex items-center gap-2 text-sm">
+            <span className="text-slate-300 uppercase tracking-wide">
+              Metric
+            </span>
+            <select
+              className="bg-slate-900 border border-slate-800 rounded px-3 py-2"
+              value={metric}
+              onChange={(event) => setMetric(event.target.value as MetricType)}
+            >
+              <option value="clicks">Clicks</option>
+              <option value="revenue">Revenue</option>
+            </select>
+          </label>
         </section>
 
         <section className="bg-slate-900 border border-slate-800 rounded-xl p-5 shadow-xl">
-          <h2 className="text-lg font-semibold mb-4">Clicks over time</h2>
+          <h2 className="text-lg font-semibold mb-4">
+            {metric === "clicks" ? "Clicks" : "Revenue"} over time
+          </h2>
           {loading ? (
             <p className="text-slate-400 text-sm">Loading data...</p>
           ) : (
-            <BarChart data={aggregatedData} />
+            <BarChart data={aggregatedData} metric={metric} />
           )}
           {error && (
             <p className="bg-red-600 text-sm mt-2">
