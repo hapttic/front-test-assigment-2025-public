@@ -3,6 +3,7 @@ import "./App.css";
 import type { AggregationLevel, MetricRecord } from "./types/data";
 import { aggregateMetrics } from "./utils/aggregation";
 import BarChart from "./components/barChart";
+import DataTable from "./components/DataTable";
 
 const aggregationOptions: AggregationLevel[] = [
   "hourly",
@@ -72,6 +73,15 @@ function App() {
             <p className="bg-red-600 text-sm mt-2">
               Something went wrong {error}
             </p>
+          )}
+        </section>
+
+        <section className="bg-slate-900 border border-slate-800 rounded-xl p-5 shadow-xl">
+          <h2 className="text-lg font-semibold mb-4">Performance Data</h2>
+          {loading ? (
+            <p className="text-slate-400 text-sm">Loading data...</p>
+          ) : (
+            <DataTable data={aggregatedData} />
           )}
         </section>
       </div>
