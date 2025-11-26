@@ -1,3 +1,4 @@
+import { useChartScales } from "../hooks/useChartScales";
 import type { AggregatedSlot } from "../types";
 
 // export default function Chart({ data }: { data: AggregatedSlot[] }) {
@@ -26,48 +27,19 @@ export default function Chart({
 }) {
   if (!data.length) return null;
 
-  const maxValue = Math.max(...data.map((d) => d.revenue));
-  console.log("max rev: ", maxValue);
   const width = 1300;
   const height = 400;
   const padding = 70;
 
-  function niceStep(maxValue: number, numIntervals: number) {
-    const rawStep = maxValue / numIntervals;
-    const pow10 = Math.pow(10, Math.floor(Math.log10(rawStep))); // 10^n
-    const base = rawStep / pow10;
+  const { maxValue, yValues, getX, getY } = useChartScales({
+    data,
+    width,
+    height,
+    padding,
+  });
 
-    let niceBase;
-    if (base <= 1) niceBase = 1;
-    else if (base <= 2) niceBase = 2;
-    else if (base <= 5) niceBase = 5;
-    else niceBase = 10;
-
-    return niceBase * pow10;
-  }
-
-  const numIntervals = 5;
-  const step = niceStep(maxValue, numIntervals);
-  const axisMax = Math.ceil(maxValue / step) * step;
-  const yValues = [];
-  for (let v = 0; v <= axisMax; v += step) {
-    yValues.push(v);
-  }
-  for (let v = 0; v <= maxValue; v += step) {
-    yValues.push(v);
-  }
-  if (yValues[yValues.length - 1] < maxValue) {
-    yValues.push(step * yValues.length); // ensure last value >= maxValue
-  }
-
-  const getX = (i: number) =>
-    padding + (i / (data.length - 1)) * (width - padding * 2);
-
-  const getY = (value: number) =>
-    height - padding - (value / maxValue) * (height - padding * 2);
-
-  //const numIntervals = 5;
-  const intervalStep = Math.ceil(maxValue / numIntervals);
+  console.log("max rev: ", maxValue);
+  //const intervalStep = Math.ceil(maxValue / numIntervals);
 
   const linePath = data
     .map((d, i) => `${i === 0 ? "M" : "L"} ${getX(i)} ${getY(d.revenue)}`)
