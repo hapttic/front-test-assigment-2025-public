@@ -34,7 +34,7 @@ export default function CampaignTable({ data }) {
                             <td>{c.impressions}</td>
                             <td>{c.clicks}</td>
                             <td>${c.revenue.toFixed(2)}</td>
-                            <td>{(c.ctrs * 100).toFixed(2)}%</td>
+                            <td>{(c.ctr * 100).toFixed(2)}%</td>
                             <td>{c.lastTimestamp ? new Date(c.lastTimestamp).toLocaleTimeString() : '-'}</td>
                         </tr>
                     ))}
