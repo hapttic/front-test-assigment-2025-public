@@ -58,7 +58,7 @@ const DashboardDataTable = ({
   };
   return (
     <div className="p-6">
-      {!isLoading && response ? (
+      {!isLoading ? (
         <div className="shadow-lg rounded-xl p-4 bg-white">
           <div className="overflow-x-auto max-h-[65vh] rounded-lg">
             <table className="min-w-full divide-y divide-cyan-200">
@@ -132,7 +132,7 @@ const DashboardDataTable = ({
               <button
                 disabled={filters.pageNumber === 1}
                 onClick={() => goToPage(filters.pageNumber - 1)}
-                className="px-4 py-2 bg-cyan-500 hover:bg-cyan-600 text-white rounded-lg transition-colors disabled:opacity-50"
+                className="cursor-pointer px-4 py-2 bg-cyan-500 hover:bg-cyan-600 text-white rounded-lg transition-colors disabled:opacity-50"
               >
                 Previous
               </button>
@@ -146,7 +146,7 @@ const DashboardDataTable = ({
                   Math.ceil(response.total / filters.pageSize)
                 }
                 onClick={() => goToPage(filters.pageNumber + 1)}
-                className="px-4 py-2 bg-cyan-500 hover:bg-cyan-600 text-white rounded-lg transition-colors disabled:opacity-50"
+                className="cursor-pointer px-4 py-2 bg-cyan-500 hover:bg-cyan-600 text-white rounded-lg transition-colors disabled:opacity-50"
               >
                 Next
               </button>

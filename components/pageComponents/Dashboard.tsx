@@ -1,8 +1,8 @@
 "use client";
 import { useMemo, useState } from "react";
-import DashboardDataTable from "./Ui/DashboardDataTable";
 import { DataFilters } from "@/lib/interfaces/types";
 import { useFetchAnalytics } from "@/hooks/useFetchAnalytics";
+import DashboardDataTable from "../Ui/DashboardDataTable";
 
 const Dashboard = () => {
   const [filters, setFilters] = useState<DataFilters>({
@@ -49,15 +49,14 @@ const Dashboard = () => {
         </div>
       </div>
       {/* data table */}
-      {response && (
-        <DashboardDataTable
-          response={response}
-          analyticsData={analyticsData}
-          isLoading={isLoading || isFetching}
-          filters={filters}
-          setFilters={setFilters}
-        />
-      )}
+
+      <DashboardDataTable
+        response={response ? response : { data: [], total: 0 }}
+        analyticsData={analyticsData}
+        isLoading={isLoading || isFetching}
+        filters={filters}
+        setFilters={setFilters}
+      />
     </div>
   );
 };
