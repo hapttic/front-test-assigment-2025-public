@@ -29,7 +29,7 @@ export default function Chart({
 
   const width = 1300;
   const height = 400;
-  const padding = 70;
+  const padding = 40;
 
   const { maxValue, yValues, getX, getY } = useChartScales({
     data,
@@ -141,10 +141,10 @@ export default function Chart({
         <text
           key={`label-${i}`}
           x={getX(i)}
-          y={height - padding + 15}
+          y={height - 35}
           fontSize={10}
           textAnchor="middle"
-          transform={`rotate(-90, ${getX(i)}, ${height - padding + 15})`}
+          transform={`rotate(-90, ${getX(i)}, ${height - 35})`}
         >
           {d.start.toLocaleDateString()}
           {/* {d.timeLabel} */}
