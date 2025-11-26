@@ -1,6 +1,6 @@
 import axios from "axios";
 import {
-  AggregatedData,
+  AnalyticsApiResponse,
   CampaignItem,
   DataFilters,
   MetricItem,
@@ -11,7 +11,7 @@ import { aggregationFunction } from "../functions/aggregationFunction";
 
 export const getAnalytics = async (
   filters: DataFilters
-): Promise<AggregatedData[] | []> => {
+): Promise<AnalyticsApiResponse | []> => {
   const { data } = await axios.get<{
     campaigns: CampaignItem[];
     metrics: MetricItem[];
@@ -19,9 +19,8 @@ export const getAnalytics = async (
   const { campaigns, metrics } = data;
 
   const joined: MetricWithCampaignItem[] = joinCampaignsToMetrics(
-    filters,
     metrics,
     campaigns
   );
-  return aggregationFunction(joined, filters.aggregationType);
+  return aggregationFunction(joined, filters);
 };

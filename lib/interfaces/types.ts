@@ -27,6 +27,10 @@ export interface AggregatedData {
   totalClicks: number;
   totalRevenue: number;
 }
+export interface AnalyticsApiResponse {
+  data: AggregatedData[];
+  total: number;
+}
 
 export interface DataFilters {
   pageNumber?: number;

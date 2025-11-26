@@ -1,24 +1,25 @@
 import {
   AggregatedData,
-  Aggregation,
+  AnalyticsApiResponse,
+  DataFilters,
   MetricWithCampaignItem,
 } from "../interfaces/types";
 
 export const aggregationFunction = (
   data: MetricWithCampaignItem[],
-  aggregationType: Aggregation
-): AggregatedData[] | [] => {
+  filters: DataFilters
+): AnalyticsApiResponse => {
   const result: AggregatedData[] = [];
 
   data.forEach((item) => {
     const date = new Date(item.timestamp);
 
     let timePeriod: string;
-    if (aggregationType == "hourly") {
+    if (filters.aggregationType == "hourly") {
       timePeriod = date.toISOString().slice(0, 13);
-    } else if (aggregationType == "daily") {
+    } else if (filters.aggregationType == "daily") {
       timePeriod = date.toISOString().slice(0, 10);
-    } else if (aggregationType == "weekly") {
+    } else if (filters.aggregationType == "weekly") {
       const week = Math.ceil(
         ((date.getTime() - new Date(date.getFullYear(), 0, 1).getTime()) /
           (1000 * 60 * 60 * 24) +
@@ -52,5 +53,13 @@ export const aggregationFunction = (
     }
   });
 
-  return result;
+  // it was not requested but I am creating pagination for preventing heavy data load
+  const total = result.length;
+  let paginatedData = result;
+  if (filters.pageNumber !== undefined && filters.pageSize !== undefined) {
+    const start = (filters.pageNumber - 1) * filters.pageSize;
+    const end = start + filters.pageSize;
+    paginatedData = result.slice(start, end);
+  }
+  return { data: paginatedData, total: total };
 };
