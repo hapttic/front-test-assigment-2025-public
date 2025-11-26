@@ -32,19 +32,42 @@ export const aggregateMetrics = (
   metrics: MetricRecord[],
   level: AggregationLevel
 ): AggregatedBucket[] => {
-  const groups = new Map<string, AggregatedBucket>(); // map to store buckets
+  type TempBucket = AggregatedBucket & { campaignIds: Set<string> };
+  const groups = new Map<string, TempBucket>(); // map to store buckets
 
   // iterate over timestamp and clicks of each metric
-  for (const { timestamp, clicks } of metrics) {
+  for (const { timestamp, clicks, impressions, revenue, campaignId } of metrics) {
     const date = new Date(timestamp);
     const label = getLabel(date, level);
     const key = `${level}-${label}`; // calculate unique key for map
 
     // default val of 0 for each if null
-    const bucket = groups.get(key) ?? { key, label, totalClicks: 0 };
-    bucket.totalClicks = bucket.totalClicks + clicks;
+    const bucket = groups.get(key) ?? {
+      key,
+      label,
+      date: timestamp,
+      campaignsActive: 0,
+      totalImpressions: 0,
+      totalClicks: 0,
+      totalRevenue: 0,
+      campaignIds: new Set<string>(),
+    };
+    bucket.totalClicks += clicks;
+    bucket.totalImpressions += impressions;
+    bucket.totalRevenue += revenue;
+    bucket.campaignIds.add(campaignId);
     groups.set(key, bucket);
   }
 
-  return [...groups.values()];
+  return [...groups.values()]
+    .map((bucket) => ({
+      key: bucket.key,
+      label: bucket.label,
+      date: bucket.date,
+      campaignsActive: bucket.campaignIds.size,
+      totalImpressions: bucket.totalImpressions,
+      totalClicks: bucket.totalClicks,
+      totalRevenue: bucket.totalRevenue,
+    }))
+    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 };
