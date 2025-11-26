@@ -12,6 +12,7 @@ export default function DataTable({ data }: DataTableProps) {
   const [sortField, setSortField] = useState<SortField>(null);
   const [sortDirection, setSortDirection] = useState<SortDirection>("asc");
 
+  // sort depending on given field
   const handleSort = (field: "date" | "revenue") => {
     if (sortField === field) {
       setSortDirection(sortDirection === "asc" ? "desc" : "asc");
@@ -37,6 +38,7 @@ export default function DataTable({ data }: DataTableProps) {
   const formatNumber = (num: number) => num.toLocaleString();
   const formatCurrency = (num: number) => `$${num.toFixed(2)}`;
   const formatDate = (dateString: string) => {
+    // format to display nice date
     const date = new Date(dateString);
     return date.toLocaleDateString("en-US", {
       year: "numeric",
@@ -47,62 +49,69 @@ export default function DataTable({ data }: DataTableProps) {
 
   return (
     <div className="overflow-x-auto">
-      <table className="w-full border-collapse">
-        <thead>
-          <tr className="border-b border-slate-700">
-            <th
-              className="text-left p-3 text-sm font-semibold text-slate-300 cursor-pointer hover:text-white"
-              onClick={() => handleSort("date")}
-            >
-              Date
-              {sortField === "date" && (
-                <span className="ml-2">{sortDirection === "asc" ? "↑" : "↓"}</span>
-              )}
-            </th>
-            <th className="text-left p-3 text-sm font-semibold text-slate-300">
-              Campaigns Active
-            </th>
-            <th className="text-left p-3 text-sm font-semibold text-slate-300">
-              Total Impressions
-            </th>
-            <th className="text-left p-3 text-sm font-semibold text-slate-300">
-              Total Clicks
-            </th>
-            <th
-              className="text-left p-3 text-sm font-semibold text-slate-300 cursor-pointer hover:text-white"
-              onClick={() => handleSort("revenue")}
-            >
-              Total Revenue
-              {sortField === "revenue" && (
-                <span className="ml-2">{sortDirection === "asc" ? "↑" : "↓"}</span>
-              )}
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {sortedData.map((bucket) => (
-            <tr
-              key={bucket.key}
-              className="border-b border-slate-800 hover:bg-slate-800/50"
-            >
-              <td className="p-3 text-sm text-slate-200">{formatDate(bucket.date)}</td>
-              <td className="p-3 text-sm text-slate-200">
-                {bucket.campaignsActive}
-              </td>
-              <td className="p-3 text-sm text-slate-200">
-                {formatNumber(bucket.totalImpressions)}
-              </td>
-              <td className="p-3 text-sm text-slate-200">
-                {formatNumber(bucket.totalClicks)}
-              </td>
-              <td className="p-3 text-sm text-slate-200">
-                {formatCurrency(bucket.totalRevenue)}
-              </td>
+      <div className="max-h-96 overflow-y-auto">
+        <table className="w-full border-collapse">
+          <thead className="sticky top-0 bg-slate-900 z-10">
+            <tr className="border-b border-slate-700">
+              <th
+                className="text-left p-3 text-sm font-semibold text-slate-300 cursor-pointer hover:text-white"
+                onClick={() => handleSort("date")}
+              >
+                Date
+                {sortField === "date" && (
+                  <span className="ml-2">
+                    {sortDirection === "asc" ? "↑" : "↓"}
+                  </span>
+                )}
+              </th>
+              <th className="text-left p-3 text-sm font-semibold text-slate-300">
+                Campaigns Active
+              </th>
+              <th className="text-left p-3 text-sm font-semibold text-slate-300">
+                Total Impressions
+              </th>
+              <th className="text-left p-3 text-sm font-semibold text-slate-300">
+                Total Clicks
+              </th>
+              <th
+                className="text-left p-3 text-sm font-semibold text-slate-300 cursor-pointer hover:text-white"
+                onClick={() => handleSort("revenue")}
+              >
+                Total Revenue
+                {sortField === "revenue" && (
+                  <span className="ml-2">
+                    {sortDirection === "asc" ? "↑" : "↓"}
+                  </span>
+                )}
+              </th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {sortedData.map((bucket) => (
+              <tr
+                key={bucket.key}
+                className="border-b border-slate-800 hover:bg-slate-800/50"
+              >
+                <td className="p-3 text-sm text-slate-200">
+                  {formatDate(bucket.date)}
+                </td>
+                <td className="p-3 text-sm text-slate-200">
+                  {bucket.campaignsActive}
+                </td>
+                <td className="p-3 text-sm text-slate-200">
+                  {formatNumber(bucket.totalImpressions)}
+                </td>
+                <td className="p-3 text-sm text-slate-200">
+                  {formatNumber(bucket.totalClicks)}
+                </td>
+                <td className="p-3 text-sm text-slate-200">
+                  {formatCurrency(bucket.totalRevenue)}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
-
