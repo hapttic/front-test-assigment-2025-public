@@ -4,6 +4,7 @@ import KPIStats from "./components/stats/KPIStats"
 import TimeIntervalSelector from "./components/TimeIntervalSelector"
 import type { TimeInterval } from "./types";
 import CampaignPerformanceTable from "./components/campaign-table/CampaignPerformanceTable";
+import SocialStats from "./components/stats/SocialStats";
 
 function App() {
 
@@ -22,6 +23,7 @@ function App() {
         />
       </div>
       <KPIStats totalRevenue={12345} totalClicks={6789} totalImpressions={101112} />
+      <SocialStats totalRevenue={12345} totalClicks={6789} totalImpressions={101112} />
       <CampaignPerformanceTable  />
     </div>
   )
