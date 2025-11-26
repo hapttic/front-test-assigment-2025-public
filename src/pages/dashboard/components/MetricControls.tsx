@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { capitalizeFirstLetter } from "../../../lib/utils";
 import type { MetricEnum } from "../../../lib/types";
+import Button from "../../../components/shared/Button";
 
 export default function MetricControls() {
   const [searchParams, setSearchParams] = useSearchParams("");
@@ -26,17 +27,16 @@ export default function MetricControls() {
       <label className="text-sm font-medium text-foreground">Metric:</label>
       <div className="flex rounded-lg border border-border bg-card p-1">
         {(["clicks", "revenue"] as const).map((metric) => (
-          <button
+          <Button
             key={metric}
             onClick={() => handleChangeMetric(metric)}
-            className={`rounded-md px-4 py-2 text-sm cursor-pointer font-medium transition-colors ${
-              selectedMetric === metric
-                ? "bg-primary text-primary-foreground"
-                : "text-muted-foreground hover:text-foreground"
-            }`}
+            className={` ${
+              metric !== selectedMetric && "text-muted-foreground"
+            } `}
+            variant={metric === selectedMetric ? "primary" : "ghost"}
           >
             {capitalizeFirstLetter(metric)}
-          </button>
+          </Button>
         ))}
       </div>
     </div>

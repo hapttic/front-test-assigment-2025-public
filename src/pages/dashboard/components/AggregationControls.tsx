@@ -2,6 +2,7 @@ import { useState } from "react";
 import type { AggregationPeriod } from "../../../lib/types";
 import { useSearchParams } from "react-router-dom";
 import { capitalizeFirstLetter } from "../../../lib/utils";
+import Button from "../../../components/shared/Button";
 
 export default function AggregationControls() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -27,17 +28,16 @@ export default function AggregationControls() {
       </label>
       <div className="flex rounded-lg border border-border bg-card p-1">
         {(["hourly", "daily", "weekly", "monthly"] as const).map((period) => (
-          <button
+          <Button
             key={period}
             onClick={() => handleChangePeriod(period)}
-            className={`rounded-md px-4 py-2 text-sm font-medium transition-colors cursor-pointer ${
-              aggregationPeriod === period
-                ? "bg-primary text-primary-foreground"
-                : "text-muted-foreground hover:text-foreground"
-            }`}
+            className={` ${
+              aggregationPeriod !== period && "text-muted-foreground"
+            } `}
+            variant={aggregationPeriod === period ? "primary" : "ghost"}
           >
             {capitalizeFirstLetter(period)}
-          </button>
+          </Button>
         ))}
       </div>
     </div>
