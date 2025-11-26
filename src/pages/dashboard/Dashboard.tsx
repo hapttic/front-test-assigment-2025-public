@@ -5,9 +5,10 @@ import MetricControls from "./components/MetricControls";
 import Header from "./components/Header";
 import DataGrid from "./components/DataGrid";
 import useAggrigatedData from "../../lib/hooks/useAggrigatedData";
+import Chart from "./components/Chart";
 
 export default function Dashboard() {
-  const { data: aggregatedData, period } = useAggrigatedData();
+  const { data: aggregatedData, period, metric } = useAggrigatedData();
 
   return (
     <Wrapper className="min-h-screen bg-background space-y-8 py-12">
@@ -18,6 +19,7 @@ export default function Dashboard() {
       </div>
 
       <CampaignMetrics data={aggregatedData} />
+      <Chart data={aggregatedData} metric={metric} period={period} />
       <DataGrid data={aggregatedData} period={period} />
     </Wrapper>
   );
