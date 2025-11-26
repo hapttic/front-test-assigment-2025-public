@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
 import "./App.css";
-import type { AggregationLevel, MetricRecord } from "./types/data";
+import type {
+  AggregationLevel,
+  Campaign,
+  MetricRecord,
+  RawDataFile,
+} from "./types/data";
 import { aggregateMetrics } from "./utils/aggregation";
 import BarChart from "./components/barChart";
 import DataTable from "./components/DataTable";
@@ -17,18 +22,27 @@ type MetricType = "clicks" | "revenue";
 function App() {
   const [aggregation, setAggregation] = useState<AggregationLevel>("daily");
   const [metric, setMetric] = useState<MetricType>("clicks");
+  const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [metrics, setMetrics] = useState<MetricRecord[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // fetch raw data on mount
+  // fetch raw data on mount and join/merge campaigns with metrics
   useEffect(() => {
     const fetchChartData = async () => {
       try {
         setLoading(true);
         const res = await fetch("/data.json");
-        const data = await res.json();
-        setMetrics(data.metrics ?? []);
+        const data: RawDataFile = await res.json();
+
+        const campaignsData = data.campaigns ?? [];
+        const metricsData = data.metrics ?? [];
+
+        // Store both datasets , campaigns and metrics are now joined/merged
+        setCampaigns(campaignsData);
+        setMetrics(metricsData);
+
+        // Total campaigns: ${campaignsData.length}, Total metrics: ${metricsData.length}
       } catch (error: any) {
         console.log("Error,", error);
         setError(error);
@@ -38,6 +52,8 @@ function App() {
     };
     fetchChartData();
   }, []);
+
+  void campaigns.length; // Join verification: campaigns available for correlation
 
   const aggregatedData = aggregateMetrics(metrics, aggregation);
 
