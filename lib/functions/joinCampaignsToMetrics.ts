@@ -1,10 +1,12 @@
 import {
   CampaignItem,
+  DataFilters,
   MetricItem,
   MetricWithCampaignItem,
 } from "../interfaces/types";
 
 export const joinCampaignsToMetrics = (
+  filters: DataFilters,
   metrics: MetricItem[],
   campaigns: CampaignItem[]
 ): MetricWithCampaignItem[] => {

@@ -18,7 +18,7 @@ export interface MetricWithCampaignItem extends MetricItem {
   campaignPlatform: string;
 }
 
-export type Aggregation = "daily" | "weekly" | "monthly";
+export type Aggregation = "hourly" | "daily" | "weekly" | "monthly";
 
 export interface AggregatedData {
   period: string;
@@ -26,4 +26,10 @@ export interface AggregatedData {
   totalImpressions: number;
   totalClicks: number;
   totalRevenue: number;
+}
+
+export interface DataFilters {
+  pageNumber?: number;
+  pageSize?: number;
+  aggregationType: Aggregation;
 }
