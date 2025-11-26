@@ -3,6 +3,7 @@ import { useFetchCampaignData } from "../hooks/useFetchCampaignData";
 import DataTable from "../components/DataTable";
 import { useAggregatedMetrics } from "../hooks/useAggregatedMetrics";
 import AggregationFilter from "../components/AggregationFilter";
+import Chart from "../components/Chart";
 
 export default function Dashboard() {
   // const [aggregation, setAggregation] = useState<
@@ -39,6 +40,7 @@ export default function Dashboard() {
           />
         </div>
       </div>
+      <Chart data={aggregated} aggregation={mode} />
       <DataTable
         rows={aggregated}
         //rows={metrics}
