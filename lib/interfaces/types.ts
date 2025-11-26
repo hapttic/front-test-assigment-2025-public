@@ -33,7 +33,7 @@ export interface AnalyticsApiResponse {
 }
 
 export interface DataFilters {
-  pageNumber?: number;
-  pageSize?: number;
+  pageNumber: number;
+  pageSize: number;
   aggregationType: Aggregation;
 }

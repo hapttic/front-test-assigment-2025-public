@@ -11,7 +11,7 @@ import { aggregationFunction } from "../functions/aggregationFunction";
 
 export const getAnalytics = async (
   filters: DataFilters
-): Promise<AnalyticsApiResponse | []> => {
+): Promise<AnalyticsApiResponse> => {
   const { data } = await axios.get<{
     campaigns: CampaignItem[];
     metrics: MetricItem[];
