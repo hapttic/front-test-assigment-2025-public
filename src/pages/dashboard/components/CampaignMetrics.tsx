@@ -1,17 +1,23 @@
+import { useMemo } from "react";
 import type { AggregatedData } from "../../../lib/types";
 
 interface props {
   data: AggregatedData[];
 }
 export default function CampaignMetrics({ data }: props) {
-  const totals = data.reduce(
-    (acc, curr) => {
-      acc.revenue += curr.totalRevenue;
-      acc.clicks += curr.totalClicks;
-      acc.impressions += curr.totalImpressions;
-      return acc;
-    },
-    { revenue: 0, clicks: 0, impressions: 0 }
+  const totals = useMemo(
+    () =>
+      data.reduce(
+        (acc, curr) => {
+          acc.revenue += curr.totalRevenue;
+          acc.clicks += curr.totalClicks;
+          acc.impressions += curr.totalImpressions;
+          return acc;
+        },
+
+        { revenue: 0, clicks: 0, impressions: 0 }
+      ),
+    [data]
   );
 
   const metrics = [

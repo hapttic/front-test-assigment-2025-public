@@ -6,6 +6,7 @@ import type {
 import { formatDate } from "../../../lib/utils";
 import useSort from "../../../lib/hooks/useSort";
 import SortIcon from "./SortIcon";
+import { memo } from "react";
 
 interface props {
   data: AggregatedData[];
@@ -25,7 +26,7 @@ const tableHeadings: TableHeading[] = [
   { label: "Revenue", field: "revenue" },
 ];
 
-export default function DataGrid({ data, period }: props) {
+function DataGrid({ data, period }: props) {
   const btnClass = `flex items-center text-sm font-semibold text-foreground cursor-pointer  hover:text-primary transition-colors`;
   const thClass = "px-6 py-4 text-left";
   const tdClass = `px-6 py-4 text-sm text-foreground`;
@@ -95,3 +96,5 @@ export default function DataGrid({ data, period }: props) {
     </div>
   );
 }
+
+export default memo(DataGrid);

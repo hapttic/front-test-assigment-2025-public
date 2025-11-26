@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { memo, useMemo, useState } from "react";
 import type {
   AggregatedData,
   AggregationPeriod,
@@ -16,7 +16,7 @@ interface props {
   period: AggregationPeriod;
 }
 
-export default function Chart({ data, metric, period }: props) {
+function Chart({ data, metric, period }: props) {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   const chatData = useMemo(() => {
@@ -119,3 +119,5 @@ export default function Chart({ data, metric, period }: props) {
     </div>
   );
 }
+
+export default memo(Chart);
