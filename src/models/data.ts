@@ -20,3 +20,15 @@ export interface Data {
     campaigns: Campaign[]
     metrics: Metric[]
 }
+
+export interface AggregatedRow {
+    id: string
+    date: string
+    campaignsActive: number
+    totalImpressions: number
+    totalClicks: number
+    totalRevenue: number
+}
+
+export type SortField = 'date' | 'totalRevenue'
+export type SortOrder = 'asc' | 'desc'

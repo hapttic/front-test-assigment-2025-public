@@ -1,0 +1,19 @@
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.th,
+.td {
+    border: 1px solid black;
+    text-align: center;
+    padding: 8px;
+}
+
+.sortable {
+    cursor: pointer;
+}
+
+.tr:nth-child(even) {
+    background-color: #f7f7f7;
+}
