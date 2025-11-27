@@ -2,15 +2,17 @@ import React, { useState, useEffect, useMemo } from 'react'
 import { fetchData, MergedCampaignMetric } from '../../services/dataService'
 import TimelineChart from '../timelineChart/TimelineChart'
 import DashboardTable from '../dashboardTable/DashboardTable'
-import { AggregatedRow, SortField, SortOrder } from "../../models/data"
+import AggregationControls from '../aggregationControls/AggregationControls'
+import { AggregatedRow, SortField, SortOrder, AggregationLevel } from '../../models/data'
 
 const Dashboard: React.FC = () => {
   const [data, setData] = useState<MergedCampaignMetric[]>([])
+  const [aggregation, setAggregation] = useState<AggregationLevel>('daily')
   const [sortField, setSortField] = useState<SortField>('date')
   const [sortOrder, setSortOrder] = useState<SortOrder>('asc')
 
   useEffect(() => {
-    const load = async () => {
+    async function load() {
       const merged = await fetchData()
       setData(merged)
     }
@@ -20,20 +22,43 @@ const Dashboard: React.FC = () => {
   const aggregatedRows: AggregatedRow[] = useMemo(() => {
     const map = new Map<string, AggregatedRow>()
 
-    data.forEach((item: MergedCampaignMetric) => {
-      const date = new Date(item.timestamp).toLocaleDateString()
+    const formatDate = (ts: string): string => {
+      const d = new Date(ts)
 
-      if (!map.has(date)) {
-        map.set(date, {
-          id: date,
-          date,
+      if (aggregation === 'hourly') {
+        return d.toISOString().slice(0, 13)
+      }
+      if (aggregation === 'daily') {
+        return d.toISOString().slice(0, 10)
+      }
+      if (aggregation === 'weekly') {
+        const d0 = new Date(d)
+        const day = d0.getDay() || 7
+        d0.setDate(d0.getDate() - day + 1)
+        d0.setHours(0, 0, 0, 0)
+        return d0.toISOString().slice(0, 10)
+      }
+      if (aggregation === 'monthly') {
+        return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`
+      }
+      return d.toISOString().slice(0, 10)
+    }
+
+
+    data.forEach(item => {
+      const key = formatDate(item.timestamp)
+
+      if (!map.has(key)) {
+        map.set(key, {
+          id: key,
+          date: key,
           campaignsActive: 1,
           totalImpressions: item.impressions,
           totalClicks: item.clicks,
-          totalRevenue: item.revenue,
+          totalRevenue: item.revenue
         })
       } else {
-        const row = map.get(date)!
+        const row = map.get(key)!
         row.campaignsActive += 1
         row.totalImpressions += item.impressions
         row.totalClicks += item.clicks
@@ -42,20 +67,28 @@ const Dashboard: React.FC = () => {
     })
 
     const rows = Array.from(map.values())
+    return rows.sort((a, b) =>
+      new Date(a.date).getTime() - new Date(b.date).getTime()
+    )
+  }, [data, aggregation])
 
-    return rows.sort((a, b) => {
+  const sortedRows = useMemo(() => {
+    return [...aggregatedRows].sort((a, b) => {
       if (sortField === 'date') {
         return sortOrder === 'asc'
           ? new Date(a.date).getTime() - new Date(b.date).getTime()
           : new Date(b.date).getTime() - new Date(a.date).getTime()
       }
-      return sortOrder === 'asc'
-        ? a.totalRevenue - b.totalRevenue
-        : b.totalRevenue - a.totalRevenue
+      if (sortField === 'totalRevenue') {
+        return sortOrder === 'asc'
+          ? a.totalRevenue - b.totalRevenue
+          : b.totalRevenue - a.totalRevenue
+      }
+      return 0
     })
-  }, [data, sortField, sortOrder])
+  }, [aggregatedRows, sortField, sortOrder])
 
-  const handleSort = (field: SortField): void => {
+  const handleSort = (field: SortField) => {
     if (sortField === field) {
       setSortOrder(prev => (prev === 'asc' ? 'desc' : 'asc'))
     } else {
@@ -68,10 +101,12 @@ const Dashboard: React.FC = () => {
     <div>
       <h1>Campaign Dashboard</h1>
 
+      <AggregationControls value={aggregation} onChange={setAggregation} />
+
       <TimelineChart data={aggregatedRows} />
 
       <DashboardTable
-        rows={aggregatedRows}
+        rows={sortedRows}
         sortField={sortField}
         sortOrder={sortOrder}
         onSort={handleSort}
