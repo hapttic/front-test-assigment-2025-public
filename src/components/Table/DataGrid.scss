@@ -6,11 +6,47 @@
   border: 1px solid #2a2e35;
   flex-grow: 1;
 
-  h3 {
-    margin-top: 0;
+  .grid-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 1rem;
-    color: #e0e0e0;
-    font-size: 1.1rem;
+
+    h3 {
+      margin: 0;
+      color: #e0e0e0;
+      font-size: 1.1rem;
+    }
+
+    .pagination-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      .page-btn {
+        background: #2a2e35;
+        border: none;
+        color: #e0e0e0;
+        padding: 5px 10px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background 0.2s;
+
+        &:hover:not(:disabled) {
+          background: #3b414b;
+        }
+
+        &:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
+      }
+
+      .page-info {
+        color: #9ca3af;
+        font-size: 0.9rem;
+      }
+    }
   }
 
   .table-responsive {

@@ -12,6 +12,8 @@ type SortDirection = "asc" | "desc";
 const DataGrid: React.FC<DataGridProps> = ({ data }) => {
   const [sortField, setSortField] = useState<SortField | null>(null);
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 50;
 
   const handleSort = (field: SortField) => {
     if (sortField === field) {
@@ -24,7 +26,7 @@ const DataGrid: React.FC<DataGridProps> = ({ data }) => {
 
   const sortedData = useMemo(() => {
     if (!sortField) return data;
-    
+
     return [...data].sort((a, b) => {
       const valA = sortField === "timestamp" ? a.timestamp : a.revenue;
       const valB = sortField === "timestamp" ? b.timestamp : b.revenue;
@@ -32,9 +34,47 @@ const DataGrid: React.FC<DataGridProps> = ({ data }) => {
     });
   }, [data, sortField, sortDirection]);
 
+  const paginatedData = useMemo(() => {
+    const startIndex = (currentPage - 1) * pageSize;
+    return sortedData.slice(startIndex, startIndex + pageSize);
+  }, [sortedData, currentPage]);
+
+  const totalPages = Math.ceil(sortedData.length / pageSize);
+
+  const handlePageChange = (newPage: number) => {
+    if (newPage >= 1 && newPage <= totalPages) {
+      setCurrentPage(newPage);
+    }
+  };
+
+  React.useEffect(() => {
+    setCurrentPage(1);
+  }, [data]);
+
   return (
     <div className="data-grid-container">
-      <h3>Campaign Data</h3>
+      <div className="grid-header">
+        <h3>Campaign Data</h3>
+        <div className="pagination-controls">
+          <button
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+            className="page-btn"
+          >
+            &lt;
+          </button>
+          <span className="page-info">
+            Page {currentPage} of {totalPages || 1}
+          </span>
+          <button
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+            className="page-btn"
+          >
+            &gt;
+          </button>
+        </div>
+      </div>
       <div className="table-responsive">
         <table className="data-table">
           <thead>
@@ -42,7 +82,9 @@ const DataGrid: React.FC<DataGridProps> = ({ data }) => {
               <th className="sortable" onClick={() => handleSort("timestamp")}>
                 Date{" "}
                 {sortField === "timestamp"
-                  ? (sortDirection === "asc" ? "↑" : "↓")
+                  ? sortDirection === "asc"
+                    ? "↑"
+                    : "↓"
                   : "↕"}
               </th>
               <th>Campaigns Active</th>
@@ -51,14 +93,16 @@ const DataGrid: React.FC<DataGridProps> = ({ data }) => {
               <th className="sortable" onClick={() => handleSort("revenue")}>
                 Total Revenue{" "}
                 {sortField === "revenue"
-                  ? (sortDirection === "asc" ? "↑" : "↓")
+                  ? sortDirection === "asc"
+                    ? "↑"
+                    : "↓"
                   : "↕"}
               </th>
             </tr>
           </thead>
           <tbody>
-            {sortedData.length > 0 ? (
-              sortedData.map((row) => (
+            {paginatedData.length > 0 ? (
+              paginatedData.map((row) => (
                 <tr key={row.timestamp}>
                   <td>{row.label}</td>
                   <td>{row.campaignsActive}</td>

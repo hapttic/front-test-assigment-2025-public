@@ -57,8 +57,8 @@ const getHourlyKey = (date: Date): string => {
 
 const getDailyKey = (date: Date): string => {
   const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
 };
 
@@ -79,14 +79,17 @@ export const aggregateData = (
   metrics: Metric[],
   aggregation: AggregationType
 ): AggregatedDataPoint[] => {
-  const groups = new Map<string, {
-    label: string;
-    timestamp: number;
-    clicks: number;
-    revenue: number;
-    impressions: number;
-    campaignIds: Set<string>;
-  }>();
+  const groups = new Map<
+    string,
+    {
+      label: string;
+      timestamp: number;
+      clicks: number;
+      revenue: number;
+      impressions: number;
+      campaignIds: Set<string>;
+    }
+  >();
 
   let getKey: (date: Date) => string;
   let getTimestamp: (date: Date) => number;
@@ -101,8 +104,8 @@ export const aggregateData = (
         return d.getTime();
       };
       getLabel = (date: Date) => {
-        const h = String(date.getHours()).padStart(2, '0');
-        const m = String(date.getMinutes()).padStart(2, '0');
+        const h = String(date.getHours()).padStart(2, "0");
+        const m = String(date.getMinutes()).padStart(2, "0");
         return `${h}:${m}`;
       };
       break;
@@ -114,7 +117,20 @@ export const aggregateData = (
         return d.getTime();
       };
       getLabel = (date: Date) => {
-        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        const months = [
+          "Jan",
+          "Feb",
+          "Mar",
+          "Apr",
+          "May",
+          "Jun",
+          "Jul",
+          "Aug",
+          "Sep",
+          "Oct",
+          "Nov",
+          "Dec",
+        ];
         return `${months[date.getMonth()]} ${date.getDate()}`;
       };
       break;
@@ -142,20 +158,41 @@ export const aggregateData = (
         return d.getTime();
       };
       getLabel = (date: Date) => {
-        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        const months = [
+          "Jan",
+          "Feb",
+          "Mar",
+          "Apr",
+          "May",
+          "Jun",
+          "Jul",
+          "Aug",
+          "Sep",
+          "Oct",
+          "Nov",
+          "Dec",
+        ];
         const year = String(date.getFullYear()).slice(-2);
         return `${months[date.getMonth()]} ${year}`;
       };
       break;
   }
 
+  const keyCache = new Map<string, string>();
+
   for (let i = 0; i < metrics.length; i++) {
     const metric = metrics[i];
-    const date = getOrParseDate(metric.timestamp);
-    const key = getKey(date);
+
+    let key = keyCache.get(metric.timestamp);
+    if (!key) {
+      const date = getOrParseDate(metric.timestamp);
+      key = getKey(date);
+      keyCache.set(metric.timestamp, key);
+    }
 
     let group = groups.get(key);
     if (!group) {
+      const date = getOrParseDate(metric.timestamp);
       group = {
         label: getLabel(date),
         timestamp: getTimestamp(date),
