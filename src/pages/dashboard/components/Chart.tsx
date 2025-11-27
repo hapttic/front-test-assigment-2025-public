@@ -1,4 +1,4 @@
-import { memo, useMemo, useState } from "react";
+import { memo, useMemo } from "react";
 import type {
   AggregatedData,
   AggregationPeriod,
@@ -17,21 +17,24 @@ interface props {
 }
 
 function Chart({ data, metric, period }: props) {
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-
   const chatData = useMemo(() => {
-    const values = data.map((d) =>
-      metric === "revenue" ? d.totalRevenue : d.totalClicks
+    const arr = data.map((d) =>
+      metric === "revenue"
+        ? { value: d.totalRevenue, dateStr: formatDate(d.timestamp, period) }
+        : { value: d.totalClicks, dateStr: formatDate(d.timestamp, period) }
     );
-    const minValue = Math.min(...values);
-    const maxValue = Math.max(...values, 0);
+
+    const minValue = Math.min(...arr.map((v) => v.value));
+    const maxValue = Math.max(...arr.map((v) => v.value));
 
     return {
-      values: values,
+      values: arr,
       max: maxValue * 1.1,
       min: Math.max(0, minValue * 0.9),
     };
-  }, [data, metric]);
+  }, [data, metric, period]);
+
+  console.log(chatData);
 
   const range = chatData.max - chatData.min;
 
@@ -62,54 +65,39 @@ function Chart({ data, metric, period }: props) {
             ))}
           </div>
 
-          <div className="relative flex items-end gap-3 h-64">
-            {chatData.values.map((value, index) => {
-              const heightPercent = ((value - chatData.min) / range) * 100;
-              const isHovered = hoveredIndex === index;
+          <div className="relative flex items-end gap-3 pr-4 h-64">
+            {chatData.values.map((item, index) => {
+              const heightPercent = ((item.value - chatData.min) / range) * 100;
 
               return (
                 <div
                   key={index}
-                  className="flex-1 flex flex-col items-center justify-end h-full relative"
-                  onMouseEnter={() =>
-                    period !== "hourly" && setHoveredIndex(index)
-                  }
-                  onMouseLeave={() =>
-                    period !== "hourly" && setHoveredIndex(null)
-                  }
+                  className=" flex-1 flex flex-col items-center justify-end h-full relative group"
                 >
-                  {isHovered && (
-                    <div className="absolute -top-10 left-1/2 -translate-x-1/2 px-3 py-1.5 bg-foreground text-background text-sm font-medium rounded-md shadow-lg z-10 whitespace-nowrap">
+                  {
+                    <div className="absolute opacity-0  group-hover:opacity-100 transition-all duration-300 -top-10 left-1/2 -translate-x-1/2 px-3 py-1.5 bg-foreground text-chart-3 text-sm font-semibold text-center rounded-md shadow-lg z-10 whitespace-nowrap">
                       {metric === "revenue"
-                        ? "$ " + formatNumber(value)
-                        : value}
+                        ? "$ " + formatNumber(item.value)
+                        : item.value}
                       <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-foreground" />
+                      <p className="text-xs text-muted-foreground font-normal">
+                        {item.dateStr}
+                      </p>
                     </div>
-                  )}
+                  }
 
                   <div
-                    className="w-full rounded-t-md transition-all duration-300 ease-out cursor-pointer"
+                    className="min-w-[100px] w-full bg-primary hover:bg-chart-3 hover:scale-x-105 rounded-t-md transition-all duration-300 ease-out cursor-pointer"
                     style={{
                       height: `${heightPercent}%`,
-                      backgroundColor: !isHovered
-                        ? "oklch(0.45 0.15 264)"
-                        : "#10b981",
-                      opacity: isHovered ? 1 : 0.8,
-                      transform: isHovered ? "scaleX(1.05)" : "scaleX(1)",
                     }}
                   />
-                </div>
-              );
-            })}
-          </div>
 
-          <div className="flex gap-3 mt-3">
-            {data.map((d, i) => {
-              return (
-                <div key={i} className="flex-1 text-center">
-                  <span className="text-[12px] text-muted-foreground truncate block">
-                    {formatDate(d.timestamp, period)}
-                  </span>
+                  <div className="">
+                    <p className="text-xs mt-2 mr-auto line-clamp-1">
+                      {item.dateStr}
+                    </p>
+                  </div>
                 </div>
               );
             })}
