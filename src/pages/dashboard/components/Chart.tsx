@@ -93,8 +93,8 @@ function Chart({ data, metric, period }: props) {
                     }}
                   />
 
-                  <div className="">
-                    <p className="text-xs mt-2 mr-auto line-clamp-1">
+                  <div className="absolute bottom-0 translate-y-[120%] ">
+                    <p className="text-xs text-muted-foreground mr-auto line-clamp-1">
                       {item.dateStr}
                     </p>
                   </div>
