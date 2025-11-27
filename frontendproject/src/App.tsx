@@ -62,62 +62,109 @@ function App() {
   );
 
   return (
-    <main className="min-h-screen bg-slate-950 text-white font-sans p-6">
-      <div className="max-w-5xl mx-auto space-y-6">
-        <section className="flex flex-wrap gap-4">
-          <label className="flex items-center gap-2 text-sm">
-            <span className="text-slate-300 uppercase tracking-wide">
-              Aggregation
-            </span>
-            <select
-              className="bg-slate-900 border border-slate-800 rounded px-3 py-2"
-              value={aggregation}
-              onChange={(event) =>
-                setAggregation(event.target.value as AggregationLevel)
-              }
-            >
-              {aggregationOptions.map((option) => (
-                <option key={option} value={option}>
-                  {option.charAt(0).toUpperCase() + option.slice(1)}
+    <main className="min-h-screen bg-linear-to-br from-slate-950 via-slate-900 to-slate-950 text-white font-sans">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+        <header className="space-y-2">
+          <h1 className="text-4xl font-bold bg-linear-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+            Campaign Analytics Dashboard
+          </h1>
+          <p className="text-slate-400 text-sm">
+            Analyze campaign performance metrics across different time periods
+          </p>
+        </header>
+
+        <section className="flex flex-wrap items-center gap-4 p-4 bg-slate-900/50 backdrop-blur-sm border border-slate-800/50 rounded-lg shadow-lg">
+          <div className="flex items-center gap-3">
+            <label className="flex items-center gap-2 text-sm font-medium text-slate-300">
+              <span className="text-slate-400 uppercase tracking-wider text-xs">
+                Aggregation
+              </span>
+              <select
+                className="bg-slate-800/80 border border-slate-700 rounded-lg px-4 py-2.5 text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all cursor-pointer hover:bg-slate-800"
+                value={aggregation}
+                onChange={(event) =>
+                  setAggregation(event.target.value as AggregationLevel)
+                }
+              >
+                {aggregationOptions.map((option) => (
+                  <option key={option} value={option} className="bg-slate-800">
+                    {option.charAt(0).toUpperCase() + option.slice(1)}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
+          <div className="flex items-center gap-3">
+            <label className="flex items-center gap-2 text-sm font-medium text-slate-300">
+              <span className="text-slate-400 uppercase tracking-wider text-xs">
+                Metric
+              </span>
+              <select
+                className="bg-slate-800/80 border border-slate-700 rounded-lg px-4 py-2.5 text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all cursor-pointer hover:bg-slate-800"
+                value={metric}
+                onChange={(event) =>
+                  setMetric(event.target.value as MetricType)
+                }
+              >
+                <option value="clicks" className="bg-slate-800">
+                  Clicks
                 </option>
-              ))}
-            </select>
-          </label>
-          <label className="flex items-center gap-2 text-sm">
-            <span className="text-slate-300 uppercase tracking-wide">
-              Metric
-            </span>
-            <select
-              className="bg-slate-900 border border-slate-800 rounded px-3 py-2"
-              value={metric}
-              onChange={(event) => setMetric(event.target.value as MetricType)}
-            >
-              <option value="clicks">Clicks</option>
-              <option value="revenue">Revenue</option>
-            </select>
-          </label>
+                <option value="revenue" className="bg-slate-800">
+                  Revenue
+                </option>
+              </select>
+            </label>
+          </div>
         </section>
 
-        <section className="bg-slate-900 border border-slate-800 rounded-xl p-5 shadow-xl">
-          <h2 className="text-lg font-semibold mb-4">
-            {metric === "clicks" ? "Clicks" : "Revenue"} over time
-          </h2>
+        <section className="bg-slate-900/80 backdrop-blur-sm border border-slate-800/50 rounded-xl p-6 sm:p-8 shadow-2xl transition-all hover:border-slate-700/50">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h2 className="text-xl font-semibold text-white mb-1">
+                {metric === "clicks" ? "Clicks" : "Revenue"} Over Time
+              </h2>
+              <p className="text-xs text-slate-400">
+                Performance metrics by {aggregation} aggregation
+              </p>
+            </div>
+          </div>
           {loading ? (
-            <p className="text-slate-400 text-sm">Loading data...</p>
+            <div className="flex items-center justify-center h-64">
+              <div className="flex flex-col items-center gap-3">
+                <div className="w-8 h-8 border-3 border-cyan-500 border-t-transparent rounded-full animate-spin"></div>
+                <p className="text-slate-400 text-sm">Loading data...</p>
+              </div>
+            </div>
           ) : (
             <BarChart data={aggregatedData} metric={metric} />
           )}
           {error && (
-            <p className="bg-red-600 text-sm mt-2">
-              Something went wrong {error}
-            </p>
+            <div className="mt-4 p-3 bg-red-500/10 border border-red-500/30 rounded-lg">
+              <p className="text-red-400 text-sm font-medium">
+                ⚠️ Something went wrong: {error}
+              </p>
+            </div>
           )}
         </section>
 
-        <section className="bg-slate-900 border border-slate-800 rounded-xl p-5 shadow-xl">
-          <h2 className="text-lg font-semibold mb-4">Performance Data</h2>
+        <section className="bg-slate-900/80 backdrop-blur-sm border border-slate-800/50 rounded-xl p-6 sm:p-8 shadow-2xl transition-all hover:border-slate-700/50">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h2 className="text-xl font-semibold text-white mb-1">
+                Performance Data
+              </h2>
+              <p className="text-xs text-slate-400">
+                Detailed metrics for each time period
+              </p>
+            </div>
+          </div>
           {loading ? (
-            <p className="text-slate-400 text-sm">Loading data...</p>
+            <div className="flex items-center justify-center h-64">
+              <div className="flex flex-col items-center gap-3">
+                <div className="w-8 h-8 border-3 border-cyan-500 border-t-transparent rounded-full animate-spin"></div>
+                <p className="text-slate-400 text-sm">Loading data...</p>
+              </div>
+            </div>
           ) : (
             <DataTable data={aggregatedData} />
           )}

@@ -51,53 +51,77 @@ export default function BarChart({
     return value.toLocaleString();
   };
 
-  // labels - show more labels for weekly/monthly, fewer for hourly
   const showLabelEvery =
-    data.length <= 10 ? 1 : data.length <= 20 ? 2 : Math.max(1, Math.floor(data.length / 12));
+    data.length <= 10
+      ? 1
+      : data.length <= 20
+      ? 2
+      : Math.max(1, Math.floor(data.length / 12));
   const showValueLabel = barWidth > 15;
 
+  const barColor = metric === "clicks" ? "#06b6d4" : "#10b981"; // cyan for clicks, green for revenue
+  const barColorHover = metric === "clicks" ? "#0891b2" : "#059669";
+
   return (
-    <div style={{ overflowX: "auto", width: "100%" }}>
+    <div
+      style={{ overflowX: "auto", width: "100%" }}
+      className="custom-scrollbar"
+    >
       <svg
         width={svgWidth}
         height={height}
         role="img"
         aria-label={`${metric} bar chart`}
+        className="chart-svg"
       >
+        <defs>
+          <linearGradient id="barGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor={barColor} stopOpacity="1" />
+            <stop offset="100%" stopColor={barColorHover} stopOpacity="0.8" />
+          </linearGradient>
+        </defs>
         <g transform={`translate(${margin.left + startX}, ${margin.top})`}>
+          {[0, 0.25, 0.5, 0.75, 1].map((ratio) => (
+            <line
+              key={ratio}
+              x1={0}
+              y1={chartHeight * ratio}
+              x2={chartWidth}
+              y2={chartHeight * ratio}
+              stroke="#334155"
+              strokeWidth={0.5}
+              opacity={0.2}
+              strokeDasharray="2,2"
+            />
+          ))}
           {data.map((bucket, index) => {
             const x = index * totalBarWidth;
-            const value = metric === "clicks" ? bucket.totalClicks : bucket.totalRevenue;
+            const value =
+              metric === "clicks" ? bucket.totalClicks : bucket.totalRevenue;
             const top = getBarTop(value);
             const barHeight = chartHeight - top;
             const showLabel =
               index % showLabelEvery === 0 || index === data.length - 1;
 
             return (
-              <g key={bucket.key}>
-                <line
-                  x1={x + barWidth / 2}
-                  y1={0}
-                  x2={x + barWidth / 2}
-                  y2={chartHeight}
-                  stroke="#334155"
-                  strokeWidth={0.5}
-                  opacity={0.3}
-                />
+              <g key={bucket.key} className="bar-group">
                 <rect
                   x={x}
                   y={top}
                   width={barWidth}
                   height={barHeight}
-                  fill="#38bdf8"
+                  fill="url(#barGradient)"
+                  rx={4}
                 />
                 {showValueLabel && (
                   <text
                     x={x + barWidth / 2}
-                    y={top - 4}
+                    y={top - 6}
                     textAnchor="middle"
                     fill="#e2e8f0"
                     fontSize={11}
+                    fontWeight="600"
+                    className="drop-shadow-sm"
                   >
                     {formatValue(value)}
                   </text>
@@ -105,10 +129,11 @@ export default function BarChart({
                 {showLabel && (
                   <text
                     x={x + barWidth / 2}
-                    y={chartHeight + 20}
+                    y={chartHeight + 22}
                     textAnchor="middle"
                     fill="#94a3b8"
                     fontSize={10}
+                    fontWeight="500"
                     style={{ userSelect: "none" }}
                   >
                     {bucket.label}
