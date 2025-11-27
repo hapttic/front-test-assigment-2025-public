@@ -1,7 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { MOCK_DATA } from '../data/mockData';
-
-export type AggregationLevel = 'daily' | 'hourly' | 'weekly' | 'monthly';
+import type { TimeInterval } from '../types';
 
 export interface AggregatedPoint {
   dateKey: string;
@@ -38,7 +37,7 @@ const findStartIndex = (data: ProcessedMetric[], targetTime: number): number => 
 };
 
 //  Bucket Key Generator 
-const getFastBucketInfo = (ts: number, aggregation: AggregationLevel) => {
+const getFastBucketInfo = (ts: number, aggregation: TimeInterval) => {
   const date = new Date(ts);
   
   // Hourly
@@ -65,14 +64,14 @@ const getFastBucketInfo = (ts: number, aggregation: AggregationLevel) => {
   // Weekly & Monthly
   if (aggregation === 'weekly') {
     const day = date.getDay();
-    const diff = date.getDate() - day + (day === 0 ? -6 : 1); // ორშაბათი რომ იყოს დასაწყისი
+    const diff = date.getDate() - day + (day === 0 ? -6 : 1);
     date.setDate(diff);
     date.setHours(0, 0, 0, 0);
     const weekTs = date.getTime();
     return {
         key: weekTs.toString(),
         sortTime: weekTs,
-        labelFn: () => `Week of ${date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`
+        labelFn: () => `${date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`
     };
   }
 
@@ -91,7 +90,7 @@ export const useCampaignAnalytics = () => {
   const [processedData, setProcessedData] = useState<ProcessedMetric[]>([]);
   const [loading, setLoading] = useState(true);
   
-  const [aggregation, setAggregation] = useState<AggregationLevel>('daily');
+  const [aggregation, setAggregation] = useState<TimeInterval>('daily');
   const [dateRange, setDateRange] = useState({
     start: '2025-08-26',
     end: '2025-11-24'

@@ -6,7 +6,9 @@ import CampaignPerformanceTable from "./components/campaign-table/CampaignPerfor
 import SocialStats from "./components/stats/SocialStats";
 import type { TimeInterval } from "./types"; 
 import { useCampaignAnalytics } from "./hooks/useCampaignAnalytics";
-import { RefreshCw } from "lucide-react";
+import { DollarSign, Eye, MousePointer2, RefreshCw } from "lucide-react";
+import { HourlyHeatmap } from "./components/performance-table/DayHourHeatmap";
+import { TimelineChart } from "./components/performance-table/TrendLineChart";
 
 function App() {
   const { 
@@ -24,6 +26,8 @@ function App() {
   useEffect(() => {
     setTempDateRange(dateRange);
   }, [dateRange]);
+
+  const [metricView, setMetricView] = useState<'revenue' | 'clicks' | 'impressions'>('revenue');
 
   const handleApplyDateRange = () => {
     setDateRange(tempDateRange);
@@ -69,6 +73,45 @@ function App() {
             </button>
           </div>
 
+          {/* Metric Selectors */}
+          <div className="flex items-center bg-[#0d3533] p-1 rounded-lg border border-[#37e6aa]/30 gap-1">
+            <button
+              onClick={() => setMetricView("revenue")}
+              className={`flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-md transition-all ${
+                metricView === "revenue"
+                  ? "bg-[#37e6aa] text-[#114341] shadow-sm"
+                  : "text-gray-300 hover:text-white hover:bg-white/5"
+              }`}
+            >
+              <DollarSign size={16} />
+              <span className="hidden sm:inline">Revenue</span>
+            </button>
+
+            <button
+              onClick={() => setMetricView("clicks")}
+              className={`flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-md transition-all ${
+                metricView === "clicks"
+                  ? "bg-[#3b82f6] text-white shadow-sm"
+                  : "text-gray-300 hover:text-white hover:bg-white/5"
+              }`}
+            >
+              <MousePointer2 size={16} />
+              <span className="hidden sm:inline">Clicks</span>
+            </button>
+
+            <button
+              onClick={() => setMetricView("impressions")}
+              className={`flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-md transition-all ${
+                metricView === "impressions"
+                  ? "bg-[#8b5cf6] text-white shadow-sm"
+                  : "text-gray-300 hover:text-white hover:bg-white/5"
+              }`}
+            >
+              <Eye size={16} />
+              <span className="hidden sm:inline">Impressions</span>
+            </button>
+</div>
+
           <TimeIntervalSelector 
             current={aggregation} 
             onChange={(val) => setAggregation(val as TimeInterval)} 
@@ -86,6 +129,13 @@ function App() {
         totalClicks={totals.clicks} 
         totalImpressions={totals.impressions} 
       />
+
+    {aggregation === 'hourly' ? (
+      <HourlyHeatmap data={aggregatedData} metricKey={metricView} />
+      ) : (
+      <TimelineChart data={aggregatedData} metricKey={metricView} aggregation={aggregation} />
+      )}
+
       <CampaignPerformanceTable data={aggregatedData} />
     </div>
   );
