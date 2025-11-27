@@ -1,42 +1,47 @@
 import React from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
-import type { CampaignMetrics } from '../../types';
+import type { AggregatedPoint } from '../../hooks/useCampaignAnalytics';
 
 interface SortConfig {
-  key: keyof CampaignMetrics;
+  key: keyof AggregatedPoint;
   dir: 'asc' | 'desc';
 }
 
 interface TableHeaderProps {
   sortConfig: SortConfig;
-  onSort: (key: keyof CampaignMetrics) => void;
+  onSort: (key: keyof AggregatedPoint) => void;
 }
 
 const columns = [
   { 
     label: 'Date', 
     key: 'timestamp', 
-    className: '' 
+    className: '',
+    sortable: true 
   }, 
   { 
     label: 'Active Campaigns', 
-    key: 'campaignId', 
-    className: 'hidden lg:table-cell' 
+    key: 'activeCampaigns', 
+    className: 'hidden lg:table-cell',
+    sortable: false 
   },
   { 
     label: 'Impressions', 
     key: 'impressions', 
-    className: 'hidden md:table-cell' 
+    className: 'hidden md:table-cell',
+    sortable: true
   },
   { 
     label: 'Clicks', 
     key: 'clicks', 
-    className: 'hidden sm:table-cell' 
+    className: 'hidden sm:table-cell',
+    sortable: true
   },
   { 
     label: 'Revenue', 
     key: 'revenue', 
-    className: ''
+    className: '',
+    sortable: true
   },
 ] as const;
 
@@ -45,28 +50,34 @@ export const TableHeader: React.FC<TableHeaderProps> = ({ sortConfig, onSort }) 
     <thead className="bg-white text-slate-700 font-medium border-b border-slate-200">
       <tr>
         {columns.map((col) => {
-          const isActive = sortConfig.key === col.key;
+          const colKey = col.key as keyof AggregatedPoint;
+          const isActive = sortConfig.key === colKey;
+          const isSortable = col.sortable !== false; 
           
           return (
             <th 
               key={col.key}
               className={`
-                px-6 py-4 cursor-pointer hover:bg-slate-200 transition-colors select-none text-left group
+                px-6 py-4 select-none text-left group
                 ${col.className} 
+                ${isSortable ? 'cursor-pointer hover:bg-slate-50 transition-colors' : 'cursor-default'}
               `}
-              onClick={() => onSort(col.key as keyof CampaignMetrics)}
+              onClick={() => isSortable && onSort(colKey)}
             >
               <div className="flex items-center gap-1">
                 {col.label}
-                <span className="w-4 flex justify-center">
-                  {isActive ? (
-                    sortConfig.dir === 'asc' 
-                      ? <ChevronUp size={14} className="text-black" />
-                      : <ChevronDown size={14} className="text-black" />
-                  ) : (
-                    <ChevronDown size={14} className="opacity-0 group-hover:opacity-30 transition-opacity" /> 
-                  )}
-                </span>
+                
+                {isSortable && (
+                  <span className="w-4 flex justify-center">
+                    {isActive ? (
+                      sortConfig.dir === 'asc' 
+                        ? <ChevronUp size={14} className="text-emerald-600" />
+                        : <ChevronDown size={14} className="text-emerald-600" />
+                    ) : (
+                      <ChevronDown size={14} className="opacity-0 group-hover:opacity-30 transition-opacity text-slate-400" /> 
+                    )}
+                  </span>
+                )}
               </div>
             </th>
           );

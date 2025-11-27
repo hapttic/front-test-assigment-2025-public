@@ -7,3 +7,5 @@ export interface CampaignMetrics {
   clicks: number;
   revenue: number;
 }
+
+export type MetricType = 'revenue' | 'clicks' | 'impressions';
