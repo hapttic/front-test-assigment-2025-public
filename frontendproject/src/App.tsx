@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import "./App.css";
 import type {
   AggregationLevel,
@@ -38,7 +38,7 @@ function App() {
         const campaignsData = data.campaigns ?? [];
         const metricsData = data.metrics ?? [];
 
-        // Store both datasets , campaigns and metrics are now joined/merged
+        // merge campaigns and metrics
         setCampaigns(campaignsData);
         setMetrics(metricsData);
 
@@ -53,9 +53,13 @@ function App() {
     fetchChartData();
   }, []);
 
-  void campaigns.length; // Join verification: campaigns available for correlation
+  void campaigns.length;
 
-  const aggregatedData = aggregateMetrics(metrics, aggregation);
+  // memoize aggregation
+  const aggregatedData = useMemo(
+    () => aggregateMetrics(metrics, aggregation),
+    [metrics, aggregation]
+  );
 
   return (
     <main className="min-h-screen bg-slate-950 text-white font-sans p-6">
