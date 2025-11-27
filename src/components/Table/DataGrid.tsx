@@ -10,7 +10,7 @@ type SortField = "timestamp" | "revenue";
 type SortDirection = "asc" | "desc";
 
 const DataGrid: React.FC<DataGridProps> = ({ data }) => {
-  const [sortField, setSortField] = useState<SortField>("timestamp");
+  const [sortField, setSortField] = useState<SortField | null>(null);
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
 
   const handleSort = (field: SortField) => {
@@ -23,6 +23,8 @@ const DataGrid: React.FC<DataGridProps> = ({ data }) => {
   };
 
   const sortedData = useMemo(() => {
+    if (!sortField) return data;
+    
     return [...data].sort((a, b) => {
       const valA = sortField === "timestamp" ? a.timestamp : a.revenue;
       const valB = sortField === "timestamp" ? b.timestamp : b.revenue;
@@ -39,16 +41,18 @@ const DataGrid: React.FC<DataGridProps> = ({ data }) => {
             <tr>
               <th className="sortable" onClick={() => handleSort("timestamp")}>
                 Date{" "}
-                {sortField === "timestamp" &&
-                  (sortDirection === "asc" ? "↑" : "↓")}
+                {sortField === "timestamp"
+                  ? (sortDirection === "asc" ? "↑" : "↓")
+                  : "↕"}
               </th>
               <th>Campaigns Active</th>
               <th>Total Impressions</th>
               <th>Total Clicks</th>
               <th className="sortable" onClick={() => handleSort("revenue")}>
                 Total Revenue{" "}
-                {sortField === "revenue" &&
-                  (sortDirection === "asc" ? "↑" : "↓")}
+                {sortField === "revenue"
+                  ? (sortDirection === "asc" ? "↑" : "↓")
+                  : "↕"}
               </th>
             </tr>
           </thead>
