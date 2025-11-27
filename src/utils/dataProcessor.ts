@@ -36,90 +36,157 @@ export const fetchData = async (): Promise<RawData> => {
   return response.json();
 };
 
+const dateCache = new Map<string, Date>();
+
+const getOrParseDate = (timestamp: string): Date => {
+  let date = dateCache.get(timestamp);
+  if (!date) {
+    date = new Date(timestamp);
+    dateCache.set(timestamp, date);
+  }
+  return date;
+};
+
+const getHourlyKey = (date: Date): string => {
+  const year = date.getFullYear();
+  const month = date.getMonth();
+  const day = date.getDate();
+  const hour = date.getHours();
+  return `${year}-${month}-${day}-${hour}`;
+};
+
+const getDailyKey = (date: Date): string => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
+
+const getWeeklyKey = (date: Date): string => {
+  const tempDate = new Date(date);
+  const day = tempDate.getDay();
+  const diff = tempDate.getDate() - day + (day === 0 ? -6 : 1);
+  tempDate.setDate(diff);
+  tempDate.setHours(0, 0, 0, 0);
+  return tempDate.getTime().toString();
+};
+
+const getMonthlyKey = (date: Date): string => {
+  return `${date.getFullYear()}-${date.getMonth()}`;
+};
+
 export const aggregateData = (
   metrics: Metric[],
   aggregation: AggregationType
 ): AggregatedDataPoint[] => {
-  const groups: {
-    [key: string]: AggregatedDataPoint & { campaignIds: Set<string> };
-  } = {};
+  const groups = new Map<string, {
+    label: string;
+    timestamp: number;
+    clicks: number;
+    revenue: number;
+    impressions: number;
+    campaignIds: Set<string>;
+  }>();
 
-  metrics.forEach((metric) => {
-    const date = new Date(metric.timestamp);
-    let key = "";
-    let label = "";
-    let groupTimestamp = 0;
+  let getKey: (date: Date) => string;
+  let getTimestamp: (date: Date) => number;
+  let getLabel: (date: Date) => string;
 
-    switch (aggregation) {
-      case "Hourly": {
-        key = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}-${date.getHours()}`;
-        label = date.toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-        });
-        const hourDate = new Date(date);
-        hourDate.setMinutes(0, 0, 0);
-        groupTimestamp = hourDate.getTime();
-        break;
-      }
-      case "Daily": {
-        key = date.toISOString().split("T")[0];
-        label = date.toLocaleDateString([], { month: "short", day: "numeric" });
-        const dayDate = new Date(date);
-        dayDate.setHours(0, 0, 0, 0);
-        groupTimestamp = dayDate.getTime();
-        break;
-      }
-      case "Weekly": {
-        const startOfWeek = new Date(date);
-        const day = startOfWeek.getDay();
-        const diff = startOfWeek.getDate() - day + (day === 0 ? -6 : 1);
-        startOfWeek.setDate(diff);
-        startOfWeek.setHours(0, 0, 0, 0);
-        key = startOfWeek.getTime().toString();
-        label = `Wk ${getWeekNumber(date)}`;
-        groupTimestamp = startOfWeek.getTime();
-        break;
-      }
-      case "Monthly": {
-        key = `${date.getFullYear()}-${date.getMonth()}`;
-        label = date.toLocaleDateString([], {
-          month: "short",
-          year: "2-digit",
-        });
-        const monthDate = new Date(date);
-        monthDate.setDate(1);
-        monthDate.setHours(0, 0, 0, 0);
-        groupTimestamp = monthDate.getTime();
-        break;
-      }
-    }
+  switch (aggregation) {
+    case "Hourly":
+      getKey = getHourlyKey;
+      getTimestamp = (date: Date) => {
+        const d = new Date(date);
+        d.setMinutes(0, 0, 0);
+        return d.getTime();
+      };
+      getLabel = (date: Date) => {
+        const h = String(date.getHours()).padStart(2, '0');
+        const m = String(date.getMinutes()).padStart(2, '0');
+        return `${h}:${m}`;
+      };
+      break;
+    case "Daily":
+      getKey = getDailyKey;
+      getTimestamp = (date: Date) => {
+        const d = new Date(date);
+        d.setHours(0, 0, 0, 0);
+        return d.getTime();
+      };
+      getLabel = (date: Date) => {
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        return `${months[date.getMonth()]} ${date.getDate()}`;
+      };
+      break;
+    case "Weekly":
+      getKey = getWeeklyKey;
+      getTimestamp = (date: Date) => {
+        const d = new Date(date);
+        const day = d.getDay();
+        const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+        d.setDate(diff);
+        d.setHours(0, 0, 0, 0);
+        return d.getTime();
+      };
+      getLabel = (date: Date) => {
+        const weekNum = getWeekNumber(date);
+        return `Wk ${weekNum}`;
+      };
+      break;
+    case "Monthly":
+      getKey = getMonthlyKey;
+      getTimestamp = (date: Date) => {
+        const d = new Date(date);
+        d.setDate(1);
+        d.setHours(0, 0, 0, 0);
+        return d.getTime();
+      };
+      getLabel = (date: Date) => {
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        const year = String(date.getFullYear()).slice(-2);
+        return `${months[date.getMonth()]} ${year}`;
+      };
+      break;
+  }
 
-    if (!groups[key]) {
-      groups[key] = {
-        label,
-        timestamp: groupTimestamp,
+  for (let i = 0; i < metrics.length; i++) {
+    const metric = metrics[i];
+    const date = getOrParseDate(metric.timestamp);
+    const key = getKey(date);
+
+    let group = groups.get(key);
+    if (!group) {
+      group = {
+        label: getLabel(date),
+        timestamp: getTimestamp(date),
         clicks: 0,
         revenue: 0,
         impressions: 0,
-        campaignsActive: 0,
         campaignIds: new Set(),
       };
+      groups.set(key, group);
     }
 
-    groups[key].clicks += metric.clicks;
-    groups[key].revenue += metric.revenue;
-    groups[key].impressions += metric.impressions;
-    groups[key].campaignIds.add(metric.campaignId);
+    group.clicks += metric.clicks;
+    group.revenue += metric.revenue;
+    group.impressions += metric.impressions;
+    group.campaignIds.add(metric.campaignId);
+  }
+
+  const result: AggregatedDataPoint[] = [];
+  groups.forEach((group) => {
+    result.push({
+      label: group.label,
+      timestamp: group.timestamp,
+      clicks: group.clicks,
+      revenue: group.revenue,
+      impressions: group.impressions,
+      campaignsActive: group.campaignIds.size,
+    });
   });
 
-  return Object.values(groups)
-    .map((group) => ({
-      ...group,
-      campaignsActive: group.campaignIds.size,
-      campaignIds: undefined,
-    }))
-    .sort((a, b) => a.timestamp - b.timestamp);
+  result.sort((a, b) => a.timestamp - b.timestamp);
+  return result;
 };
 
 function getWeekNumber(d: Date): number {
