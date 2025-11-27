@@ -13,7 +13,8 @@ export default function BarChart({
   width = 720,
   height = 280,
 }: BarChartProps) {
-  const margin = { top: 12, right: 12, bottom: 40, left: 40 };
+  // Increase bottom margin for better label spacing, especially for weekly
+  const margin = { top: 12, right: 12, bottom: 50, left: 40 };
   const chartWidth = width - margin.left - margin.right; // calc full w
   const chartHeight = height - margin.top - margin.bottom; // calc full h
   const values = data.map((bucket) =>
@@ -23,7 +24,8 @@ export default function BarChart({
 
   const minBarWidth = 8;
   const maxBarWidth = 50;
-  const gap = data.length <= 20 ? 40 : 12; // to update gap within bars
+  // Adjust gap based on data length - more space for fewer items
+  const gap = data.length <= 15 ? 40 : data.length <= 30 ? 20 : 8;
   const calculatedBarWidth =
     (chartWidth - (data.length - 1) * gap) / data.length;
   const barWidth = Math.max(
@@ -49,9 +51,9 @@ export default function BarChart({
     return value.toLocaleString();
   };
 
-  // labels
+  // labels - show more labels for weekly/monthly, fewer for hourly
   const showLabelEvery =
-    data.length <= 12 ? 1 : Math.max(1, Math.floor(data.length / 15));
+    data.length <= 10 ? 1 : data.length <= 20 ? 2 : Math.max(1, Math.floor(data.length / 12));
   const showValueLabel = barWidth > 15;
 
   return (
@@ -103,10 +105,11 @@ export default function BarChart({
                 {showLabel && (
                   <text
                     x={x + barWidth / 2}
-                    y={chartHeight + 14}
+                    y={chartHeight + 20}
                     textAnchor="middle"
                     fill="#94a3b8"
                     fontSize={10}
+                    style={{ userSelect: "none" }}
                   >
                     {bucket.label}
                   </text>

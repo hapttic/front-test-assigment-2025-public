@@ -47,12 +47,7 @@ const getLabel = (bucketDate: Date, level: AggregationLevel): string => {
   } else if (level === "daily") {
     return `${year}-${month}-${day}`;
   } else if (level === "weekly") {
-    const weekEnd = new Date(bucketDate);
-    weekEnd.setUTCDate(weekEnd.getUTCDate() + 6);
-    const endYear = weekEnd.getUTCFullYear();
-    const endDay = pad(weekEnd.getUTCDate());
-    const endMonth = pad(weekEnd.getUTCMonth() + 1);
-    return `${year}-${month}-${day} to ${endYear}-${endMonth}-${endDay}`;
+    return `${month}/${day}/${year.toString().slice(-2)}`;
   } else {
     // monthly
     return `${year}-${month}`;
