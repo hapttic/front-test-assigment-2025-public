@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import { DataFilters } from "@/lib/interfaces/types";
 import { useFetchAnalytics } from "@/hooks/useFetchAnalytics";
 import DashboardDataTable from "../Ui/DashboardDataTable";
+import TimelineChart from "./TimelineChart";
 
 const Dashboard = () => {
   const [filters, setFilters] = useState<DataFilters>({
@@ -18,7 +19,6 @@ const Dashboard = () => {
     if (Array.isArray(response)) return response;
     return response.data;
   }, [response]);
-
   return (
     <div className="p-6 bg-cyan-50 min-h-screen">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
@@ -57,6 +57,12 @@ const Dashboard = () => {
         filters={filters}
         setFilters={setFilters}
       />
+
+      {/*timeline chart*/}
+      <h2 className="text-2xl font-extrabold text-cyan-900 mb-6 drop-shadow-md">
+        Line chart of Revenue
+      </h2>
+      {response?.data && <TimelineChart data={response?.data} />}
     </div>
   );
 };
