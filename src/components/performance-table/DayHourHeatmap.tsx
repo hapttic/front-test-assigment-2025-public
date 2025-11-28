@@ -1,129 +1,68 @@
-import React, { useMemo } from 'react';
-import type { MetricType } from '../../types';
-import { formatNumber } from '../../utils/formatters';
+import React, { useMemo, useState } from 'react';
 import type { AggregatedPoint } from '../../hooks/useCampaignAnalytics';
+import { formatNumber } from '../../utils/formatters';
+import type { MetricType } from '../../types';
 
-interface HourlyHeatmapProps {
-    data: AggregatedPoint[]; 
-  metricKey: MetricType;
-}
+interface HourlyHeatmapProps { data: AggregatedPoint[]; metricKey: MetricType; }
 
 export const HourlyHeatmap: React.FC<HourlyHeatmapProps> = ({ data, metricKey }) => {
-  const hours = [
-    '12am', '1am', '2am', '3am', '4am', '5am', '6am', '7am', '8am', '9am', '10am', '11am',
-    '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm', '8pm', '9pm', '10pm', '11pm'
-  ];
+  const hours = Array.from({ length: 24 }, (_, i) => i);
+  const getTheme = () => {
+    switch(metricKey) {
+      case 'revenue': return { main: '#10b981' }; case 'clicks': return { main: '#3b82f6' }; case 'impressions': return { main: '#8b5cf6' };
+      default: return { main: '#3b82f6' };
+    }
+  };
+  const theme = getTheme();
 
   const { grid, maxVal, cols } = useMemo(() => {
-    if (data.length === 0) return { grid: [], maxVal: 0, cols: [] };
-
-    const uniqueDateStrings = Array.from(new Set(data.map(d => {
-      const date = new Date(d.timestamp);
-      return new Date(date.getFullYear(), date.getMonth(), date.getDate()).toISOString();
-    })));
-
-    uniqueDateStrings.sort((a, b) => new Date(a).getTime() - new Date(b).getTime());
-
-    const colHeaders = uniqueDateStrings.map(d => 
-      new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
-    );
-
-    const dateToIndex = new Map(uniqueDateStrings.map((d, i) => [d, i]));
-    const gridData = Array(24).fill(0).map(() => Array(uniqueDateStrings.length).fill(0));
+    if (data.length === 0) return { grid: [], maxVal: 0, cols: [], dates: [] };
+    const uniqueDates = Array.from(new Set(data.map(d => {
+      const date = new Date(d.timestamp); return new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime();
+    }))).sort((a, b) => a - b);
+    const dateToIndex = new Map(uniqueDates.map((ts, i) => [ts, i]));
+    const gridData = Array(24).fill(0).map(() => Array(uniqueDates.length).fill(0));
     let max = 0;
 
     data.forEach(point => {
       const d = new Date(point.timestamp);
-      const dateKey = new Date(d.getFullYear(), d.getMonth(), d.getDate()).toISOString();
-      const colIndex = dateToIndex.get(dateKey);
+      const dayStartTs = new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
+      const colIndex = dateToIndex.get(dayStartTs);
       const hour = d.getHours();
-      
       if (colIndex !== undefined) {
-        gridData[hour][colIndex] += point[metricKey];
+        const val = Number(point[metricKey] || 0);
+        gridData[hour][colIndex] += val;
         if (gridData[hour][colIndex] > max) max = gridData[hour][colIndex];
       }
     });
-
+    const colHeaders = uniqueDates.map(ts => new Date(ts).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
     return { grid: gridData, maxVal: max, cols: colHeaders };
   }, [data, metricKey]);
 
-  const cellSize = 40;
-  const gap = 4;
-  const xLabelsHeight = 40;
-  const yLabelsWidth = 50;
-  const width = yLabelsWidth + (cellSize + gap) * cols.length;
-  const height = xLabelsHeight + (cellSize + gap) * 24;
+  const cellWidth = 30; const cellHeight = 16; const yLabelWidth = 50; const xLabelHeight = 30;
+  const width = yLabelWidth + (cellWidth * cols.length);
+  const height = xLabelHeight + (cellHeight * 24);
+  const [hoveredData, setHoveredData] = useState<{x: number, y: number, val: number, hour: number, day: string} | null>(null);
 
-  if (maxVal === 0) return <div className="h-[500px] flex items-center justify-center text-slate-400">No data available</div>;
+  if (maxVal === 0) return <div className="h-full flex items-center justify-center text-slate-400">No data available</div>;
 
   return (
-    <div className="w-full overflow-x-auto flex justify-start pb-4">
-      <div className="relative" style={{ width, height }}>
-        <svg width={width} height={height} className="overflow-visible">
-          {hours.map((hour, i) => (
-            <text 
-              key={hour} 
-              x={yLabelsWidth - 10} 
-              y={i * (cellSize + gap) + cellSize / 1.5} 
-              textAnchor="end" 
-              fontSize="11" 
-              fill="#64748b"
-            >
-              {hour}
-            </text>
-          ))}
-
+    <div className="w-full h-full flex flex-col overflow-hidden">
+      <div className="grow overflow-auto relative custom-scrollbar">
+        <svg width={Math.max(width, 100)} height={height} className="block my-2">
+          {hours.map((hour) => ( <line key={`line-${hour}`} x1={yLabelWidth} y1={hour * cellHeight + cellHeight / 2} x2={width} y2={hour * cellHeight + cellHeight / 2} stroke="#f1f5f9" strokeWidth="1" /> ))}
+          {hours.map((hour) => ( (hour % 3 === 0) && ( <text key={`label-${hour}`} x={yLabelWidth - 10} y={hour * cellHeight + cellHeight / 2 + 4} textAnchor="end" fontSize="11" fill="#94a3b8" className="font-medium"> {hour === 0 ? '12am' : hour === 12 ? '12pm' : hour > 12 ? `${hour-12}pm` : `${hour}am`} </text> ) ))}
           {grid.map((row, hourIndex) => (
             row.map((val, dayIndex) => {
-              const opacity = val / maxVal;
-              const fillOpacity = val > 0 ? Math.max(0.1, opacity) : 0.02;
-              
-              return (
-                <g key={`${dayIndex}-${hourIndex}`} className="group">
-                  <rect
-                    x={yLabelsWidth + dayIndex * (cellSize + gap)}
-                    y={hourIndex * (cellSize + gap)}
-                    width={cellSize}
-                    height={cellSize}
-                    rx={6}
-                    fill="#8b5cf6"
-                    fillOpacity={fillOpacity}
-                    className="transition-all duration-300 hover:stroke-indigo-600 hover:stroke-2 cursor-pointer"
-                  />
-                  <title>
-                    {cols[dayIndex]}, {hours[hourIndex]}: {metricKey === 'revenue' ? '$' : ''}{formatNumber(val)}
-                  </title>
-                  {val > 0 && (
-                      <text
-                        x={yLabelsWidth + dayIndex * (cellSize + gap) + cellSize / 2}
-                        y={hourIndex * (cellSize + gap) + cellSize / 1.5 + 1}
-                        textAnchor="middle"
-                        fontSize="9"
-                        fill={fillOpacity > 0.5 ? 'white' : '#4c1d95'}
-                        pointerEvents="none"
-                        fontWeight="500"
-                      >
-                        {val > 999 ? (val/1000).toFixed(1) + 'k' : Math.round(val)}
-                      </text>
-                  )}
-                </g>
-              );
+              if (val === 0) return null;
+              const percentage = val / maxVal;
+              const radius = Math.max(1.5, Math.sqrt(percentage) * 7); 
+              const cx = yLabelWidth + dayIndex * cellWidth + cellWidth / 2; const cy = hourIndex * cellHeight + cellHeight / 2;
+              return ( <circle key={`${dayIndex}-${hourIndex}`} cx={cx} cy={cy} r={radius} fill={theme.main} opacity={0.7} className="transition-all duration-200 hover:opacity-100 hover:r-[8px] cursor-pointer" onMouseEnter={() => setHoveredData({ x: cx, y: cy, val, hour: hourIndex, day: cols[dayIndex] })} onMouseLeave={() => setHoveredData(null)} /> );
             })
           ))}
-
-          {cols.map((col, i) => (
-            <text 
-              key={col + i} 
-              x={yLabelsWidth + i * (cellSize + gap) + cellSize / 2} 
-              y={height} 
-              textAnchor="middle" 
-              fontSize="11" 
-              fontWeight="500"
-              fill="#334155"
-            >
-              {col}
-            </text>
-          ))}
+          {cols.map((col, i) => { if (cols.length > 20 && i % 3 !== 0) return null; return ( <text key={`col-${i}`} x={yLabelWidth + i * cellWidth + cellWidth / 2} y={height - 5} textAnchor="middle" fontSize="10" fill="#64748b"> {col} </text> ) })}
+          {hoveredData && ( <g transform={`translate(${hoveredData.x}, ${hoveredData.y - 12})`} style={{ pointerEvents: 'none' }}> <rect x="-55" y="-45" width="110" height="40" rx="6" fill="#1e293b" className="shadow-xl" /> <path d="M -5 -5 L 0 2 L 5 -5 Z" fill="#1e293b" /> <text x="0" y="-28" textAnchor="middle" fill="white" fontSize="12" fontWeight="bold"> {metricKey === 'revenue' ? '$' : ''}{formatNumber(hoveredData.val)} </text> <text x="0" y="-14" textAnchor="middle" fill="#cbd5e1" fontSize="9"> {hoveredData.day} • {hoveredData.hour}:00 </text> </g> )}
         </svg>
       </div>
     </div>

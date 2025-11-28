@@ -55,7 +55,7 @@ const CampaignPerformanceTable: React.FC<Props> = ({ data }) => {
   }, [data.length]);
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-4 mt-8 mb-12">
+    <div className="w-full mx-auto px-4 mt-8 mb-12">
         <div className="flex items-center justify-between mb-2">
             <h2 className="text-lg font-bold text-slate-900 uppercase flex items-center gap-2 bg-[#37e6aa] size-fit p-2 rounded-lg shadow-sm">
                 <BarChart3 size={20} className="text-[#114341]" />

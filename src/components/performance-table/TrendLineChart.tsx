@@ -133,17 +133,30 @@ export const TimelineChart: React.FC<TimelineChartProps> = ({ data, metricKey, a
 
         {points.map((p, i) => (
           <g key={i} className="group cursor-pointer">
-            <circle cx={p.x} cy={p.y} r="8" fill="transparent" />
-            <circle cx={p.x} cy={p.y} r="4" fill="white" stroke={color} strokeWidth="2" className="opacity-0 group-hover:opacity-100 transition-opacity" />
+            <circle cx={p.x} cy={p.y} r="12" fill="transparent" />
+          
+            <circle 
+                cx={p.x} 
+                cy={p.y} 
+                r="3" 
+                fill="white" 
+                stroke={color} 
+                strokeWidth="2.5" 
+                className="transition-all duration-200 group-hover:r-6 shadow-sm"
+            />
             
-            <g className="opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
-              <rect x={p.x - 60} y={p.y - 60} width="120" height="50" rx="6" fill="#1e293b" stroke="white" strokeWidth="1" />
-              <text x={p.x} y={p.y - 35} textAnchor="middle" fill="white" fontSize="12" fontWeight="bold">
+            <g className="opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 duration-200">
+              <rect x={p.x - 60} y={p.y - 70} width="120" height="55" rx="8" fill="#1e293b" stroke="white" strokeWidth="2" className="shadow-xl" />
+              
+              <text x={p.x} y={p.y - 45} textAnchor="middle" fill="white" fontSize="13" fontWeight="bold">
                 {metricKey === 'revenue' ? '$' : ''}{formatNumber(Number(p.value))}
               </text>
-              <text x={p.x} y={p.y - 20} textAnchor="middle" fill="#94a3b8" fontSize="10">
+              
+              <text x={p.x} y={p.y - 28} textAnchor="middle" fill="#94a3b8" fontSize="11">
                 {getTooltipDate(p.timestamp)}
               </text>
+              
+              <path d={`M ${p.x - 6} ${p.y - 15} L ${p.x + 6} ${p.y - 15} L ${p.x} ${p.y - 9} Z`} fill="#1e293b" stroke="white" strokeWidth="1" />
             </g>
           </g>
         ))}
