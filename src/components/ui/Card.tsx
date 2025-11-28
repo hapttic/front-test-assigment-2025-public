@@ -45,7 +45,7 @@ export const Card: React.FC<CardProps> = ({
         <span className="text-sm font-medium text-slate-500">{label}</span>
       </div>
       <div>
-        <div className="text-3xl font-bold text-slate-900">{value}</div>
+        <div className="text-base md:text-3xl font-bold text-slate-900">{value}</div>
         {extraInfo && <div className="mt-1">{extraInfo}</div>}
       </div>
     </div>
