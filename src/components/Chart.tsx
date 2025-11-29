@@ -2,23 +2,7 @@ import { useRef } from "react";
 import { useChartScales } from "../hooks/useChartScales";
 import type { AggregatedSlot } from "../types";
 import { useContainerWidth } from "../hooks/useContainerWidth";
-
-// export default function Chart({ data }: { data: AggregatedSlot[] }) {
-//   if (!data.length) return null;
-
-//   const maxRevenue = Math.max(...data.map((d) => d.revenue));
-
-//   return (
-//     <svg className="w-full h-48 border rounded bg-white">
-//       {data.map((d, i) => {
-//         const x = (i / (data.length - 1)) * 100;
-//         const y = 100 - (d.revenue / maxRevenue) * 100;
-
-//         return <circle key={i} cx={`${x}%`} cy={`${y}%`} r="3" fill="blue" />;
-//       })}
-//     </svg>
-//   );
-// }
+import { formatDate } from "../utils/formatDate";
 
 export default function Chart({
   data,
@@ -77,8 +61,8 @@ export default function Chart({
         Days
       </text> */}
         <text
-          x={width - padding + 30}
-          y={height - padding - 10}
+          x={width - padding / 4} //x={width - padding + 30}
+          y={height - padding} //y={height - padding - 10}
           fontSize={12}
           textAnchor="end"
         >
@@ -93,15 +77,7 @@ export default function Chart({
           y2={height - padding}
           stroke="#999"
         />
-        {/* <text
-        x={15} // left margin
-        y={height / 2} // centered vertically
-        fontSize={12}
-        textAnchor="middle"
-        transform={`rotate(-90, 15, ${height / 2})`}
-      >
-        Revenue
-      </text> */}
+
         <text
           x={padding}
           y={padding - 10}
@@ -112,25 +88,6 @@ export default function Chart({
           Revenue
         </text>
 
-        {/* {Array.from({ length: numIntervals + 1 }).map((_, i) => {
-        const value = i * intervalStep;
-        const y = getY(value);
-
-        return (
-          <g key={i}>
-            <line
-              x1={padding}
-              y1={y}
-              x2={width - padding}
-              y2={y}
-              stroke="#eee"
-            />
-            <text x={padding - 10} y={y} fontSize={10} textAnchor="end">
-              {value}
-            </text>
-          </g>
-        );
-      })} */}
         {yValues.map((value, i) => (
           <g key={i}>
             <line
@@ -151,10 +108,10 @@ export default function Chart({
           </g>
         ))}
 
-        {/* Line */}
+        {/* graphic line */}
         <path d={linePath} fill="none" stroke="blue" strokeWidth={2} />
 
-        {/* Points */}
+        {/* points */}
         {data.map((d, i) => (
           <circle key={i} cx={getX(i)} cy={getY(d.revenue)} r="4" fill="blue" />
         ))}
@@ -169,26 +126,11 @@ export default function Chart({
             textAnchor="middle"
             transform={`rotate(-90, ${getX(i)}, ${height - 35})`}
           >
-            {d.start.toLocaleDateString()}
+            {/* {d.start.toLocaleDateString()} */}
+            {formatDate(d.start, aggregation)}
             {/* {d.timeLabel} */}
           </text>
         ))}
-        {/* {Array.from({ length: numIntervals + 1 }).map((_, i) => {
-        const value = i * intervalStep;
-        const y = getY(value);
-
-        return (
-          <text
-            key={i}
-            x={padding - 10} // left of axis
-            y={y}
-            fontSize={10}
-            textAnchor="end"
-          >
-            {value}
-          </text>
-        );
-      })} */}
 
         {/* Y max label */}
         {/* <text x={padding - 10} y={padding} fontSize={10} textAnchor="end">

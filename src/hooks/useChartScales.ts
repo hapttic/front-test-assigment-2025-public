@@ -49,8 +49,13 @@ export function useChartScales({
     }
 
     // scale funcrion
+    // const getX = (i: number) =>
+    //   padding + (i / (data.length - 1)) * (width - padding * 2);
+    const horizontalMargin = 20; // extra space before first and after last
     const getX = (i: number) =>
-      padding + (i / (data.length - 1)) * (width - padding * 2);
+      padding +
+      horizontalMargin +
+      (i / (data.length - 1)) * (width - padding * 2 - horizontalMargin * 2);
 
     const getY = (value: number) =>
       height - padding - (value / yAxisMax) * (height - padding * 2);
