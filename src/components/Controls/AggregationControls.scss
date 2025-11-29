@@ -7,6 +7,10 @@
   margin: 0;
   box-shadow: none;
 
+  @media (max-width: 520px) {
+    flex-direction: column;
+  }
+
   .button-group {
     display: flex;
     gap: 0.25rem;

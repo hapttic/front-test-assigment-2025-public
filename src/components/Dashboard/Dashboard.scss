@@ -50,6 +50,9 @@
     .controls-section {
       display: flex;
       justify-content: flex-end;
+      @media (max-width: 520px) {
+        justify-content: center;
+      }
     }
 
     .chart-section {
