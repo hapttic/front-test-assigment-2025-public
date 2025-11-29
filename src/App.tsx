@@ -86,7 +86,7 @@ function App() {
         ) : (
           <>
             <div className="mb-6">
-              <TimelineChart data={sortedDisplay} metric={metric} onMetricChange={setMetric} />
+              <TimelineChart data={displayed} metric={metric} onMetricChange={setMetric} />
             </div>
             <DataGrid rows={sortedDisplay} sortBy={sortBy} sortDir={sortDir} onSortChange={onSortChange} />
           </>
