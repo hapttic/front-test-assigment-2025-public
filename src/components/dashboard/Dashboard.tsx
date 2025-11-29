@@ -105,7 +105,7 @@ const Dashboard: React.FC = () => {
 
       <Header aggregation={aggregation} setAggregation={setAggregation} />
       <div className="dashboard">
-        <TimelineChart data={aggregatedRows} aggregation={aggregation} />
+        <TimelineChart data={aggregatedRows} />
 
         <DashboardTable
           rows={sortedRows}

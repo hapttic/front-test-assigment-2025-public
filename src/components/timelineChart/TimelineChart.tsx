@@ -1,10 +1,9 @@
-import React, { useMemo, useState, useRef, useEffect } from 'react'
-import { AggregatedRow, AggregationLevel } from '../../models/data'
+import React, { useMemo, useState } from 'react'
+import { AggregatedRow } from '../../models/data'
 import "./TimelineChart.css"
 
 interface Props {
     data: AggregatedRow[]
-    aggregation: AggregationLevel
 }
 
 type Metric = 'totalClicks' | 'totalRevenue'
@@ -28,19 +27,6 @@ const formatTick = (n: number) => {
 
 const TimelineChart: React.FC<Props> = ({ data }) => {
     const [metric, setMetric] = useState<Metric>('totalClicks')
-    const containerRef = useRef<HTMLDivElement>(null)
-    const [dimensions, setDimensions] = useState({ width: 600, height: 350 })
-
-    useEffect(() => {
-        const update = () => {
-            if (containerRef.current) {
-                setDimensions({ width: containerRef.current.clientWidth, height: 350 })
-            }
-        }
-        update()
-        window.addEventListener('resize', update)
-        return () => window.removeEventListener('resize', update)
-    }, [])
 
     const sortedData = useMemo(() => {
         return [...data].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
@@ -52,18 +38,16 @@ const TimelineChart: React.FC<Props> = ({ data }) => {
     }, [sortedData, metric])
 
     const points = useMemo(() => {
-        if (!sortedData || sortedData.length === 0) return []
-
-        const width = Math.max(dimensions.width, sortedData.length * 80)
-        const height = dimensions.height
         const padding = 50
+        const height = 350
+        const widthPerPoint = 80
 
         return sortedData.map((d, i) => {
-            const x = padding + (i / (sortedData.length - 1)) * (width - 2 * padding)
+            const x = padding + (i / (sortedData.length - 1 || 1)) * ((sortedData.length - 1) * widthPerPoint)
             const y = height - padding - (d[metric] / maxValue) * (height - 2 * padding)
             return { x, y, value: d[metric], label: d.date }
         })
-    }, [sortedData, metric, dimensions, maxValue])
+    }, [sortedData, metric, maxValue])
 
     const linePath = useMemo(() => {
         if (points.length === 0) return ''
@@ -72,21 +56,18 @@ const TimelineChart: React.FC<Props> = ({ data }) => {
 
     const yTicks = useMemo(() => {
         const step = maxValue / 4
+        const height = 350
         return [0, 1, 2, 3, 4].map(i => ({
             raw: Math.round(i * step),
             label: formatTick(Math.round(i * step)),
-            y: dimensions.height - 50 - (i / 4) * (dimensions.height - 2 * 50),
+            y: height - 50 - (i / 4) * (height - 100)
         }))
-    }, [maxValue, dimensions])
+    }, [maxValue])
 
-    const scrollWidth = points.length * 80
-    const effectiveWidth = Math.max(scrollWidth, dimensions.width)
+    const svgMinWidth = Math.max(points.length * 80, 0)
 
     return (
-        <div
-            ref={containerRef}
-            className="timeline-container scrollable"
-        >
+        <div className="timeline-container scrollable">
             <div className="chart-header">
                 <h2 className="chart-title">Timeline Chart</h2>
                 <div className="metric-buttons">
@@ -97,17 +78,17 @@ const TimelineChart: React.FC<Props> = ({ data }) => {
             </div>
             <div
                 className="svg-wrapper"
-                style={{ width: effectiveWidth }}
+                style={{ width: '100%', minWidth: svgMinWidth }}
             >
-                <svg width={effectiveWidth} height={dimensions.height} style={{ background: "#222", borderRadius: "5px" }}>
+                <svg width="100%" height={350} style={{ background: "#222", borderRadius: "5px" }}>
                     <line
                         x1={50}
-                        y1={dimensions.height - 50}
-                        x2={effectiveWidth - 50}
-                        y2={dimensions.height - 50}
+                        y1={350 - 50}
+                        x2={svgMinWidth - 50}
+                        y2={350 - 50}
                         stroke="#3a3a3a"
                     />
-                    <line x1={50} y1={dimensions.height - 50} x2={50} y2={20} stroke="#3a3a3a" />
+                    <line x1={50} y1={350 - 50} x2={50} y2={20} stroke="#3a3a3a" />
 
                     <path d={linePath} fill="none" stroke="grey" strokeWidth={2} />
 
@@ -119,11 +100,11 @@ const TimelineChart: React.FC<Props> = ({ data }) => {
                         <text
                             key={i}
                             x={p.x}
-                            y={dimensions.height - 30}
+                            y={350 - 30}
                             textAnchor="middle"
                             fontSize={10}
                             fill="#ccc"
-                            transform={`rotate(45 ${p.x},${dimensions.height - 30})`}
+                            transform={`rotate(45 ${p.x},${350 - 30})`}
                         >
                             {p.label}
                         </text>
