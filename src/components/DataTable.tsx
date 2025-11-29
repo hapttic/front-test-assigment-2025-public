@@ -1,4 +1,4 @@
-import type { AggregatedSlot, Metric } from "../types";
+import type { AggregatedSlot } from "../types";
 
 export default function DataTable({ rows }: { rows: AggregatedSlot[] }) {
   return (

@@ -1,5 +1,7 @@
+import { useRef } from "react";
 import { useChartScales } from "../hooks/useChartScales";
 import type { AggregatedSlot } from "../types";
+import { useContainerWidth } from "../hooks/useContainerWidth";
 
 // export default function Chart({ data }: { data: AggregatedSlot[] }) {
 //   if (!data.length) return null;
@@ -27,13 +29,20 @@ export default function Chart({
 }) {
   if (!data.length) return null;
 
+  const containerRef = useRef<HTMLDivElement>(null);
+  const containerWidth = useContainerWidth(containerRef);
+
   // const width = 1300;
   // const height = 500;
   const padding = 60;
-  const pointSpacing = 50;
+  const pointSpacing = 20;
+
+  const baseWidth = padding * 2 + data.length * pointSpacing;
+
+  const width = Math.max(containerWidth, baseWidth);
 
   // Dynamic width based on data count
-  const width = Math.max(600, padding * 2 + data.length * pointSpacing);
+  //const width = Math.max(600, padding * 2 + data.length * pointSpacing);
   const height = 500;
 
   const { maxValue, yValues, getX, getY } = useChartScales({
@@ -51,7 +60,10 @@ export default function Chart({
     .join(" ");
 
   return (
-    <div className="w-full p-4 overflow-x-auto shadow-md rounded my-wrapper">
+    <div
+      ref={containerRef}
+      className="w-full p-4 overflow-x-auto shadow-md rounded my-wrapper"
+    >
       <svg width={width} height={height} className="bg-white rounded  ">
         {/* X Axis */}
         <line

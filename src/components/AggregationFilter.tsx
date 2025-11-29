@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import type { AggregationFilterProps, Mode } from "../types";
+import type { AggregationFilterProps } from "../types";
 
 export default function AggregationFilter({
   value,
