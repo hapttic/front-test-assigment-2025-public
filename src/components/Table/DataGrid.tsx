@@ -13,6 +13,7 @@ const DataGrid: React.FC<DataGridProps> = ({ data }) => {
   const [sortField, setSortField] = useState<SortField | null>(null);
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
   const [currentPage, setCurrentPage] = useState(1);
+  const [inputPage, setInputPage] = useState("1");
   const pageSize = 50;
 
   const handleSort = (field: SortField) => {
@@ -44,11 +45,31 @@ const DataGrid: React.FC<DataGridProps> = ({ data }) => {
   const handlePageChange = (newPage: number) => {
     if (newPage >= 1 && newPage <= totalPages) {
       setCurrentPage(newPage);
+      setInputPage(newPage.toString());
+    }
+  };
+
+  const handleJumpToFirstLast = () => {
+    if (currentPage === totalPages) {
+      handlePageChange(1);
+    } else {
+      handlePageChange(totalPages);
+    }
+  };
+
+  const handleInputSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const pageNum = parseInt(inputPage);
+    if (!isNaN(pageNum) && pageNum >= 1 && pageNum <= totalPages) {
+      handlePageChange(pageNum);
+    } else {
+      setInputPage(currentPage.toString());
     }
   };
 
   React.useEffect(() => {
     setCurrentPage(1);
+    setInputPage("1");
   }, [data]);
 
   return (
@@ -63,15 +84,28 @@ const DataGrid: React.FC<DataGridProps> = ({ data }) => {
           >
             &lt;
           </button>
-          <span className="page-info">
-            Page {currentPage} of {totalPages || 1}
-          </span>
+
+          <form onSubmit={handleInputSubmit} className="page-input-form">
+            <span className="page-info">Page</span>
+            <input
+              type="text"
+              value={inputPage}
+              onChange={(e) => setInputPage(e.target.value)}
+              className="page-input"
+            />
+            <span className="page-info">of {totalPages || 1}</span>
+          </form>
+
           <button
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
             className="page-btn"
           >
             &gt;
+          </button>
+
+          <button onClick={handleJumpToFirstLast} className="page-btn jump-btn">
+            {currentPage === totalPages ? "First" : "Last"}
           </button>
         </div>
       </div>

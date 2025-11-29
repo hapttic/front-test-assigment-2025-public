@@ -23,6 +23,28 @@
       align-items: center;
       gap: 10px;
 
+      .page-input-form {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .page-input {
+        background: #1f2329;
+        border: 1px solid #2a2e35;
+        color: #e0e0e0;
+        padding: 5px 8px;
+        border-radius: 4px;
+        width: 40px;
+        text-align: center;
+        font-size: 0.9rem;
+
+        &:focus {
+          outline: none;
+          border-color: #00d2ff;
+        }
+      }
+
       .page-btn {
         background: #2a2e35;
         border: none;
@@ -39,6 +61,12 @@
         &:disabled {
           opacity: 0.5;
           cursor: not-allowed;
+        }
+
+        &.jump-btn {
+          min-width: 60px;
+          font-size: 0.85rem;
+          font-weight: 500;
         }
       }
 
