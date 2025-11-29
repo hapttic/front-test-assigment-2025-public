@@ -22,7 +22,7 @@ const AggregationControls = ({ aggregation, onAggregationChange }: AggregationCo
         id="aggregation-select"
         value={aggregation}
         onChange={(e) => onAggregationChange(e.target.value as AggregationLevel)}
-        className="px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+        className="px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm text-gray-900"
       >
         {aggregationOptions.map((option) => (
           <option key={option.value} value={option.value}>
