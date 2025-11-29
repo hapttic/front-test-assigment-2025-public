@@ -1,0 +1,26 @@
+.container {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+  
+  .button {
+    padding: 6px 12px;
+    font-size: 14px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    background: #fff;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+  }
+  
+  .button:hover {
+    background: #f2f2f2;
+  }
+  
+  .active {
+    background: #222;
+    color: white;
+    border-color: #222;
+  }
+  
