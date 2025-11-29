@@ -104,9 +104,25 @@ export const aggregateData = (
         return d.getTime();
       };
       getLabel = (date: Date) => {
+        const months = [
+          "Jan",
+          "Feb",
+          "Mar",
+          "Apr",
+          "May",
+          "Jun",
+          "Jul",
+          "Aug",
+          "Sep",
+          "Oct",
+          "Nov",
+          "Dec",
+        ];
+        const month = months[date.getMonth()];
+        const day = date.getDate();
         const h = String(date.getHours()).padStart(2, "0");
         const m = String(date.getMinutes()).padStart(2, "0");
-        return `${h}:${m}`;
+        return `${month} ${day}, ${h}:${m}`;
       };
       break;
     case "Daily":
