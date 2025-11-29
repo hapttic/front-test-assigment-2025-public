@@ -26,7 +26,7 @@ const formatTick = (n: number) => {
     return n.toString()
 }
 
-const TimelineChart: React.FC<Props> = ({ data, aggregation }) => {
+const TimelineChart: React.FC<Props> = ({ data }) => {
     const [metric, setMetric] = useState<Metric>('totalClicks')
     const containerRef = useRef<HTMLDivElement>(null)
     const [dimensions, setDimensions] = useState({ width: 600, height: 350 })
@@ -79,13 +79,13 @@ const TimelineChart: React.FC<Props> = ({ data, aggregation }) => {
         }))
     }, [maxValue, dimensions])
 
-    const isScrollable = aggregation === 'hourly' || aggregation === 'daily'
     const scrollWidth = points.length * 80
+    const effectiveWidth = Math.max(scrollWidth, dimensions.width)
 
     return (
         <div
             ref={containerRef}
-            className={`timeline-container ${isScrollable ? 'scrollable' : ''}`}
+            className="timeline-container scrollable"
         >
             <div className="chart-header">
                 <h2 className="chart-title">Timeline Chart</h2>
@@ -97,13 +97,13 @@ const TimelineChart: React.FC<Props> = ({ data, aggregation }) => {
             </div>
             <div
                 className="svg-wrapper"
-                style={{ width: isScrollable ? scrollWidth : '100%' }}
+                style={{ width: effectiveWidth }}
             >
-                <svg width={isScrollable ? scrollWidth : dimensions.width} height={dimensions.height} style={{ background: "#222", borderRadius: "5px" }}>
+                <svg width={effectiveWidth} height={dimensions.height} style={{ background: "#222", borderRadius: "5px" }}>
                     <line
                         x1={50}
                         y1={dimensions.height - 50}
-                        x2={isScrollable ? scrollWidth - 50 : dimensions.width - 50}
+                        x2={effectiveWidth - 50}
                         y2={dimensions.height - 50}
                         stroke="#3a3a3a"
                     />

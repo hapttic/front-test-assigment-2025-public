@@ -1,9 +1,21 @@
+.timeline-container {
+    display: block;
+    width: 100% !important;
+    overflow-x: auto;
+}
+
 .timeline-container.scrollable {
     overflow-x: auto;
 }
 
+.timeline-container:not(.scrollable) {
+    overflow-x: hidden;
+}
+
 .svg-wrapper {
-    display: inline-block;
+    width: 100%;
+    min-width: 100%;
+    display: block;
 }
 
 .chart-title {
