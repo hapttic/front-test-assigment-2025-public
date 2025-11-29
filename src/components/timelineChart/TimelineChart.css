@@ -1,0 +1,32 @@
+.timeline-container.scrollable {
+    overflow-x: auto;
+}
+
+.svg-wrapper {
+    display: inline-block;
+}
+
+.chart-title {
+    color: #ccc;
+}
+
+.metric-buttons button {
+    margin-right: 5px;
+}
+
+.chart-header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.chart-header button {
+    color: #ccc;
+}
+
+.metric-buttons span {
+    color: white;
+    margin-right: 3.5px;
+}

@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { AggregationLevel } from '../../models/data'
+import "./AggregationControls.css"
 
 interface Props {
     value: AggregationLevel
@@ -7,12 +8,33 @@ interface Props {
 }
 
 const AggregationControls: React.FC<Props> = ({ value, onChange }) => {
+    const [open, setOpen] = useState(false)
+    const options: AggregationLevel[] = ['hourly', 'daily', 'weekly', 'monthly']
+
+    const handleSelect = (level: AggregationLevel) => {
+        onChange(level)
+        setOpen(false)
+    }
+
     return (
-        <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
-            <button onClick={() => onChange('hourly')} disabled={value === 'hourly'}>Hourly</button>
-            <button onClick={() => onChange('daily')} disabled={value === 'daily'}>Daily</button>
-            <button onClick={() => onChange('weekly')} disabled={value === 'weekly'}>Weekly</button>
-            <button onClick={() => onChange('monthly')} disabled={value === 'monthly'}>Monthly</button>
+        <div className="dropdown">
+            <button className="dropdown-toggle" onClick={() => setOpen(prev => !prev)}>
+                {value.charAt(0).toUpperCase() + value.slice(1)}
+            </button>
+
+            {open && (
+                <ul className="dropdown-menu">
+                    {options.map(opt => (
+                        <li
+                            key={opt}
+                            className={`dropdown-item ${opt === value ? 'selected' : ''}`}
+                            onClick={() => handleSelect(opt)}
+                        >
+                            <button>{opt.charAt(0).toUpperCase() + opt.slice(1)}</button>
+                        </li>
+                    ))}
+                </ul>
+            )}
         </div>
     )
 }

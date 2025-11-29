@@ -1,19 +1,13 @@
 import React, { useMemo, useState, useRef, useEffect } from 'react'
-
-interface AggregatedRow {
-    id: string
-    date: string
-    campaignsActive: number
-    totalImpressions: number
-    totalClicks: number
-    totalRevenue: number
-}
-
-type Metric = 'totalClicks' | 'totalRevenue'
+import { AggregatedRow, AggregationLevel } from '../../models/data'
+import "./TimelineChart.css"
 
 interface Props {
     data: AggregatedRow[]
+    aggregation: AggregationLevel
 }
+
+type Metric = 'totalClicks' | 'totalRevenue'
 
 const niceNumber = (value: number) => {
     const exponent = Math.floor(Math.log10(value))
@@ -32,7 +26,7 @@ const formatTick = (n: number) => {
     return n.toString()
 }
 
-const TimelineChart: React.FC<Props> = ({ data }) => {
+const TimelineChart: React.FC<Props> = ({ data, aggregation }) => {
     const [metric, setMetric] = useState<Metric>('totalClicks')
     const containerRef = useRef<HTMLDivElement>(null)
     const [dimensions, setDimensions] = useState({ width: 600, height: 350 })
@@ -60,7 +54,7 @@ const TimelineChart: React.FC<Props> = ({ data }) => {
     const points = useMemo(() => {
         if (!sortedData || sortedData.length === 0) return []
 
-        const width = dimensions.width
+        const width = Math.max(dimensions.width, sortedData.length * 80)
         const height = dimensions.height
         const padding = 50
 
@@ -85,48 +79,63 @@ const TimelineChart: React.FC<Props> = ({ data }) => {
         }))
     }, [maxValue, dimensions])
 
+    const isScrollable = aggregation === 'hourly' || aggregation === 'daily'
+    const scrollWidth = points.length * 80
+
     return (
-        <div ref={containerRef} style={{ width: '100%' }}>
-            <h2>Timeline Chart</h2>
-            <div style={{ marginBottom: '10px' }}>
-                <button onClick={() => setMetric('totalClicks')}>Clicks</button>
-                <button onClick={() => setMetric('totalRevenue')}>Revenue</button>
+        <div
+            ref={containerRef}
+            className={`timeline-container ${isScrollable ? 'scrollable' : ''}`}
+        >
+            <div className="chart-header">
+                <h2 className="chart-title">Timeline Chart</h2>
+                <div className="metric-buttons">
+                    <button onClick={() => setMetric('totalClicks')}>Clicks</button>
+                    <span> / </span>
+                    <button onClick={() => setMetric('totalRevenue')}>Revenue</button>
+                </div>
             </div>
-            <svg width={dimensions.width} height={dimensions.height} style={{ border: '1px solid black' }}>
-                <line
-                    x1={50}
-                    y1={dimensions.height - 50}
-                    x2={dimensions.width - 50}
-                    y2={dimensions.height - 50}
-                    stroke="black"
-                />
-                <line x1={50} y1={dimensions.height - 50} x2={50} y2={20} stroke="black" />
+            <div
+                className="svg-wrapper"
+                style={{ width: isScrollable ? scrollWidth : '100%' }}
+            >
+                <svg width={isScrollable ? scrollWidth : dimensions.width} height={dimensions.height} style={{ background: "#222", borderRadius: "5px" }}>
+                    <line
+                        x1={50}
+                        y1={dimensions.height - 50}
+                        x2={isScrollable ? scrollWidth - 50 : dimensions.width - 50}
+                        y2={dimensions.height - 50}
+                        stroke="#3a3a3a"
+                    />
+                    <line x1={50} y1={dimensions.height - 50} x2={50} y2={20} stroke="#3a3a3a" />
 
-                <path d={linePath} fill="none" stroke="blue" strokeWidth={2} />
+                    <path d={linePath} fill="none" stroke="grey" strokeWidth={2} />
 
-                {points.map((p, i) => (
-                    <circle key={i} cx={p.x} cy={p.y} r={4} fill="red" />
-                ))}
+                    {points.map((p, i) => (
+                        <circle key={i} cx={p.x} cy={p.y} r={4} fill="white" />
+                    ))}
 
-                {points.map((p, i) => (
-                    <text
-                        key={i}
-                        x={p.x}
-                        y={dimensions.height - 30}
-                        textAnchor="middle"
-                        fontSize={10}
-                        transform={`rotate(45 ${p.x},${dimensions.height - 30})`}
-                    >
-                        {p.label}
-                    </text>
-                ))}
+                    {points.map((p, i) => (
+                        <text
+                            key={i}
+                            x={p.x}
+                            y={dimensions.height - 30}
+                            textAnchor="middle"
+                            fontSize={10}
+                            fill="#ccc"
+                            transform={`rotate(45 ${p.x},${dimensions.height - 30})`}
+                        >
+                            {p.label}
+                        </text>
+                    ))}
 
-                {yTicks.map((tick, i) => (
-                    <text key={i} x={10} y={tick.y + 5} fontSize={10}>
-                        {tick.label}
-                    </text>
-                ))}
-            </svg>
+                    {yTicks.map((tick, i) => (
+                        <text key={i} x={10} y={tick.y + 5} fontSize={10} fill="#ccc">
+                            {tick.label}
+                        </text>
+                    ))}
+                </svg>
+            </div>
         </div>
     )
 }

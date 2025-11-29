@@ -1,6 +1,7 @@
 .table {
     width: 100%;
     border-collapse: collapse;
+    border-radius: 5px;
 }
 
 .th,
@@ -8,6 +9,7 @@
     border: 1px solid black;
     text-align: center;
     padding: 8px;
+    color: white;
 }
 
 .sortable {
@@ -15,5 +17,18 @@
 }
 
 .tr:nth-child(even) {
-    background-color: #f7f7f7;
+    background-color: #444;
+}
+
+.campaigns {
+    margin-top: 50px;
+}
+
+.campaigns h2 {
+    color: #ccc;
+    margin-bottom: 15px;
+}
+
+th {
+    background: #222;
 }

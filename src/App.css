@@ -6,14 +6,27 @@
 
 body {
   overflow-x: hidden;
-}
-
-.link {
-  text-decoration: none;
-  color: inherit;
+  background: #2a2a2a;
+  padding: 35px;
 }
 
 button {
   border: 0;
   background-color: transparent;
+  color: white;
+  cursor: pointer;
+}
+
+ul {
+  list-style-type: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+li {
+  color: white;
 }
