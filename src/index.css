@@ -72,3 +72,12 @@ button:focus-visible {
     background-color: #f9f9f9;
   } */
 }
+
+@media (min-width: 1440px) {
+  .my-wrapper {
+    padding: 0 !important;
+  }
+  .chart {
+    width: 1334px !important;
+  }
+}

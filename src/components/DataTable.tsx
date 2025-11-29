@@ -2,7 +2,8 @@ import type { AggregatedSlot, Metric } from "../types";
 
 export default function DataTable({ rows }: { rows: AggregatedSlot[] }) {
   return (
-    <div className="overflow-x-auto max-h-[500px] border border-gray-500 rounded-2xl">
+    <div className=" rounded-2xl overflow-hidden shadow-md">
+      {/* className="overflow-x-auto max-h-[500px] border border-gray-300 rounded-2xl" */}
       <table className="min-w-full text-sm">
         <thead>
           <tr className="border-b bg-gray-50">
@@ -14,7 +15,7 @@ export default function DataTable({ rows }: { rows: AggregatedSlot[] }) {
           </tr>
         </thead>
 
-        <tbody>
+        {/* <tbody>
           {rows.map((r, i) => (
             <tr key={i} className="border-b hover:bg-gray-100">
               <td className="p-2">{r.start.toISOString()}</td>
@@ -24,8 +25,24 @@ export default function DataTable({ rows }: { rows: AggregatedSlot[] }) {
               <td className="p-2">${r.revenue.toFixed(2)}</td>
             </tr>
           ))}
-        </tbody>
+        </tbody> */}
       </table>
+
+      <div className="max-h-[500px] overflow-auto">
+        <table className="min-w-full text-sm">
+          <tbody>
+            {rows.map((r, i) => (
+              <tr key={i} className="border-b hover:bg-gray-100">
+                <td className="p-2">{r.start.toISOString()}</td>
+                <td className="p-2">{r.campaignsActive}</td>
+                <td className="p-2">{r.impressions}</td>
+                <td className="p-2">{r.clicks}</td>
+                <td className="p-2">${r.revenue.toFixed(2)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
