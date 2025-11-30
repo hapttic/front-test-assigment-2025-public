@@ -77,6 +77,7 @@ export interface UseDataFetchResult {
 
 export interface AggregatedDataPoint {
   timestamp: string;
+  label: string;
   clicks: number;
   revenue: number;
   impressions: number;

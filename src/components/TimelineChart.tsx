@@ -111,7 +111,7 @@ function TimelineChart({ title, data, metricType }: TimelineChartProps) {
               textAnchor="middle"
               style={{ pointerEvents: "none" }}
             >
-              {point.timestamp}
+              {point.label}
             </text>
           );
         })}

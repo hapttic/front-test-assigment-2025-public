@@ -27,8 +27,8 @@ function Table( { metrics }: TableProps) {
             </thead>
             <tbody>
                 {visibleMetrics.map((metric) => (
-                    <tr key={metric.timestamp}>
-                        <td>{metric.timestamp}</td>
+                    <tr key={metric.label}>
+                        <td>{metric.label}</td>
                         <td>{metric.campaigns.size}</td>
                         <td>{metric.impressions}</td>
                         <td>{metric.clicks}</td>

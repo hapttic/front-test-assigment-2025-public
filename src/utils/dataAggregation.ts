@@ -47,7 +47,8 @@ export function aggregateMetrics(
       existing.campaigns.add(metric.campaignId);
     } else {
       aggregationMap.set(key, {
-        timestamp: key,
+        label: key,
+        timestamp: metric.timestamp,
         clicks: metric.clicks,
         revenue: metric.revenue,
         impressions: metric.impressions,
