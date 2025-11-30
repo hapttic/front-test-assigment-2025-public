@@ -1,4 +1,4 @@
-import type { Campaign, Dataset, JoinedMetric, Metric } from '../../types/data';
+import type { Campaign, Dataset, JoinedMetric, Metric } from '../types/data';
 
 
 export async function fetchDataset(): Promise<Dataset> {

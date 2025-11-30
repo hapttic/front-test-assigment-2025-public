@@ -1,11 +1,9 @@
 import { useMemo, useState } from 'react';
 import type { AggregatedSlot } from '../lib/aggregation';
 import { useChartData } from '../hooks/useChartData';
-
-
-
-type MetricType = 'clicks' | 'revenue';
-type MetricKey = 'totalClicks' | 'totalRevenue';
+import type { MetricType, MetricKey } from '../types/chart';
+import { getTickValues } from '../utils/chart';
+import { Y_TICKS_COUNT, X_TICKS_MAX_COUNT } from '../constants/chart';
 
 interface Props {
   data: AggregatedSlot[];
@@ -13,41 +11,23 @@ interface Props {
   onMetricChange: (m: MetricType) => void;
 }
 
-const getTickValues = (min: number, max: number, count: number): number[] => {
-  if (count < 1) return [];
-  const range = max - min;
-  return Array.from({ length: count + 1 }, (_, i) => min + (i * range) / count);
-};
-
-
 export function TimelineChart({ data, metric, onMetricChange }: Props) {
-
   const metricKey: MetricKey = metric === 'clicks' ? 'totalClicks' : 'totalRevenue';
-
-
   const { path, points, minY, maxY, minX, maxX, dims } = useChartData(data, metricKey);
   const [hoverIndex, setHoverIndex] = useState<number | null>(null);
 
   const { w, h, m, innerH } = dims;
 
- 
-
-
-  const yTicks = 4;
-  const yTickValues = getTickValues(minY, maxY, yTicks);
-
-  
-  const xTickCount = Math.min(6, data.length);
+  const yTickValues = getTickValues(minY, maxY, Y_TICKS_COUNT);
+  const xTickCount = Math.min(X_TICKS_MAX_COUNT, data.length);
   const xTickIndexes = useMemo(() => {
     if (data.length === 0) return [];
     const step = data.length > 1 ? (data.length - 1) / (xTickCount - 1) : 0;
     return Array.from({ length: xTickCount }, (_, i) => Math.round(i * step));
   }, [data.length, xTickCount]);
 
-
   return (
     <div className="w-full">
-  
       <div className="flex items-center justify-between mb-2">
         <h3 className="text-sm font-semibold text-gray-800">
           Timeline ({metric === 'clicks' ? 'Clicks' : 'Revenue'})
@@ -65,7 +45,7 @@ export function TimelineChart({ data, metric, onMetricChange }: Props) {
           </select>
         </div>
       </div>
-      
+
       {data.length === 0 ? (
         <div className="w-full h-64 bg-white rounded-lg shadow border flex items-center justify-center text-gray-500">No data to display</div>
       ) : (
@@ -93,26 +73,23 @@ export function TimelineChart({ data, metric, onMetricChange }: Props) {
 
         {yTickValues.map((v, i) => {
           const ratio = (v - minY) / (maxY - minY);
-          const y = m.top + (1 - ratio) * innerH; 
-          
+          const y = m.top + (1 - ratio) * innerH;
+
           return (
             <g key={i}>
               <line x1={m.left} y1={y} x2={w - m.right} y2={y} stroke="#f3f4f6" />
               <text x={m.left - 8} y={y} textAnchor="end" dominantBaseline="middle" className="fill-gray-500 text-[10px]">
-            
                 {metric === 'clicks' ? Math.round(v) : v.toFixed(2)}
               </text>
             </g>
           );
         })}
 
-     
         {xTickIndexes.map((idx, i) => {
           const d = data[idx];
-         
           const ratio = (d.startUTC - minX) / (maxX - minX || 1);
           const x = m.left + ratio * dims.innerW;
-          
+
           return (
             <g key={i}>
               <line x1={x} y1={h - m.bottom} x2={x} y2={m.top} stroke="#f3f4f6" />
@@ -123,8 +100,6 @@ export function TimelineChart({ data, metric, onMetricChange }: Props) {
           );
         })}
 
- 
-     
         {points.length > 1 && (
           <path
             d={`M ${points[0].x} ${points[0].y} ${points.slice(1).map(p => `L ${p.x} ${p.y}`).join(' ')} L ${points[points.length - 1].x} ${m.top + innerH} L ${points[0].x} ${m.top + innerH} Z`}

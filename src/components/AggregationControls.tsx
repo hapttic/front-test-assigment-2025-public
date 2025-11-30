@@ -1,4 +1,3 @@
-
 import type { AggregationLevel } from '../lib/aggregation';
 
 interface Props {

@@ -1,4 +1,3 @@
-
 import { useEffect, useMemo, useState } from 'react';
 import './App.css';
 import { AggregationControls } from './components/AggregationControls';
@@ -7,12 +6,15 @@ import { DataGrid } from './components/DataGrid';
 import { fetchDataset, joinMetricsWithCampaigns } from './lib/data';
 import type { AggregationLevel, AggregatedSlot } from './lib/aggregation';
 import { aggregateMetrics } from './lib/aggregation';
+import type { SortBy, SortDir } from './types/sorting';
+import type { MetricType } from './types/chart';
+import { sortAggregatedSlots } from './utils/sorting';
 
 function App() {
   const [level, setLevel] = useState<AggregationLevel>('hourly');
-  const [metric, setMetric] = useState<'clicks' | 'revenue'>('clicks');
-  const [sortBy, setSortBy] = useState<'date' | 'revenue'>('date');
-  const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc');
+  const [metric, setMetric] = useState<MetricType>('clicks');
+  const [sortBy, setSortBy] = useState<SortBy>('date');
+  const [sortDir, setSortDir] = useState<SortDir>('asc');
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [joined, setJoined] = useState<ReturnType<typeof joinMetricsWithCampaigns> | null>(null);
@@ -49,20 +51,13 @@ function App() {
     setLevel(newLevel);
   };
 
-  const onSortChange = (by: 'date' | 'revenue', dir: 'asc' | 'desc') => {
+  const onSortChange = (by: SortBy, dir: SortDir) => {
     setSortBy(by);
     setSortDir(dir);
   };
 
   const sortedDisplay = useMemo(() => {
-    const rows = [...displayed];
-    rows.sort((a, b) => {
-      let cmp = 0;
-      if (sortBy === 'date') cmp = a.startUTC - b.startUTC;
-      else cmp = a.totalRevenue - b.totalRevenue;
-      return sortDir === 'asc' ? cmp : -cmp;
-    });
-    return rows;
+    return sortAggregatedSlots(displayed, sortBy, sortDir);
   }, [displayed, sortBy, sortDir]);
 
   return (

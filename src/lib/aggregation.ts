@@ -1,11 +1,12 @@
-import type { JoinedMetric } from "../../types/data";
+import type { JoinedMetric } from '../types/data';
+import type { AggregationLevel } from '../types/aggregation';
 
-export type AggregationLevel = 'hourly' | 'daily' | 'weekly' | 'monthly';
+export type { AggregationLevel };
 
 export interface AggregatedSlot {
-  startUTC: number; 
-  endUTC: number; 
-  label: string; 
+  startUTC: number;
+  endUTC: number;
+  label: string;
   campaignsActive: number;
   totalImpressions: number;
   totalClicks: number;
@@ -25,10 +26,9 @@ function startOfDayUTC(d: Date): Date {
 }
 
 function startOfISOWeekUTC(d: Date): Date {
-  
   const day = d.getUTCDay();
   const nd = startOfDayUTC(d);
-  const diffToMonday = (day + 6) % 7; 
+  const diffToMonday = (day + 6) % 7;
   nd.setUTCDate(nd.getUTCDate() - diffToMonday);
   return nd;
 }
@@ -58,7 +58,7 @@ function labelForBucket(start: Date, level: AggregationLevel): string {
   if (level === 'hourly') return `${y}-${m}-${d} ${h}:00 UTC`;
   if (level === 'daily') return `${y}-${m}-${d}`;
   if (level === 'monthly') return `${y}-${m}`;
-  
+
   return `${y}-${m}-${d} (week)`;
 }
 

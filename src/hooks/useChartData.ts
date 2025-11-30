@@ -1,25 +1,13 @@
 import { useMemo } from 'react';
 import type { AggregatedSlot } from '../lib/aggregation';
-
-const CHART_WIDTH = 800;
-const CHART_HEIGHT = 300;
-const MARGINS = { top: 20, right: 20, bottom: 30, left: 40 };
-
-const INNER_WIDTH = CHART_WIDTH - MARGINS.left - MARGINS.right;
-const INNER_HEIGHT = CHART_HEIGHT - MARGINS.top - MARGINS.bottom;
-
-type MetricKey = 'totalClicks' | 'totalRevenue';
-
-interface ChartData {
-  path: string;
-  points: { x: number; y: number }[];
-  minY: number;
-  maxY: number;
-  minX: number;
-  maxX: number;
-
-  dims: { w: number; h: number; m: typeof MARGINS; innerW: number; innerH: number };
-}
+import type { MetricKey, ChartData } from '../types/chart';
+import {
+  CHART_WIDTH,
+  CHART_HEIGHT,
+  CHART_MARGINS,
+  CHART_INNER_WIDTH,
+  CHART_INNER_HEIGHT,
+} from '../constants/chart';
 
 export function useChartData(data: AggregatedSlot[], metricKey: MetricKey): ChartData {
   return useMemo(() => {
@@ -40,20 +28,15 @@ export function useChartData(data: AggregatedSlot[], metricKey: MetricKey): Char
 
     
     const xScale = (x: number) => {
-    
-      if (maxX === minX) return MARGINS.left + INNER_WIDTH / 2;
-      
+      if (maxX === minX) return CHART_MARGINS.left + CHART_INNER_WIDTH / 2;
       const ratio = (x - minX) / (maxX - minX);
-      return MARGINS.left + ratio * INNER_WIDTH;
+      return CHART_MARGINS.left + ratio * CHART_INNER_WIDTH;
     };
-    
+
     const yScale = (y: number) => {
- 
-      if (paddedMaxY === paddedMinY) return MARGINS.top + INNER_HEIGHT / 2;
-      
+      if (paddedMaxY === paddedMinY) return CHART_MARGINS.top + CHART_INNER_HEIGHT / 2;
       const ratio = (y - paddedMinY) / (paddedMaxY - paddedMinY);
-      
-      return MARGINS.top + (1 - ratio) * INNER_HEIGHT;
+      return CHART_MARGINS.top + (1 - ratio) * CHART_INNER_HEIGHT;
     };
 
     
@@ -68,14 +51,20 @@ export function useChartData(data: AggregatedSlot[], metricKey: MetricKey): Char
       ''
     );
 
-    return { 
-      path, 
-      points, 
-      minY: paddedMinY, 
-      maxY: paddedMaxY, 
-      minX, 
+    return {
+      path,
+      points,
+      minY: paddedMinY,
+      maxY: paddedMaxY,
+      minX,
       maxX,
-      dims: { w: CHART_WIDTH, h: CHART_HEIGHT, m: MARGINS, innerW: INNER_WIDTH, innerH: INNER_HEIGHT }
+      dims: {
+        w: CHART_WIDTH,
+        h: CHART_HEIGHT,
+        m: CHART_MARGINS,
+        innerW: CHART_INNER_WIDTH,
+        innerH: CHART_INNER_HEIGHT,
+      },
     };
   }, [data, metricKey]);
 }

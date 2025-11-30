@@ -1,8 +1,8 @@
 import { useMemo, useState } from 'react';
 import type { AggregatedSlot } from '../lib/aggregation';
-
-type SortBy = 'date' | 'revenue';
-type SortDir = 'asc' | 'desc';
+import type { SortBy, SortDir } from '../types/sorting';
+import { sortAggregatedSlots } from '../utils/sorting';
+import { PAGE_SIZE_OPTIONS, DEFAULT_PAGE_SIZE } from '../constants/pagination';
 
 interface Props {
   rows: AggregatedSlot[];
@@ -12,18 +12,11 @@ interface Props {
 }
 
 export function DataGrid({ rows, sortBy, sortDir, onSortChange }: Props) {
-  const [pageSize, setPageSize] = useState<number>(10);
+  const [pageSize, setPageSize] = useState<number>(DEFAULT_PAGE_SIZE);
   const [pageIndex, setPageIndex] = useState<number>(0);
 
   const sorted = useMemo(() => {
-    const copy = [...rows];
-    copy.sort((a, b) => {
-      let cmp = 0;
-      if (sortBy === 'date') cmp = a.startUTC - b.startUTC;
-      else cmp = a.totalRevenue - b.totalRevenue;
-      return sortDir === 'asc' ? cmp : -cmp;
-    });
-    return copy;
+    return sortAggregatedSlots(rows, sortBy, sortDir);
   }, [rows, sortBy, sortDir]);
 
   const toggle = (by: SortBy) => {
@@ -60,7 +53,7 @@ export function DataGrid({ rows, sortBy, sortDir, onSortChange }: Props) {
                 setPageIndex(0);
               }}
             >
-              {[10, 25, 50, 100].map((n) => (
+              {PAGE_SIZE_OPTIONS.map((n) => (
                 <option key={n} value={n}>{n}</option>
               ))}
             </select>
