@@ -1,11 +1,10 @@
-import type { AggregatedData, AggregationLevel } from "../types";
+import type { AggregatedData } from "../types";
 
 interface DataGridProps {
   data: AggregatedData[];
-  aggregation: AggregationLevel;
 }
 
-const DataGrid = ({ data, aggregation }: DataGridProps) => {
+const DataGrid = ({ data }: DataGridProps) => {
   if (!data.length) {
     return (
       <div className="text-center py-12 text-gray-500 italic">

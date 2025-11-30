@@ -1,12 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AggregationControls, DataGrid } from "./components";
 import type { AggregatedData, AggregationLevel } from "./types";
-import { createMockAggregatedData } from "./utils";
+import { aggregateData } from "./utils";
+import campaignData from "../data.json";
 
 function App() {
   const [aggregation, setAggregation] = useState<AggregationLevel>("daily");
+  const [aggregatedData, setAggregatedData] = useState<AggregatedData[]>([]);
 
-  const mockData: AggregatedData[] = createMockAggregatedData(aggregation);
+  useEffect(() => {
+    (() => {
+      const processedData = aggregateData(campaignData, aggregation);
+      setAggregatedData(processedData);
+    })();
+  }, [aggregation]);
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -23,7 +30,7 @@ function App() {
             <h2 className="text-xl font-semibold text-gray-800 mb-4">
               Performance Data - <span className="capitalize">{aggregation}</span> View
             </h2>
-            <DataGrid data={mockData} aggregation={aggregation} />
+            <DataGrid data={aggregatedData} />
           </section>
         </main>
       </div>
