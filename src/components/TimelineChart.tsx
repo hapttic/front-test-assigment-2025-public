@@ -5,8 +5,9 @@ function TimelineChart({ title, data }: TimelineChartProps) {
   const chartHeight = 400;
 
   const graphPadding = 40;
+  const yAxisLabelWidth = 30;
 
-  const graphWidth = chartWidth - graphPadding * 2;
+  const graphWidth = chartWidth - graphPadding * 2 - yAxisLabelWidth;
   const graphHeight = chartHeight - graphPadding * 2;
 
   const distanceBetweenPoints = graphWidth / (data.length - 1);
@@ -24,7 +25,21 @@ function TimelineChart({ title, data }: TimelineChartProps) {
   };
 
   const getX = (index: number) => {
-    return graphPadding + index * distanceBetweenPoints;
+    return graphPadding + yAxisLabelWidth + index * distanceBetweenPoints;
+  };
+
+  const getYAxisLabels = () => {
+    const labelCount = 5;
+    const labelStep = valueRange / (labelCount - 1);
+
+    const labels = [];
+    for (let i = 0; i < labelCount; i++) {
+      const label = minValue + i * labelStep;
+      const y = getY(label);
+
+      labels.push({ label, y });
+    }
+    return labels;
   };
 
   return (
@@ -57,6 +72,20 @@ function TimelineChart({ title, data }: TimelineChartProps) {
             />
           );
         })}
+
+        {getYAxisLabels().map((label, index) => (
+          <text
+            key={index}
+            x={yAxisLabelWidth - 10}
+            y={label.y}
+            fontSize="10"
+            fill="black"
+            textAnchor="end"
+            dominantBaseline="middle"
+          >
+            {label.label}
+          </text>
+        ))}
 
         {data.map((point, index) => {
           return (
