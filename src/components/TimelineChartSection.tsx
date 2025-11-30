@@ -18,7 +18,7 @@ function TimelineChartSection({
       <div>
         Aggregation: {aggregationType}, Metric: {metricType}
       </div>
-      <TimelineChart title="Test" data={metrics} />
+      <TimelineChart title="Test" data={metrics} metricType={metricType} />
     </section>
   );
 }

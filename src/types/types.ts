@@ -44,6 +44,7 @@ export interface MetricTypeButtonProps {
 export interface TimelineChartProps {
   title: string;
   data: AggregatedDataPoint[];
+  metricType: MetricType;
 }
 
 export interface Campaign {

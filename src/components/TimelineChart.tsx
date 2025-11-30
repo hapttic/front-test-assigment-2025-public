@@ -1,6 +1,6 @@
-import type { TimelineChartProps } from "../types/types";
+import { MetricType, type AggregatedDataPoint, type TimelineChartProps } from "../types/types";
 
-function TimelineChart({ title, data }: TimelineChartProps) {
+function TimelineChart({ title, data, metricType }: TimelineChartProps) {
   const chartWidth = 800;
   const chartHeight = 400;
 
@@ -12,8 +12,19 @@ function TimelineChart({ title, data }: TimelineChartProps) {
 
   const distanceBetweenPoints = graphWidth / (data.length - 1);
 
-  const maxValue = Math.max(...data.map((point) => point.clicks)) + 2;
-  const minValue = Math.min(...data.map((point) => point.clicks)) - 2;
+   const getValue = (point: AggregatedDataPoint) => {
+    switch (metricType) {
+      case MetricType.REVENUE:
+        return point.revenue;
+      case MetricType.CLICKS:
+        return point.clicks;
+      default:
+        return 0;
+    }
+  }
+
+  const maxValue = Math.max(...data.map((point) => getValue(point))) + 2;
+  const minValue = Math.min(...data.map((point) => getValue(point))) - 2;
   const valueRange = maxValue - minValue;
 
   const getY = (value: number) => {
@@ -52,9 +63,9 @@ function TimelineChart({ title, data }: TimelineChartProps) {
             <line
               key={index}
               x1={getX(index - 1)}
-              y1={getY(prevPoint.clicks)}
+              y1={getY(getValue(prevPoint))}
               x2={getX(index)}
-              y2={getY(point.clicks)}
+              y2={getY(getValue(point))}
               stroke="blue"
               strokeWidth={2}
             />
@@ -66,7 +77,7 @@ function TimelineChart({ title, data }: TimelineChartProps) {
             <circle
               key={index}
               cx={getX(index)}
-              cy={getY(point.clicks)}
+              cy={getY(getValue(point))}
               r={5}
               fill="blue"
             />
