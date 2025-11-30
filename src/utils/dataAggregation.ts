@@ -1,26 +1,29 @@
-import type { Metric, AggregationType, AggregatedDataPoint } from '../types/types';
+import { type Metric, AggregationType, type AggregatedDataPoint } from '../types/types';
+
+const monthLabels = [
+  'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+  'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+];
 
 function getAggregationKey(timestamp: string, aggregationType: AggregationType): string {
   const date = new Date(timestamp);
-  
+
+  const hour = String(date.getUTCHours()) + ':00';
+  const day = String(date.getUTCDate());
+  const month = monthLabels[date.getUTCMonth()];
+  const year = String(date.getUTCFullYear());
+
   switch (aggregationType) {
     case 'HOURLY':
-      return `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, '0')}-${String(date.getUTCDate()).padStart(2, '0')}T${String(date.getUTCHours()).padStart(2, '0')}:00:00`;
-    
+      return `${hour}, ${month} ${day}, ${year}`;
     case 'DAILY':
-      return `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, '0')}-${String(date.getUTCDate()).padStart(2, '0')}`;
-    
+      return `${month} ${day}, ${year}`;
     case 'WEEKLY': {
-      const startOfWeek = new Date(date);
-      const day = startOfWeek.getUTCDay();
-      const diff = startOfWeek.getUTCDate() - day + (day === 0 ? -6 : 1);
-      startOfWeek.setUTCDate(diff);
-      return `${startOfWeek.getUTCFullYear()}-W${String(Math.ceil((startOfWeek.getUTCDate() + 6) / 7)).padStart(2, '0')}`;
+      const weekNumber = Math.ceil(date.getUTCDate() / 7);
+      return `Week ${weekNumber}, ${month} ${year}`;
     }
-    
     case 'MONTHLY':
-      return `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, '0')}`;
-    
+      return `${month} ${year}`;
     default:
       return timestamp;
   }
@@ -51,34 +54,5 @@ export function aggregateMetrics(
     }
   }
 
-  return Array.from(aggregationMap.values()).sort(
-    (a, b) => a.timestamp.localeCompare(b.timestamp)
-  );
-}
-
-export function formatTimestampLabel(timestamp: string, aggregationType: AggregationType): string {
-  switch (aggregationType) {
-    case 'HOURLY': {
-      const date = new Date(timestamp);
-      return date.toLocaleString('en-US', { 
-        month: 'short', 
-        day: 'numeric', 
-        hour: '2-digit',
-        minute: '2-digit'
-      });
-    }
-    case 'DAILY': {
-      const date = new Date(timestamp);
-      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-    }
-    case 'WEEKLY':
-      return timestamp;
-    case 'MONTHLY': {
-      const [year, month] = timestamp.split('-');
-      const date = new Date(Number(year), Number(month) - 1);
-      return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
-    }
-    default:
-      return timestamp;
-  }
+  return Array.from(aggregationMap.values());
 }

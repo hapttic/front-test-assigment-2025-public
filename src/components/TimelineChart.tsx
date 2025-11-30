@@ -88,6 +88,8 @@ function TimelineChart({ title, data }: TimelineChartProps) {
         ))}
 
         {data.map((point, index) => {
+          const labelSkip = Math.ceil(data.length / 5);
+          if (index % labelSkip !== 0 && index !== data.length - 1) return null;
           return (
             <text
               key={`label-${index}`}
