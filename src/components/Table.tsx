@@ -37,7 +37,10 @@ function Table( { metrics }: TableProps) {
     const hasMore = metrics.length > visibleCount;
 
     const handleLoadMore = () => {
-        setVisibleCount(prevCount => prevCount + LOAD_MORE_STEP);
+        setVisibleCount(prevCount => {
+            const newCount = prevCount + LOAD_MORE_STEP;
+            return Math.min(newCount, metrics.length);
+        });
     };
 
     const handleSortClick = (clicked: 'date' | 'revenue') => {
