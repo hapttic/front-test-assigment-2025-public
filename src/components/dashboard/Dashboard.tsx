@@ -24,7 +24,7 @@ const Dashboard: React.FC = () => {
   }, [])
 
   const aggregatedRows: AggregatedRow[] = useMemo(() => {
-    const map = new Map<string, AggregatedRow>()
+    const map = new Map<string, { row: AggregatedRow, ts: number }>()
     const formatDate = (ts: string): string => {
       const d = new Date(ts)
       if (aggregation === 'hourly') {
@@ -50,32 +50,35 @@ const Dashboard: React.FC = () => {
 
     data.forEach(item => {
       const key = formatDate(item.timestamp)
+      const ts = new Date(item.timestamp).getTime()
       if (!map.has(key)) {
         map.set(key, {
-          id: key,
-          date: key,
-          campaignsActive: 1,
-          totalImpressions: item.impressions,
-          totalClicks: item.clicks,
-          totalRevenue: item.revenue
+          row: {
+            id: key,
+            date: key,
+            campaignsActive: 1,
+            totalImpressions: item.impressions,
+            totalClicks: item.clicks,
+            totalRevenue: item.revenue
+          },
+          ts
         })
       } else {
-        const row = map.get(key)!
-        row.campaignsActive += 1
-        row.totalImpressions += item.impressions
-        row.totalClicks += item.clicks
-        row.totalRevenue += item.revenue
+        const entry = map.get(key)!
+        entry.row.campaignsActive += 1
+        entry.row.totalImpressions += item.impressions
+        entry.row.totalClicks += item.clicks
+        entry.row.totalRevenue += item.revenue
       }
     })
-    return Array.from(map.values())
+
+    return Array.from(map.values()).map(e => ({ ...e.row, __ts: e.ts }))
   }, [data, aggregation])
 
   const sortedRows = useMemo(() => {
     return [...aggregatedRows].sort((a, b) => {
       if (sortField === 'date') {
-        return sortOrder === 'asc'
-          ? new Date(a.date).getTime() - new Date(b.date).getTime()
-          : new Date(b.date).getTime() - new Date(a.date).getTime()
+        return sortOrder === 'asc' ? (a as any).__ts - (b as any).__ts : (b as any).__ts - (a as any).__ts
       }
       if (sortField === 'totalRevenue') {
         return sortOrder === 'asc' ? a.totalRevenue - b.totalRevenue : b.totalRevenue - a.totalRevenue
