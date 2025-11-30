@@ -1,6 +1,6 @@
 
-function Section({ children} : { children: React.ReactNode }) {
-    return <section className="bg-zinc-900/50 p-1 rounded-lg border border-white/5 py-5 px-6">{children}</section>;
+function Section({ children, className} : { children: React.ReactNode, className?: string }) {
+    return <section className={`bg-zinc-900/50 rounded-lg border border-white/5 ${className}`}>{children}</section>;
 }
 
 export default Section;

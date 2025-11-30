@@ -10,7 +10,7 @@ function TimelineChartSection({
   const [metricType, setMetricType] = useState<MetricType>(MetricType.REVENUE);
 
   return (
-    <Section>
+    <Section className="py-5 px-6">
       <div className="flex justify-between items-center">
         <div>
           <h2 className="text-lg font-semibold text-white tracking-tight">Revenue Over Time </h2>

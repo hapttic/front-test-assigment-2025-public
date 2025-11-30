@@ -39,9 +39,9 @@ function App() {
       <TimelineChartSection
         metrics={aggregatedData}
       />
-      {/* <TableSection 
+      <TableSection 
         metrics={aggregatedData} 
-      /> */}
+      />
     </main>
   );
 }
