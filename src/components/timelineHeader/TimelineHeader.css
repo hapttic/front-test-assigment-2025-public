@@ -1,0 +1,62 @@
+.timeline-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.switchers {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 15px;
+}
+
+.metric-switcher {
+    display: flex;
+    background: transparent;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #333;
+}
+
+.metric-switcher .tab {
+    padding: 8px 14px;
+    font-size: 16px;
+    cursor: pointer;
+    color: white;
+    transition: 0.2s;
+}
+
+.metric-switcher .tab.active {
+    background: #3858f7ff;
+    color: #fff;
+    font-weight: bold;
+
+}
+
+.chart-type-switcher {
+    display: flex;
+    background: transparent;
+    border-radius: 8px;
+    border: 1px solid #333;
+    overflow: hidden;
+}
+
+.icon-btn {
+    padding: 8px 10px;
+    cursor: pointer;
+    color: white;
+    transition: 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon-btn.active {
+    background: #3858f7ff;
+    color: #fff;
+    font-weight: bold;
+    border-radius: 0;
+}

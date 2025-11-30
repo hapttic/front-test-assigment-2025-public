@@ -1,0 +1,19 @@
+header {
+    display: flex;
+    align-items: center;
+    width: calc(100% - 70px);
+    justify-content: space-between;
+    margin-bottom: 50px;
+    position: fixed;
+    top: 0;
+    left: 35px;
+    background-color: #0F1117;
+    padding: 20px 0;
+    border-bottom: 1px solid #ccc;
+}
+
+@media (max-width: 768px) {
+    h1 {
+        font-size: 24px;
+    }
+}
