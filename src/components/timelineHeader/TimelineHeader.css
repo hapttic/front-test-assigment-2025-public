@@ -11,40 +11,41 @@
     margin-bottom: 15px;
 }
 
-.switchers h2 {
-    color: #ccc;
-}
-
 .metric-switcher {
     display: flex;
-    background: #2a2a2a;
+    background: transparent;
     border-radius: 8px;
     overflow: hidden;
+    border: 1px solid #333;
 }
 
 .metric-switcher .tab {
     padding: 8px 14px;
-    font-size: 13px;
+    font-size: 16px;
     cursor: pointer;
-    color: #aaa;
+    color: white;
     transition: 0.2s;
 }
 
 .metric-switcher .tab.active {
     background: #3858f7ff;
     color: #fff;
+    font-weight: bold;
+
 }
 
 .chart-type-switcher {
     display: flex;
-    background: #2a2a2a;
+    background: transparent;
     border-radius: 8px;
+    border: 1px solid #333;
+    overflow: hidden;
 }
 
 .icon-btn {
     padding: 8px 10px;
     cursor: pointer;
-    color: #aaa;
+    color: white;
     transition: 0.2s;
     display: flex;
     align-items: center;
@@ -54,4 +55,6 @@
 .icon-btn.active {
     background: #3858f7ff;
     color: #fff;
+    font-weight: bold;
+    border-radius: 0;
 }

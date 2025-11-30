@@ -24,10 +24,10 @@ const TimelineHeader: React.FC<TimelineHeaderProps> = ({ metric, setMetric, char
                 </div>
                 <div className="chart-type-switcher">
                     <div className={chartType === 'line' ? "icon-btn active" : "icon-btn"} onClick={() => setChartType('line')}>
-                        <FiTrendingUp size={18} />
+                        <FiTrendingUp size={19} />
                     </div>
                     <div className={chartType === 'bar' ? "icon-btn active" : "icon-btn"} onClick={() => setChartType('bar')}>
-                        <FiBarChart2 size={18} />
+                        <FiBarChart2 size={19} />
                     </div>
                 </div>
             </div>

@@ -78,13 +78,13 @@ const TimelineChart: React.FC<Props> = ({ data }) => {
                             <text key={i} x={10} y={tick.y + 4} fontSize={10} fill="#888">{tick.label}</text>
                         ))}
 
-                        {chartType === 'line' && <path d={linePath} fill="none" stroke="#3858f7ff" strokeWidth={2} />}
+                        {chartType === 'line' && <path d={linePath} fill="none" stroke="#6079f7ff" strokeWidth={2} />}
                         {points.map((p, i) => (
                             chartType === 'line' ? (
                                 <circle
                                     key={i}
                                     cx={p.x} cy={p.y} r={5}
-                                    fill={hoveredIndex === i ? 'lightblue' : 'lightblue'}
+                                    fill={hoveredIndex === i ? '#3858f7ff' : '#3858f7ff'}
                                     onMouseEnter={() => setHoveredIndex(i)}
                                     onMouseLeave={() => setHoveredIndex(null)}
                                 />
