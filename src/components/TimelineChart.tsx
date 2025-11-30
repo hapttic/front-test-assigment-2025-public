@@ -4,41 +4,41 @@ function TimelineChart({ title, data }: TimelineChartProps) {
   const chartWidth = 800;
   const chartHeight = 400;
 
-  const distanceBetweenPoints = chartWidth / (data.length - 1);
+  const graphPadding = 40;
+
+  const graphWidth = chartWidth - graphPadding * 2;
+  const graphHeight = chartHeight - graphPadding * 2;
+
+  const distanceBetweenPoints = graphWidth / (data.length - 1);
 
   const maxValue = Math.max(...data.map((point) => point.value)) + 2;
   const minValue = Math.min(...data.map((point) => point.value)) - 2;
   const valueRange = maxValue - minValue;
 
   const getY = (value: number) => {
-    if (valueRange === 0) return chartHeight / 2;
-    return chartHeight - ((value - minValue) / valueRange) * chartHeight;
+    if (valueRange === 0) return graphHeight / 2 + graphPadding;
+    return (
+      graphPadding +
+      (graphHeight - ((value - minValue) / valueRange) * graphHeight)
+    );
+  };
+
+  const getX = (index: number) => {
+    return graphPadding + index * distanceBetweenPoints;
   };
 
   return (
     <div className="w-full bg-red-200 flex justify-center items-center">
       <svg className="bg-yellow-200" width={chartWidth} height={chartHeight}>
         {data.map((point, index) => {
-          return (
-            <circle
-              key={index}
-              cx={index * distanceBetweenPoints}
-              cy={getY(point.value)}
-              r={5}
-              fill="blue"
-            />
-          );
-        })}
-
-        {data.map((point, index) => {
           if (index === 0) return null;
           const prevPoint = data[index - 1];
           return (
             <line
               key={index}
-              x1={(index - 1) * distanceBetweenPoints}
+              x1={getX(index - 1)}
               y1={getY(prevPoint.value)}
-              x2={index * distanceBetweenPoints}
+              x2={getX(index)}
               y2={getY(point.value)}
               stroke="blue"
               strokeWidth={2}
@@ -48,12 +48,26 @@ function TimelineChart({ title, data }: TimelineChartProps) {
 
         {data.map((point, index) => {
           return (
-            <text
+            <circle
               key={index}
-              x={index * distanceBetweenPoints}
-              y={chartHeight}
+              cx={getX(index)}
+              cy={getY(point.value)}
+              r={5}
+              fill="blue"
+            />
+          );
+        })}
+
+        {data.map((point, index) => {
+          return (
+            <text
+              key={`label-${index}`}
+              x={getX(index)}
+              y={chartHeight - 10}
               fontSize="12"
               fill="black"
+              textAnchor="middle"
+              style={{ pointerEvents: "none" }}
             >
               {point.timestamp}
             </text>
