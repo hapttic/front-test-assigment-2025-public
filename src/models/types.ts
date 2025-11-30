@@ -30,6 +30,21 @@ export interface AggregatedRow {
     totalRevenue: number
 }
 
+export interface TimelinePoint {
+    x: number
+    y: number
+    value: number
+    label: string
+}
+
+export interface TimelineChartData {
+    points: TimelinePoint[]
+    linePath: string
+    yTicks: { raw: number, label: string, y: number }[]
+    maxValue: number
+    svgMinWidth: number
+}
+
 export type SortField = 'date' | 'totalRevenue'
 export type SortOrder = 'asc' | 'desc'
 

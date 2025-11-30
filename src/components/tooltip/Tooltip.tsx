@@ -22,7 +22,7 @@ const Tooltip: React.FC<TooltipProps> = ({ x, value, label, metric }) => {
     const metricLabel = metric === 'totalRevenue' ? 'Revenue' : 'Clicks'
 
     return (
-        <g style={{ pointerEvents: 'none', zIndex: 999 }}>
+        <g style={{ pointerEvents: 'none' }}>
             <rect
                 x={rectX}
                 y={rectY}
@@ -32,7 +32,6 @@ const Tooltip: React.FC<TooltipProps> = ({ x, value, label, metric }) => {
                 rx={8}
                 stroke="#4da6ff"
                 strokeWidth={1.5}
-                filter="url(#tooltipShadow)"
             />
             <text
                 x={x}

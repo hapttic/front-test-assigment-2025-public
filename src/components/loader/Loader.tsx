@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import "./Loader.css";
+import { useLoaderProgress } from "../../hooks/useLoaderProgress";
 
 interface LoaderProps {
     loading: boolean;
@@ -7,22 +8,7 @@ interface LoaderProps {
 }
 
 const Loader: React.FC<LoaderProps> = ({ loading, onFinish }) => {
-    const [progress, setProgress] = useState(0);
-
-    useEffect(() => {
-        if (!loading) {
-            setProgress(100);
-            const timeout = setTimeout(() => {
-                onFinish?.();
-                setProgress(0);
-            }, 300);
-            return () => clearTimeout(timeout);
-        }
-        const interval = setInterval(() => {
-            setProgress((prev) => (prev >= 95 ? 95 : prev + Math.random() * 5));
-        }, 100);
-        return () => clearInterval(interval);
-    }, [loading, onFinish]);
+    const progress = useLoaderProgress(loading, onFinish);
 
     if (!loading && progress === 0) return null;
 

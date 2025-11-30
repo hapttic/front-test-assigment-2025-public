@@ -11,7 +11,7 @@ const AggregationControls: React.FC<Props> = ({ value, onChange }) => {
     const [open, setOpen] = useState(false)
     const options: AggregationLevel[] = ['hourly', 'daily', 'weekly', 'monthly']
 
-    const handleSelect = (level: AggregationLevel) => {
+    const handleSelect = (level: AggregationLevel): void => {
         onChange(level)
         setOpen(false)
     }
