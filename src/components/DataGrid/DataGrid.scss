@@ -1,0 +1,129 @@
+.data-grid-container {
+  background: #1f2329;
+  padding: 1.5rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  border: 1px solid #2a2e35;
+  flex-grow: 1;
+
+  .grid-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    
+    @media (max-width: 520px) {
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    h3 {
+      margin: 0;
+      color: #e0e0e0;
+      font-size: 1.1rem;
+    }
+
+    .pagination-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      .page-input-form {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .page-input {
+        background: #1f2329;
+        border: 1px solid #2a2e35;
+        color: #e0e0e0;
+        padding: 5px 8px;
+        border-radius: 4px;
+        width: 40px;
+        text-align: center;
+        font-size: 0.9rem;
+
+        &:focus {
+          outline: none;
+          border-color: #00d2ff;
+        }
+      }
+
+      .page-btn {
+        background: #2a2e35;
+        border: none;
+        color: #e0e0e0;
+        padding: 5px 10px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background 0.2s;
+
+        &:hover:not(:disabled) {
+          background: #3b414b;
+        }
+
+        &:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
+
+        &.jump-btn {
+          min-width: 60px;
+          font-size: 0.85rem;
+          font-weight: 500;
+        }
+      }
+
+      .page-info {
+        color: #9ca3af;
+        font-size: 0.9rem;
+      }
+    }
+  }
+
+  .table-responsive {
+    overflow-x: auto;
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 400px;
+
+      th,
+      td {
+        padding: 12px 10px;
+        text-align: left;
+        border-bottom: 1px solid #2a2e35;
+        font-size: 0.9rem;
+      }
+
+      th {
+        background-color: transparent;
+        font-weight: 600;
+        color: #9ca3af;
+
+        &.sortable {
+          cursor: pointer;
+          &:hover {
+            color: #ffffff;
+          }
+        }
+      }
+
+      td {
+        color: #e0e0e0;
+      }
+
+      tr:hover {
+        background-color: #2a2e35;
+      }
+
+      .empty-state {
+        text-align: center;
+        color: #6b7280;
+        padding: 2rem;
+      }
+    }
+  }
+}

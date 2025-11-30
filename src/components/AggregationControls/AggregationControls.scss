@@ -1,0 +1,43 @@
+.aggregation-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background-color: transparent;
+  padding: 0;
+  margin: 0;
+  box-shadow: none;
+
+  @media (max-width: 520px) {
+    flex-direction: column;
+  }
+
+  .button-group {
+    display: flex;
+    gap: 0.25rem;
+    background-color: #2a2e35;
+    padding: 4px;
+    border-radius: 8px;
+
+    .control-btn {
+      padding: 0.4rem 0.8rem;
+      border: none;
+      background-color: transparent;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all 0.2s ease;
+      color: #9ca3af;
+      font-weight: 500;
+
+      &:hover {
+        color: #ffffff;
+      }
+
+      &.active {
+        background-color: #3a3f4b;
+        color: #ffffff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      }
+    }
+  }
+}
