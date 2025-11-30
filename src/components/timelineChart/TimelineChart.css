@@ -1,25 +1,14 @@
-.timeline-container.scrollable {
-    overflow-x: auto;
+.timeline-container {
     width: 100%;
 }
 
+.scrollable {
+    overflow-x: auto;
+}
+
 .svg-wrapper {
-    display: block;
-    min-width: 100%;
-}
-
-.chart-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-}
-
-.chart-title {
-    color: #ccc;
-}
-
-.metric-buttons button {
-    margin-right: 5px;
-    color: #ccc;
+    overflow-x: auto;
+    border: 2px solid #222;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }

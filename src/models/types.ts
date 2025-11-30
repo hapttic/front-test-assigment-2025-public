@@ -33,4 +33,7 @@ export interface AggregatedRow {
 export type SortField = 'date' | 'totalRevenue'
 export type SortOrder = 'asc' | 'desc'
 
+export type MetricType = 'totalClicks' | 'totalRevenue'
+export type ChartType = 'line' | 'bar'
+
 export type AggregationLevel = 'hourly' | 'daily' | 'weekly' | 'monthly'

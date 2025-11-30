@@ -1,12 +1,14 @@
 import React, { useMemo, useState } from 'react'
-import { AggregatedRow } from '../../models/data'
+import { AggregatedRow, AggregationLevel } from '../../models/types'
 import "./TimelineChart.css"
+import TimelineHeader from '../timelineHeader/TimelineHeader'
+import { MetricType, ChartType } from '../../models/types'
+import Tooltip from '../tooltip/Tooltip'
 
 interface Props {
     data: AggregatedRow[]
+    aggregation: AggregationLevel
 }
-
-type Metric = 'totalClicks' | 'totalRevenue'
 
 const niceNumber = (value: number) => {
     const exponent = Math.floor(Math.log10(value))
@@ -26,98 +28,103 @@ const formatTick = (n: number) => {
 }
 
 const TimelineChart: React.FC<Props> = ({ data }) => {
-    const [metric, setMetric] = useState<Metric>('totalClicks')
+    const [metric, setMetric] = useState<MetricType>('totalClicks')
+    const [chartType, setChartType] = useState<ChartType>('line')
+    const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
 
-    const sortedData = useMemo(() => {
-        return [...data].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
-    }, [data])
+    const sortedData = useMemo(() => [...data].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()), [data])
 
     const maxValue = useMemo(() => {
         const rawMax = Math.max(...sortedData.map(d => d[metric]), 1)
         return niceNumber(rawMax)
     }, [sortedData, metric])
 
-    const points = useMemo(() => {
-        const padding = 50
-        const height = 350
-        const widthPerPoint = 80
+    const slotWidth = 90
+    const padding = 70
+    const chartHeight = 350
+    const barWidth = slotWidth * 0.7
 
-        return sortedData.map((d, i) => {
-            const x = padding + (i / (sortedData.length - 1 || 1)) * ((sortedData.length - 1) * widthPerPoint)
-            const y = height - padding - (d[metric] / maxValue) * (height - 2 * padding)
-            return { x, y, value: d[metric], label: d.date }
-        })
-    }, [sortedData, metric, maxValue])
+    const xOffset = padding + 35;
 
-    const linePath = useMemo(() => {
-        if (points.length === 0) return ''
-        return points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ')
-    }, [points])
+    const points = useMemo(() => sortedData.map((d, i) => {
+        const x = xOffset + i * slotWidth
+        const y = chartHeight - padding - (d[metric] / maxValue) * (chartHeight - 2 * padding)
+        return { x, y, value: d[metric], label: d.date }
+    }), [sortedData, metric, maxValue])
+
+    const linePath = useMemo(() => points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' '), [points])
 
     const yTicks = useMemo(() => {
         const step = maxValue / 4
-        const height = 350
         return [0, 1, 2, 3, 4].map(i => ({
             raw: Math.round(i * step),
             label: formatTick(Math.round(i * step)),
-            y: height - 50 - (i / 4) * (height - 100)
+            y: chartHeight - padding - (i / 4) * (chartHeight - 2 * padding)
         }))
     }, [maxValue])
 
-    const svgMinWidth = Math.max(points.length * 80, 0)
+    const svgMinWidth = Math.max(points.length * slotWidth + xOffset, 0)
 
     return (
-        <div className="timeline-container scrollable">
-            <div className="chart-header">
-                <h2 className="chart-title">Timeline Chart</h2>
-                <div className="metric-buttons">
-                    <button onClick={() => setMetric('totalClicks')}>Clicks</button>
-                    <span> / </span>
-                    <button onClick={() => setMetric('totalRevenue')}>Revenue</button>
+        <>
+            <div className="timeline-container scrollable">
+                <TimelineHeader metric={metric} setMetric={setMetric} chartType={chartType} setChartType={setChartType} />
+                <div className="svg-wrapper" style={{ width: '100%', minWidth: svgMinWidth }}>
+                    <svg width="100%" height={chartHeight}>
+                        {yTicks.map((tick, i) => (
+                            <line key={i} x1={padding} y1={tick.y} x2={svgMinWidth - padding} y2={tick.y} stroke="#333" strokeWidth={1} />
+                        ))}
+                        {yTicks.map((tick, i) => (
+                            <text key={i} x={10} y={tick.y + 4} fontSize={10} fill="#888">{tick.label}</text>
+                        ))}
+
+                        {chartType === 'line' && <path d={linePath} fill="none" stroke="#3858f7ff" strokeWidth={2} />}
+                        {points.map((p, i) => (
+                            chartType === 'line' ? (
+                                <circle
+                                    key={i}
+                                    cx={p.x} cy={p.y} r={5}
+                                    fill={hoveredIndex === i ? 'lightblue' : 'lightblue'}
+                                    onMouseEnter={() => setHoveredIndex(i)}
+                                    onMouseLeave={() => setHoveredIndex(null)}
+                                />
+                            ) : (
+                                <path
+                                    key={i}
+                                    d={`
+                M ${p.x - barWidth / 2} ${chartHeight - padding} 
+                L ${p.x - barWidth / 2} ${p.y + 6} 
+                Q ${p.x - barWidth / 2} ${p.y} ${p.x - barWidth / 2 + 6} ${p.y} 
+                L ${p.x + barWidth / 2 - 6} ${p.y} 
+                Q ${p.x + barWidth / 2} ${p.y} ${p.x + barWidth / 2} ${p.y + 6} 
+                L ${p.x + barWidth / 2} ${chartHeight - padding} 
+                Z
+            `}
+                                    fill={hoveredIndex === i ? '#6079f7ff' : '#3858f7ff'}
+                                    onMouseEnter={() => setHoveredIndex(i)}
+                                    onMouseLeave={() => setHoveredIndex(null)}
+                                />
+                            )
+                        ))}
+
+                        {points.map((p, i) => (
+                            <text key={i} x={p.x} y={chartHeight - 20} textAnchor="middle" fontSize={12} fill="#bbb">
+                                {p.label.split(',')[0]}
+                            </text>
+                        ))}
+
+                        {hoveredIndex !== null && (
+                            <Tooltip
+                                x={points[hoveredIndex].x}
+                                value={points[hoveredIndex].value}
+                                label={points[hoveredIndex].label}
+                                metric={metric}
+                            />
+                        )}
+                    </svg>
                 </div>
             </div>
-            <div
-                className="svg-wrapper"
-                style={{ width: '100%', minWidth: svgMinWidth }}
-            >
-                <svg width="100%" height={350} style={{ background: "#222", borderRadius: "5px" }}>
-                    <line
-                        x1={50}
-                        y1={350 - 50}
-                        x2={svgMinWidth - 50}
-                        y2={350 - 50}
-                        stroke="#3a3a3a"
-                    />
-                    <line x1={50} y1={350 - 50} x2={50} y2={20} stroke="#3a3a3a" />
-
-                    <path d={linePath} fill="none" stroke="grey" strokeWidth={2} />
-
-                    {points.map((p, i) => (
-                        <circle key={i} cx={p.x} cy={p.y} r={4} fill="white" />
-                    ))}
-
-                    {points.map((p, i) => (
-                        <text
-                            key={i}
-                            x={p.x}
-                            y={350 - 30}
-                            textAnchor="middle"
-                            fontSize={10}
-                            fill="#ccc"
-                            transform={`rotate(45 ${p.x},${350 - 30})`}
-                        >
-                            {p.label}
-                        </text>
-                    ))}
-
-                    {yTicks.map((tick, i) => (
-                        <text key={i} x={10} y={tick.y + 5} fontSize={10} fill="#ccc">
-                            {tick.label}
-                        </text>
-                    ))}
-                </svg>
-            </div>
-        </div>
+        </>
     )
 }
 

@@ -1,5 +1,5 @@
 import React from 'react'
-import { AggregatedRow, SortField, SortOrder } from "../../models/data"
+import { AggregatedRow, SortField, SortOrder } from "../../models/types"
 import './DashboardTable.css'
 
 interface Props {

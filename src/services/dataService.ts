@@ -1,4 +1,4 @@
-import { Metric, Campaign } from "../models/data"
+import { Metric, Campaign } from "../models/types"
 
 
 export interface MergedCampaignMetric extends Campaign, Metric { }

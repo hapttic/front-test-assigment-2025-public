@@ -12,8 +12,8 @@
     position: absolute;
     top: 100%;
     right: 0;
-    background-color: #222;
-    border: 1px solid #333;
+    background-color: #0f1117;
+    border: 1px solid #222;
     list-style: none;
     margin: 0;
     width: 130px;
@@ -26,17 +26,17 @@
 .dropdown-item {
     padding: 0;
     border-radius: 5px;
-    transition: all 0.7s ease;
+    transition: box-shadow 0.7s ease;
     margin-top: 5px;
-    border: 1px solid #333;
+    border: 1px solid #222;
     color: grey;
 }
 
 .dropdown-item:hover {
-    background: #1c1c1c;
-    transition: all 1.2s ease;
+    background: #3858f7ff;
+    transition: box-shadow 1.2s ease;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-    border: 1px solid grey;
+    font-weight: bold;
 }
 
 .dropdown-item button {
@@ -50,7 +50,7 @@
 }
 
 .dropdown-item.selected button {
-    background-color: #1c1c1c;
+    background-color: #3858f7ff;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-    border: 1px solid grey;
+    font-weight: bold;
 }

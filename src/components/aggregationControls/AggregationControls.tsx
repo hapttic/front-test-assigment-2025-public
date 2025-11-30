@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { AggregationLevel } from '../../models/data'
+import { AggregationLevel } from '../../models/types'
 import "./AggregationControls.css"
 
 interface Props {

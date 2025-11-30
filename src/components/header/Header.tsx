@@ -1,7 +1,7 @@
 import React from 'react'
 import "./Header.css"
 import AggregationControls from '../aggregationControls/AggregationControls'
-import { AggregationLevel } from '../../models/data'
+import { AggregationLevel } from '../../models/types'
 
 interface Props {
     aggregation: AggregationLevel
