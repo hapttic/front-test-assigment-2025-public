@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import type { AggregationLevel, ChartMetric } from './types';
 import { aggregateData } from './utils/aggregation';
 import { useLoadData } from './hooks/useLoadData';
+import { DataGrid } from './components/DataGrid';
 
 function App() {
   // State management for user controls
@@ -134,9 +135,7 @@ function App() {
               <h2 className="text-lg font-semibold text-gray-900 mb-4">
                 Data Grid
               </h2>
-              <div className="h-64 flex items-center justify-center bg-gray-50 rounded">
-                <p className="text-gray-500">Grid component coming next...</p>
-              </div>
+              <DataGrid data={aggregatedData} aggregationLevel={aggregationLevel} />
             </div>
           </div>
         )}
