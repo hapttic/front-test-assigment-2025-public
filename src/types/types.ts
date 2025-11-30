@@ -25,7 +25,6 @@ export interface AggregationButtonProps {
 }
 
 export interface TimelineChartSectionProps {
-  aggregationType: AggregationType;
   metrics: AggregatedDataPoint[];
 }
 
@@ -81,4 +80,13 @@ export interface AggregatedDataPoint {
   clicks: number;
   revenue: number;
   impressions: number;
+  campaigns: Set<string>;
+}
+
+export interface TableSectionProps {
+  metrics: AggregatedDataPoint[];
+}
+
+export interface TableProps {
+  metrics: AggregatedDataPoint[];
 }

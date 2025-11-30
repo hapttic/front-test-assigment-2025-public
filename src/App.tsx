@@ -4,6 +4,7 @@ import { AggregationType } from "./types/types";
 import TimelineChartSection from "./components/TimelineChartSection";
 import useDataFetch from "./hooks/useDataFetch";
 import { aggregateMetrics } from "./utils/dataAggregation";
+import TableSection from "./components/TableSection";
 
 function App() {
   const { data, loading, error } = useDataFetch();
@@ -31,8 +32,10 @@ function App() {
         setAggregationType={setAggregationType}
       />
       <TimelineChartSection
-        aggregationType={aggregationType}
         metrics={aggregatedData}
+      />
+      <TableSection 
+        metrics={aggregatedData} 
       />
     </main>
   );

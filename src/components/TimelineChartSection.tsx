@@ -4,7 +4,6 @@ import MetricTypeControl from "./MetricTypeControl";
 import TimelineChart from "./TimelineChart";
 
 function TimelineChartSection({
-  aggregationType,
   metrics,
 }: TimelineChartSectionProps) {
   const [metricType, setMetricType] = useState<MetricType>(MetricType.REVENUE);
@@ -15,9 +14,6 @@ function TimelineChartSection({
         metricType={metricType}
         setMetricType={setMetricType}
       />
-      <div>
-        Aggregation: {aggregationType}, Metric: {metricType}
-      </div>
       <TimelineChart title="Test" data={metrics} metricType={metricType} />
     </section>
   );

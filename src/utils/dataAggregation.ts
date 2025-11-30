@@ -44,12 +44,14 @@ export function aggregateMetrics(
       existing.clicks += metric.clicks;
       existing.revenue += metric.revenue;
       existing.impressions += metric.impressions;
+      existing.campaigns.add(metric.campaignId);
     } else {
       aggregationMap.set(key, {
         timestamp: key,
         clicks: metric.clicks,
         revenue: metric.revenue,
-        impressions: metric.impressions
+        impressions: metric.impressions,
+        campaigns: new Set([metric.campaignId])
       });
     }
   }
