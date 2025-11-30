@@ -90,9 +90,9 @@ export function DataGrid({ rows }: Props) {
                         <tr key={`${row.date}-${row.revenue}-${row.clicks}`}>
                             <td>{formatDateDisplay(row.date)}</td>
                             <td>{row.campaignsActive}</td>
-                            <td>{row.impressions.toLocaleString()}</td>
+                            <td >{row.impressions.toLocaleString()}</td>
                             <td>{row.clicks.toLocaleString()}</td>
-                            <td>${row.revenue.toFixed(2)}</td>
+                            <td className={styles.revenue} >${row.revenue.toFixed(2)}</td>
                         </tr>
                     ))}
                 </tbody>
