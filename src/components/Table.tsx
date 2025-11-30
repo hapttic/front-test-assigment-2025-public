@@ -1,28 +1,68 @@
 import { useState } from "react";
-import type { TableProps } from "../types/types";
+import { TableSortType, type TableProps } from "../types/types";
 
-const INITIAL_DATA = 50;
+const INITIAL_DATA_SIZE = 50;
 const LOAD_MORE_STEP = 20;
 
 function Table( { metrics }: TableProps) {
-    const [visibleCount, setVisibleCount] = useState(INITIAL_DATA);
-    const visibleMetrics = metrics.slice(0, visibleCount);
+    const [sortType, setSortType] = useState<TableSortType>(TableSortType.TIME_DESC);
 
+    const [visibleCount, setVisibleCount] = useState(INITIAL_DATA_SIZE);
+
+    const getVisibleMetrics = () => {
+        if (sortType === TableSortType.TIME_ASC) {
+            return metrics
+                .slice(0, visibleCount);
+        } else if (sortType === TableSortType.TIME_DESC) {
+            return metrics
+                .slice(metrics.length - visibleCount, metrics.length)
+                .reverse();
+        } else if (sortType === TableSortType.REVENUE_ASC) {
+            return metrics
+                .slice()
+                .sort((a, b) => a.revenue - b.revenue)
+                .slice(0, visibleCount);
+        } else if (sortType === TableSortType.REVENUE_DESC) {
+            return metrics
+                .slice()
+                .sort((a, b) => b.revenue - a.revenue)
+                .slice(0, visibleCount);
+        }
+        return [];
+    }
+
+    const visibleMetrics = getVisibleMetrics();
     const hasMore = metrics.length > visibleCount;
 
     const handleLoadMore = () => {
         setVisibleCount(prevCount => prevCount + LOAD_MORE_STEP);
     };
 
+    const handleSortClick = (clicked: 'date' | 'revenue') => {
+        if (clicked === 'date') {
+            if (sortType === TableSortType.TIME_DESC) {
+                setSortType(TableSortType.TIME_ASC);
+            } else {
+                setSortType(TableSortType.TIME_DESC);
+            }
+        } else {
+            if (sortType === TableSortType.REVENUE_DESC) {
+                setSortType(TableSortType.REVENUE_ASC);
+            } else {
+                setSortType(TableSortType.REVENUE_DESC);
+            }
+        }
+    }
+
     return <div>
         <table className="table-auto w-full text-left">
             <thead>
                 <tr>
-                    <th>Date</th>
+                    <th onClick={() => handleSortClick('date')}>Date</th>
                     <th>Active Campaigns</th>
                     <th>Impressions</th>
                     <th>Clicks</th>
-                    <th>Revenue</th>
+                    <th onClick={() => handleSortClick('revenue')}>Revenue</th>
                 </tr>
             </thead>
             <tbody>

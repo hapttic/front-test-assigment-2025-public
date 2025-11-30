@@ -91,3 +91,11 @@ export interface TableSectionProps {
 export interface TableProps {
   metrics: AggregatedDataPoint[];
 }
+
+export const TableSortType = {
+  TIME_ASC: 'TIME_ASC',
+  TIME_DESC: 'TIME_DESC',
+  REVENUE_ASC: 'REVENUE_ASC',
+  REVENUE_DESC: 'REVENUE_DESC',
+} as const;
+export type TableSortType = typeof TableSortType[keyof typeof TableSortType];
