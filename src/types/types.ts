@@ -26,6 +26,7 @@ export interface AggregationButtonProps {
 
 export interface TimelineChartSectionProps {
   aggregationType: AggregationType;
+  metrics: AggregatedDataPoint[];
 }
 
 export interface MetricTypeControlProps {
@@ -40,12 +41,43 @@ export interface MetricTypeButtonProps {
   isActive: boolean;
 }
 
-export interface TimelineChartDataPoint {
-  timestamp: string;
-  value: number;
-}
-
 export interface TimelineChartProps {
   title: string;
-  data: TimelineChartDataPoint[];
+  data: AggregatedDataPoint[];
+}
+
+export interface Campaign {
+  id: string;
+  name: string;
+  platform: string;
+}
+
+export interface Metric {
+  campaignId: string;
+  timestamp: string;
+  impressions: number;
+  clicks: number;
+  revenue: number;
+}
+
+export interface ApiResponse {
+  metadata: {
+    generatedAt: string;
+    description: string;
+  };
+  campaigns: Campaign[];
+  metrics: Metric[];
+}
+
+export interface UseDataFetchResult {
+  data: ApiResponse | null;
+  loading: boolean;
+  error: string | null;
+}
+
+export interface AggregatedDataPoint {
+  timestamp: string;
+  clicks: number;
+  revenue: number;
+  impressions: number;
 }

@@ -12,8 +12,8 @@ function TimelineChart({ title, data }: TimelineChartProps) {
 
   const distanceBetweenPoints = graphWidth / (data.length - 1);
 
-  const maxValue = Math.max(...data.map((point) => point.value)) + 2;
-  const minValue = Math.min(...data.map((point) => point.value)) - 2;
+  const maxValue = Math.max(...data.map((point) => point.clicks)) + 2;
+  const minValue = Math.min(...data.map((point) => point.clicks)) - 2;
   const valueRange = maxValue - minValue;
 
   const getY = (value: number) => {
@@ -52,9 +52,9 @@ function TimelineChart({ title, data }: TimelineChartProps) {
             <line
               key={index}
               x1={getX(index - 1)}
-              y1={getY(prevPoint.value)}
+              y1={getY(prevPoint.clicks)}
               x2={getX(index)}
-              y2={getY(point.value)}
+              y2={getY(point.clicks)}
               stroke="blue"
               strokeWidth={2}
             />
@@ -66,7 +66,7 @@ function TimelineChart({ title, data }: TimelineChartProps) {
             <circle
               key={index}
               cx={getX(index)}
-              cy={getY(point.value)}
+              cy={getY(point.clicks)}
               r={5}
               fill="blue"
             />
