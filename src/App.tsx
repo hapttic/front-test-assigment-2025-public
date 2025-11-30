@@ -28,7 +28,7 @@ function App() {
 
   return (
     <main className="bg-base container mx-auto px-6 py-8 space-y-8">
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col justify-between items-center lg:flex-row">
         <Heading />
         <AggregationControl
           aggregationType={aggregationType}

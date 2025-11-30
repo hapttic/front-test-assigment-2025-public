@@ -59,8 +59,8 @@ function Table( { metrics }: TableProps) {
         }
     }
 
-    return <div>
-        <table className="table-auto w-full text-left">
+    return <div className="overflow-x-auto">
+        <table className="table-auto w-full text-left ">
             <thead className="bg-white/[0.02] text-sm uppercase text-zinc-500 border-y border-white/5">
                 <tr>
                     <th 
