@@ -33,15 +33,7 @@ export interface MetricTypeControlProps {
   setMetricType: (type: MetricType) => void;
 }
 
-export interface MetricTypeButtonProps {
-  title: string;
-  metricType: MetricType;
-  setMetricType: (type: MetricType) => void;
-  isActive: boolean;
-}
-
 export interface TimelineChartProps {
-  title: string;
   data: AggregatedDataPoint[];
   metricType: MetricType;
 }

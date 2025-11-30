@@ -10,7 +10,7 @@ import Heading from "./components/Heading";
 function App() {
   const { data, loading, error } = useDataFetch();
   const [aggregationType, setAggregationType] = useState<AggregationType>(
-    AggregationType.HOURLY
+    AggregationType.DAILY
   );
 
   const aggregatedData = useMemo(() => {
@@ -35,11 +35,11 @@ function App() {
           setAggregationType={setAggregationType}
         />
       </div>
-      {/* 
+      
       <TimelineChartSection
         metrics={aggregatedData}
       />
-      <TableSection 
+      {/* <TableSection 
         metrics={aggregatedData} 
       /> */}
     </main>

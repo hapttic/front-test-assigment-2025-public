@@ -2,6 +2,7 @@ import { useState } from "react";
 import { MetricType, type TimelineChartSectionProps } from "../types/types";
 import MetricTypeControl from "./MetricTypeControl";
 import TimelineChart from "./TimelineChart";
+import Section from "./Section";
 
 function TimelineChartSection({
   metrics,
@@ -9,13 +10,20 @@ function TimelineChartSection({
   const [metricType, setMetricType] = useState<MetricType>(MetricType.REVENUE);
 
   return (
-    <section>
-      <MetricTypeControl
-        metricType={metricType}
-        setMetricType={setMetricType}
-      />
-      <TimelineChart title="Test" data={metrics} metricType={metricType} />
-    </section>
+    <Section>
+      <div className="flex justify-between items-center">
+        <div>
+          <h2 className="text-lg font-semibold text-white tracking-tight">Revenue Over Time </h2>
+          <p className="text-sm text-zinc-400">Aggregated view of revenue across all campaigns.</p>
+        </div>
+        <MetricTypeControl
+          metricType={metricType}
+          setMetricType={setMetricType}
+          />
+      </div>
+      
+      <TimelineChart data={metrics} metricType={metricType} />
+    </Section>
   );
 }
 

@@ -1,7 +1,7 @@
 import { MetricType, type AggregatedDataPoint, type TimelineChartProps } from "../types/types";
 
-function TimelineChart({ title, data, metricType }: TimelineChartProps) {
-  const chartWidth = 800;
+function TimelineChart({ data, metricType }: TimelineChartProps) {
+  const chartWidth = 1200;
   const chartHeight = 400;
 
   const graphPadding = 40;
@@ -45,7 +45,7 @@ function TimelineChart({ title, data, metricType }: TimelineChartProps) {
 
     const labels = [];
     for (let i = 0; i < labelCount; i++) {
-      const label = minValue + i * labelStep;
+      const label = Math.round(minValue + i * labelStep);
       const y = getY(label);
 
       labels.push({ label, y });
@@ -54,8 +54,8 @@ function TimelineChart({ title, data, metricType }: TimelineChartProps) {
   };
 
   return (
-    <div className="w-full bg-red-200 flex justify-center items-center">
-      <svg className="bg-yellow-200" width={chartWidth} height={chartHeight}>
+    <div className="w-full flex justify-center items-center overflow-x-auto mt-10 mb-6">
+      <svg width={chartWidth} height={chartHeight} className="overflow-visible">
         {data.map((point, index) => {
           if (index === 0) return null;
           const prevPoint = data[index - 1];
@@ -66,7 +66,7 @@ function TimelineChart({ title, data, metricType }: TimelineChartProps) {
               y1={getY(getValue(prevPoint))}
               x2={getX(index)}
               y2={getY(getValue(point))}
-              stroke="blue"
+              stroke="#8B5CF6"
               strokeWidth={2}
             />
           );
@@ -78,8 +78,8 @@ function TimelineChart({ title, data, metricType }: TimelineChartProps) {
               key={index}
               cx={getX(index)}
               cy={getY(getValue(point))}
-              r={5}
-              fill="blue"
+              r={1}
+              fill="#8B5CF6"
             />
           );
         })}
@@ -89,8 +89,7 @@ function TimelineChart({ title, data, metricType }: TimelineChartProps) {
             key={index}
             x={yAxisLabelWidth - 10}
             y={label.y}
-            fontSize="10"
-            fill="black"
+            className="text-xs fill-zinc-500"
             textAnchor="end"
             dominantBaseline="middle"
           >
@@ -106,8 +105,7 @@ function TimelineChart({ title, data, metricType }: TimelineChartProps) {
               key={`label-${index}`}
               x={getX(index)}
               y={chartHeight - 10}
-              fontSize="12"
-              fill="black"
+              className="text-xs fill-zinc-500"
               textAnchor="middle"
               style={{ pointerEvents: "none" }}
             >
