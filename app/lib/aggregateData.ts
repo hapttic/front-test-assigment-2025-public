@@ -5,7 +5,6 @@ export function aggregateData(
   data: JoinedMetric[],
   mode: AggregationMode
 ): AggregatedRow[] {
-
   const buckets = new Map<string, AggregatedRow>();
 
   for (const item of data) {
@@ -13,7 +12,7 @@ export function aggregateData(
 
     switch (mode) {
       case "hourly":
-        key = item.timestamp.slice(0, 13); 
+        key = item.timestamp.slice(0, 13) + ":00:00";
         break;
       case "daily":
         key = toDay(item.timestamp);
@@ -45,7 +44,7 @@ export function aggregateData(
     bucket.campaignsActive += 1;
   }
 
-  return Array.from(buckets.values()).sort(
-    (a, b) => a.date.localeCompare(b.date)
+  return Array.from(buckets.values()).sort((a, b) =>
+    a.date.localeCompare(b.date)
   );
 }
