@@ -24,7 +24,7 @@ export interface AggregationButtonProps {
   isActive: boolean;
 }
 
-export interface TimelineChartProps {
+export interface TimelineChartSectionProps {
   aggregationType: AggregationType;
 }
 
@@ -38,4 +38,14 @@ export interface MetricTypeButtonProps {
   metricType: MetricType;
   setMetricType: (type: MetricType) => void;
   isActive: boolean;
+}
+
+export interface TimelineChartDataPoint {
+  timestamp: string;
+  value: number;
+}
+
+export interface TimelineChartProps {
+  title: string;
+  data: TimelineChartDataPoint[];
 }
