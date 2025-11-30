@@ -30,6 +30,7 @@ function App() {
             <h2 className="text-xl font-semibold text-gray-800 mb-4">
               Performance Data - <span className="capitalize">{aggregation}</span> View
             </h2>
+
             <DataGrid data={aggregatedData} />
           </section>
         </main>
