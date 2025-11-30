@@ -2,12 +2,14 @@ import React, { useState, useEffect, useMemo } from 'react'
 import { fetchData, MergedCampaignMetric } from '../../services/dataService'
 import TimelineChart from '../timelineChart/TimelineChart'
 import DashboardTable from '../dashboardTable/DashboardTable'
+import Loader from '../loader/Loader'
 import { AggregatedRow, SortField, SortOrder, AggregationLevel } from '../../models/types'
 import Header from '../header/Header'
 import "./Dashboard.css"
 
 const Dashboard: React.FC = () => {
   const [data, setData] = useState<MergedCampaignMetric[]>([])
+  const [loading, setLoading] = useState(true)
   const [aggregation, setAggregation] = useState<AggregationLevel>('daily')
   const [sortField, setSortField] = useState<SortField>('date')
   const [sortOrder, setSortOrder] = useState<SortOrder>('asc')
@@ -16,13 +18,13 @@ const Dashboard: React.FC = () => {
     async function load() {
       const merged = await fetchData()
       setData(merged)
+      setLoading(false)
     }
     load()
   }, [])
 
   const aggregatedRows: AggregatedRow[] = useMemo(() => {
     const map = new Map<string, AggregatedRow>()
-
     const formatDate = (ts: string): string => {
       const d = new Date(ts)
       if (aggregation === 'hourly') {
@@ -65,7 +67,6 @@ const Dashboard: React.FC = () => {
         row.totalRevenue += item.revenue
       }
     })
-
     return Array.from(map.values())
   }, [data, aggregation])
 
@@ -77,9 +78,7 @@ const Dashboard: React.FC = () => {
           : new Date(b.date).getTime() - new Date(a.date).getTime()
       }
       if (sortField === 'totalRevenue') {
-        return sortOrder === 'asc'
-          ? a.totalRevenue - b.totalRevenue
-          : b.totalRevenue - a.totalRevenue
+        return sortOrder === 'asc' ? a.totalRevenue - b.totalRevenue : b.totalRevenue - a.totalRevenue
       }
       return 0
     })
@@ -87,12 +86,14 @@ const Dashboard: React.FC = () => {
 
   const handleSort = (field: SortField) => {
     if (sortField === field) {
-      setSortOrder(prev => (prev === 'asc' ? 'desc' : 'asc'))
+      setSortOrder(prev => prev === 'asc' ? 'desc' : 'asc')
     } else {
       setSortField(field)
       setSortOrder('asc')
     }
   }
+
+  if (loading) return <Loader loading={loading} />
 
   return (
     <div>
