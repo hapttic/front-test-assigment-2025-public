@@ -22,6 +22,7 @@ const Dashboard: React.FC = () => {
 
   const aggregatedRows: AggregatedRow[] = useMemo(() => {
     const map = new Map<string, AggregatedRow>()
+
     const formatDate = (ts: string): string => {
       const d = new Date(ts)
       if (aggregation === 'hourly') {
@@ -65,10 +66,7 @@ const Dashboard: React.FC = () => {
       }
     })
 
-    const rows = Array.from(map.values())
-    return rows.sort((a, b) =>
-      new Date(a.date).getTime() - new Date(b.date).getTime()
-    )
+    return Array.from(map.values())
   }, [data, aggregation])
 
   const sortedRows = useMemo(() => {
