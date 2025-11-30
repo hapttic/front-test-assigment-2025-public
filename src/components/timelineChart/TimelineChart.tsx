@@ -39,12 +39,13 @@ const TimelineChart: React.FC<Props> = ({ data }) => {
         return niceNumber(rawMax)
     }, [sortedData, metric])
 
-    const slotWidth = 90
-    const padding = 70
-    const chartHeight = 350
+    const slotWidth = 120
+    const padding = 80
+    const chartHeight = 400
     const barWidth = slotWidth * 0.7
+    const minChartWidth = 800
 
-    const xOffset = padding + 35;
+    const xOffset = padding + 40
 
     const points = useMemo(() => sortedData.map((d, i) => {
         const x = xOffset + i * slotWidth
@@ -63,7 +64,7 @@ const TimelineChart: React.FC<Props> = ({ data }) => {
         }))
     }, [maxValue])
 
-    const svgMinWidth = Math.max(points.length * slotWidth + xOffset, 0)
+    const svgMinWidth = Math.max(points.length * slotWidth + xOffset, minChartWidth)
 
     return (
         <>
@@ -75,16 +76,15 @@ const TimelineChart: React.FC<Props> = ({ data }) => {
                             <line key={i} x1={padding} y1={tick.y} x2={svgMinWidth - padding} y2={tick.y} stroke="#333" strokeWidth={1} />
                         ))}
                         {yTicks.map((tick, i) => (
-                            <text key={i} x={10} y={tick.y + 4} fontSize={10} fill="#888">{tick.label}</text>
+                            <text key={i} x={10} y={tick.y + 5} fontSize={16} fill="#888">{tick.label}</text>
                         ))}
-
-                        {chartType === 'line' && <path d={linePath} fill="none" stroke="#6079f7ff" strokeWidth={2} />}
+                        {chartType === 'line' && <path d={linePath} fill="none" stroke="#6079f7ff" strokeWidth={3} />}
                         {points.map((p, i) => (
                             chartType === 'line' ? (
                                 <circle
                                     key={i}
-                                    cx={p.x} cy={p.y} r={5}
-                                    fill={hoveredIndex === i ? '#3858f7ff' : '#3858f7ff'}
+                                    cx={p.x} cy={p.y} r={6}
+                                    fill={hoveredIndex === i ? '#3858f7ff' : '#6079f7ff'}
                                     onMouseEnter={() => setHoveredIndex(i)}
                                     onMouseLeave={() => setHoveredIndex(null)}
                                 />
@@ -93,10 +93,10 @@ const TimelineChart: React.FC<Props> = ({ data }) => {
                                     key={i}
                                     d={`
                 M ${p.x - barWidth / 2} ${chartHeight - padding} 
-                L ${p.x - barWidth / 2} ${p.y + 6} 
-                Q ${p.x - barWidth / 2} ${p.y} ${p.x - barWidth / 2 + 6} ${p.y} 
-                L ${p.x + barWidth / 2 - 6} ${p.y} 
-                Q ${p.x + barWidth / 2} ${p.y} ${p.x + barWidth / 2} ${p.y + 6} 
+                L ${p.x - barWidth / 2} ${p.y + 8} 
+                Q ${p.x - barWidth / 2} ${p.y} ${p.x - barWidth / 2 + 8} ${p.y} 
+                L ${p.x + barWidth / 2 - 8} ${p.y} 
+                Q ${p.x + barWidth / 2} ${p.y} ${p.x + barWidth / 2} ${p.y + 8} 
                 L ${p.x + barWidth / 2} ${chartHeight - padding} 
                 Z
             `}
@@ -106,13 +106,11 @@ const TimelineChart: React.FC<Props> = ({ data }) => {
                                 />
                             )
                         ))}
-
                         {points.map((p, i) => (
-                            <text key={i} x={p.x} y={chartHeight - 20} textAnchor="middle" fontSize={12} fill="#bbb">
+                            <text key={i} x={p.x} y={chartHeight - 15} textAnchor="middle" fontSize={14} fill="#bbb">
                                 {p.label.split(',')[0]}
                             </text>
                         ))}
-
                         {hoveredIndex !== null && (
                             <Tooltip
                                 x={points[hoveredIndex].x}
