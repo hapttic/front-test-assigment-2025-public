@@ -4,6 +4,7 @@ import { useDashboardStore } from "./store/useDashboardStore";
 import { useAnalytics } from "./modules/useAnalytics";
 import { AggregationControls } from "./components/AggregationControls";
 import { TimelineChart } from "./components/TimelineChart";
+import { DataGrid } from "./components/DataGrid";
 
 export default function Page() {
   const mode = useDashboardStore((s) => s.mode);
@@ -24,10 +25,13 @@ export default function Page() {
 
       {data && (
         <>
-          <h2>Clicks</h2>
-          <TimelineChart data={data} mode={mode} metric="clicks" />
+          <h2 style={{ marginTop: 40 }}>Revenue</h2>
+          <TimelineChart data={data} mode={mode} metric="revenue" />
         </>
       )}
+      {data && <DataGrid rows={data} />}
+
+
     </div>
   );
 }
