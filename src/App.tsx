@@ -5,6 +5,7 @@ import TimelineChartSection from "./components/TimelineChartSection";
 import useDataFetch from "./hooks/useDataFetch";
 import { aggregateMetrics } from "./utils/dataAggregation";
 import TableSection from "./components/TableSection";
+import Heading from "./components/Heading";
 
 function App() {
   const { data, loading, error } = useDataFetch();
@@ -26,17 +27,21 @@ function App() {
   }
 
   return (
-    <main>
-      <AggregationControl
-        aggregationType={aggregationType}
-        setAggregationType={setAggregationType}
-      />
+    <main className="bg-base container mx-auto px-6 py-8 space-y-8">
+      <div className="flex justify-between items-center">
+        <Heading />
+        <AggregationControl
+          aggregationType={aggregationType}
+          setAggregationType={setAggregationType}
+        />
+      </div>
+      {/* 
       <TimelineChartSection
         metrics={aggregatedData}
       />
       <TableSection 
         metrics={aggregatedData} 
-      />
+      /> */}
     </main>
   );
 }
