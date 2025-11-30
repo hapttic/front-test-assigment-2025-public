@@ -1,5 +1,6 @@
 import { AggregatedRow } from "../lib/types";
 import styles from "./TimelineChart.module.css";
+import { formatDateDisplay } from "@/app/lib/formatDate";
 
 
 interface Props {
@@ -132,7 +133,7 @@ export function TimelineChart({ mode, data, metric = "clicks" }: Props) {
                                 transform={`rotate(-45, ${xScale(i)}, ${chartHeight + 15})`}
                                 className={styles.axisLabel}
                             >
-                                {d.date}
+                                {formatDateDisplay(d.date)}
                             </text>
                         );
                     })}

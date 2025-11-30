@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { AggregatedRow } from "@/app/lib/types";
+import { formatDateDisplay } from "@/app/lib/formatDate";
 import styles from "./DataGrid.module.css";
 
 interface Props {
@@ -34,6 +35,7 @@ export function DataGrid({ rows }: Props) {
 
         return direction === "asc" ? (x > y ? 1 : -1) : (x < y ? 1 : -1);
     });
+
     function normalizeDate(value: string): number {
         if (value.includes("T") || value.length === 10) {
             return new Date(value).getTime();
@@ -51,7 +53,6 @@ export function DataGrid({ rows }: Props) {
 
             const first = new Date(year, 0, 1);
             const dayOffset = first.getDay() === 0 ? -6 : 1 - first.getDay();
-
             const startOfWeek = new Date(year, 0, 1 + dayOffset + (week - 1) * 7);
             return startOfWeek.getTime();
         }
@@ -87,7 +88,7 @@ export function DataGrid({ rows }: Props) {
                 <tbody>
                     {sortedRows.map((row) => (
                         <tr key={`${row.date}-${row.revenue}-${row.clicks}`}>
-                            <td>{row.date}</td>
+                            <td>{formatDateDisplay(row.date)}</td>
                             <td>{row.campaignsActive}</td>
                             <td>{row.impressions.toLocaleString()}</td>
                             <td>{row.clicks.toLocaleString()}</td>
