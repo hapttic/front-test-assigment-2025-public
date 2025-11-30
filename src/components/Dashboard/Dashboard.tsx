@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
-import AggregationControls from "../Controls/AggregationControls";
-import TimelineChart from "../Chart/TimelineChart";
-import DataGrid from "../Table/DataGrid";
+import AggregationControls from "../AggregationControls/AggregationControls";
+import TimelineChart from "../TimelineChart/TimelineChart";
+import DataGrid from "../DataGrid/DataGrid";
 import "./Dashboard.scss";
 import { fetchData, aggregateData } from "../../utils/dataProcessor";
 import type { RawData, AggregationType } from "../../utils/dataProcessor";
