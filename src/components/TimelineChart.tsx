@@ -84,16 +84,6 @@ export function TimelineChart({ data, aggregationLevel, metric }: TimelineChartP
   };
 
   /**
-   * Format value for display
-   */
-  const formatValue = (value: number): string => {
-    if (metric === 'Revenue') {
-      return `$${value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-    }
-    return value.toLocaleString('en-US');
-  };
-
-  /**
    * Format number with separators
    */
   const formatNumber = (num: number): string => {
