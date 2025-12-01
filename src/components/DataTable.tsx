@@ -4,8 +4,6 @@ export default function DataTable({ rows }: { rows: AggregatedSlot[] }) {
   return (
     <div className="border border-gray-300 rounded-2xl shadow-md overflow-hidden">
       <div className="overflow-auto max-h-[500px]">
-        {/* className="overflow-x-auto max-h-[500px] border border-gray-300 rounded-2xl" border border-gray-300 rounded-2xl */}
-        {/* className=" rounded-2xl overflow-hidden shadow-md" */}
         <table className="min-w-full text-sm table-fixed">
           <thead className="bg-gray-50 sticky top-0 z-10">
             <tr className="border-b">

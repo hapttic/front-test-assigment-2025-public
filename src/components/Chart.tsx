@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useChartScales } from "../hooks/useChartScales";
 import type { AggregatedSlot } from "../types";
 import { useContainerWidth } from "../hooks/useContainerWidth";
@@ -10,13 +10,11 @@ export default function Chart({
   data: AggregatedSlot[];
   aggregation: "hourly" | "daily" | "weekly" | "monthly";
 }) {
-  if (!data.length) return null;
+  const [ready, setReady] = useState(false);
 
   const containerRef = useRef<HTMLDivElement>(null);
-  const containerWidth = useContainerWidth(containerRef);
+  const containerWidth = useContainerWidth(containerRef) || 800;
 
-  // const width = 1300;
-  // const height = 500;
   const padding = 90;
   const pointSpacing = 20;
 
@@ -24,8 +22,6 @@ export default function Chart({
 
   const width = Math.max(containerWidth, baseWidth);
 
-  // Dynamic width based on data count
-  //const width = Math.max(600, padding * 2 + data.length * pointSpacing);
   const height = 500;
 
   const { maxValue, yValues, getX, getY } = useChartScales({
@@ -36,7 +32,12 @@ export default function Chart({
   });
 
   console.log("max rev: ", maxValue);
-  //const intervalStep = Math.ceil(maxValue / numIntervals);
+
+  useEffect(() => {
+    setReady(true);
+  }, []);
+
+  if (!ready || !data.length) return null;
 
   const linePath = data
     .map((d, i) => `${i === 0 ? "M" : "L"} ${getX(i)} ${getY(d.revenue)}`)
