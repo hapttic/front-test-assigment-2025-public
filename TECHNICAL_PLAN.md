@@ -64,3 +64,19 @@ The development will follow the planned commits sequentially to demonstrate a cl
 6.  `feat(ui)`: Add `Controls` and initial Tailwind styling.
 7.  `fix(responsive)`: Apply CSS rules for mobile adaptation.
 8.  `chore`: Final cleanup and review.
+
+---
+
+## 5. FINAL UPDATE Deviations from Original Plan
+
+While the core technical plan was followed systematically, the following enhancements were added during implementation:
+
+**Added Features (Not in Original Plan):**
+- **Pagination for DataGrid**: The original plan included only sorting, but pagination (10/25/50/100 rows per page) was added as a separate commit due to the large hourly dataset making the table unwieldy.
+- **Interactive Hover Tooltips**: The SVG chart was enhanced with custom tooltips showing comprehensive data (date, campaigns, impressions, clicks, revenue) on hover, improving UX beyond the basic chart requirement.
+
+**Implementation Decisions:**
+- **Bar Chart vs Line Chart**: Implemented a bar chart instead of a line chart as it better represents aggregated time-series data with discrete buckets.
+- **Additional Stats Cards**: Added a summary dashboard section displaying key metrics (total data points, aggregation level, chart metric, raw data count) for better user context.
+
+All deviations were additive enhancements that improved functionality without compromising the original requirements or architectural principles.
