@@ -1,11 +1,11 @@
 import type { AggregationLevel } from "../types";
 
-interface AggregationControlsProps {
+interface IProps {
   aggregation: AggregationLevel;
   onAggregationChange: (level: AggregationLevel) => void;
 }
 
-const AggregationControls = ({ aggregation, onAggregationChange }: AggregationControlsProps) => {
+const AggregationControls = ({ aggregation, onAggregationChange }: IProps) => {
   const aggregationOptions: { value: AggregationLevel; label: string }[] = [
     { value: "hourly", label: "Hourly" },
     { value: "daily", label: "Daily" },

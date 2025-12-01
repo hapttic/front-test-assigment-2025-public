@@ -1,14 +1,14 @@
 import { useState, useMemo } from "react";
 import type { AggregatedData } from "../types";
 
-interface DataGridProps {
+interface IProps {
   data: AggregatedData[];
 }
 
 type SortField = Exclude<keyof AggregatedData, "period">;
 type SortDirection = "asc" | "desc";
 
-const DataGrid: React.FC<DataGridProps> = ({ data }) => {
+const DataGrid = ({ data }: IProps) => {
   const [sortField, setSortField] = useState<SortField>("periodStart");
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
 
