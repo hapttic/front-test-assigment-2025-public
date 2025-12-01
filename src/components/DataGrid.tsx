@@ -114,36 +114,43 @@ export function DataGrid({ data, aggregationLevel }: DataGridProps) {
             {/* Date Column - Sortable */}
             <th
               onClick={() => handleSort('date')}
-              className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider cursor-pointer hover:bg-gray-100 transition-colors select-none"
+              className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 text-left text-[10px] sm:text-xs font-medium text-gray-700 uppercase tracking-tight sm:tracking-wider cursor-pointer hover:bg-gray-100 transition-colors select-none"
             >
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1 sm:gap-2">
                 <span>Date</span>
                 {renderSortIcon('date')}
               </div>
             </th>
 
             {/* Campaigns Active */}
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
-              Campaigns Active
+            <th className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 text-left text-[10px] sm:text-xs font-medium text-gray-700 uppercase tracking-tight sm:tracking-wider">
+              <span className="hidden lg:inline">Campaigns Active</span>
+              <span className="hidden sm:inline lg:hidden">Campaigns</span>
+              <span className="sm:hidden">Camp.</span>
             </th>
 
             {/* Total Impressions */}
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
-              Total Impressions
+            <th className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 text-left text-[10px] sm:text-xs font-medium text-gray-700 uppercase tracking-tight sm:tracking-wider">
+              <span className="hidden lg:inline">Total Impressions</span>
+              <span className="hidden sm:inline lg:hidden">Impressions</span>
+              <span className="sm:hidden">Impr.</span>
             </th>
 
             {/* Total Clicks */}
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
-              Total Clicks
+            <th className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 text-left text-[10px] sm:text-xs font-medium text-gray-700 uppercase tracking-tight sm:tracking-wider">
+              <span className="hidden sm:inline">Total Clicks</span>
+              <span className="sm:hidden">Clicks</span>
             </th>
 
             {/* Total Revenue - Sortable */}
             <th
               onClick={() => handleSort('totalRevenue')}
-              className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider cursor-pointer hover:bg-gray-100 transition-colors select-none"
+              className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 text-left text-[10px] sm:text-xs font-medium text-gray-700 uppercase tracking-tight sm:tracking-wider cursor-pointer hover:bg-gray-100 transition-colors select-none"
             >
-              <div className="flex items-center gap-2">
-                <span>Total Revenue</span>
+              <div className="flex items-center gap-1 sm:gap-2">
+                <span className="hidden lg:inline">Total Revenue</span>
+                <span className="hidden sm:inline lg:hidden">Revenue</span>
+                <span className="sm:hidden">Rev.</span>
                 {renderSortIcon('totalRevenue')}
               </div>
             </th>
@@ -156,27 +163,27 @@ export function DataGrid({ data, aggregationLevel }: DataGridProps) {
               className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}
             >
               {/* Date */}
-              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+              <td className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 whitespace-nowrap text-[10px] sm:text-xs md:text-sm font-medium text-gray-900">
                 {formatDate(row.date, aggregationLevel)}
               </td>
 
               {/* Campaigns Active */}
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+              <td className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 whitespace-nowrap text-[10px] sm:text-xs md:text-sm text-gray-700">
                 {row.campaignsActive}
               </td>
 
               {/* Total Impressions */}
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+              <td className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 whitespace-nowrap text-[10px] sm:text-xs md:text-sm text-gray-700">
                 {formatNumber(row.totalImpressions)}
               </td>
 
               {/* Total Clicks */}
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+              <td className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 whitespace-nowrap text-[10px] sm:text-xs md:text-sm text-gray-700">
                 {formatNumber(row.totalClicks)}
               </td>
 
               {/* Total Revenue */}
-              <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">
+              <td className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 whitespace-nowrap text-[10px] sm:text-xs md:text-sm font-semibold text-gray-900">
                 {formatCurrency(row.totalRevenue)}
               </td>
             </tr>

@@ -133,12 +133,12 @@ export function TimelineChart({ data, aggregationLevel, metric }: TimelineChartP
   }
 
   return (
-    <div className="w-full overflow-x-auto">
+    <div className="w-full overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
       <svg
         width={width}
         height={height}
         viewBox={`0 0 ${width} ${height}`}
-        className="mx-auto"
+        className="mx-auto min-w-[600px] sm:min-w-0"
         style={{ maxWidth: '100%', height: 'auto' }}
       >
         {/* Chart Title */}
