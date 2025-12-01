@@ -33,7 +33,7 @@ export default function DataTable({ rows }: { rows: AggregatedSlot[] }) {
           <tbody>
             {rows.map((r, i) => (
               <tr key={i} className="border-b hover:bg-gray-100">
-                <td className="p-2">{r.start.toISOString()}</td>
+                <td className="p-2">{r.start}</td>
                 <td className="p-2">{r.campaignsActive}</td>
                 <td className="p-2">{r.impressions}</td>
                 <td className="p-2">{r.clicks}</td>

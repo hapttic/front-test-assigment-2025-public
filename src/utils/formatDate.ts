@@ -1,19 +1,3 @@
-// export function formatDate(date: Date, mode: string) {
-//   if (mode === "hourly") {
-//     return date.toISOString().slice(0, 13) + ":00"; // YYYY-MM-DDTHH:00
-//   }
-//   if (mode === "daily") {
-//     return date.toISOString().slice(0, 10); // YYYY-MM-DD
-//   }
-//   if (mode === "monthly") {
-//     return date.toISOString().slice(0, 7); // YYYY-MM
-//   }
-//   if (mode === "weekly") {
-//     return date.toISOString().slice(0, 10); // Monday date
-//   }
-//   return date.toISOString();
-// }
-
 export function formatDate(date: Date, mode: string) {
   const pad = (n: number) => n.toString().padStart(2, "0");
 
@@ -30,17 +14,7 @@ export function formatDate(date: Date, mode: string) {
       return `${year}-${month}-${day}`;
 
     case "weekly":
-      // Option 1:
-      const monday = new Date(date);
-      const dayOfWeek = monday.getUTCDay();
-      const diff = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
-      monday.setUTCDate(monday.getUTCDate() + diff);
-      return `${monday.getUTCFullYear()}-${pad(monday.getUTCMonth() + 1)}-${pad(
-        monday.getUTCDate()
-      )}`;
-
-    // Option 2:
-    // return getISOWeekKey(date);
+      return getISOWeekKey(date);
 
     case "monthly":
       return `${year}-${month}`;

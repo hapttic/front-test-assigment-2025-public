@@ -13,8 +13,8 @@ export interface Metric {
 }
 
 export interface AggregatedSlot {
-  start: Date;
-  end: Date;
+  start: string;
+  end: string;
   campaignsActive: number;
   impressions: number;
   clicks: number;

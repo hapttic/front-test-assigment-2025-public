@@ -2,7 +2,6 @@ import { useRef } from "react";
 import { useChartScales } from "../hooks/useChartScales";
 import type { AggregatedSlot } from "../types";
 import { useContainerWidth } from "../hooks/useContainerWidth";
-import { formatDate } from "../utils/formatDate";
 
 export default function Chart({
   data,
@@ -18,7 +17,7 @@ export default function Chart({
 
   // const width = 1300;
   // const height = 500;
-  const padding = 60;
+  const padding = 90;
   const pointSpacing = 20;
 
   const baseWidth = padding * 2 + data.length * pointSpacing;
@@ -49,7 +48,7 @@ export default function Chart({
       className="w-full p-4 overflow-x-auto shadow-md rounded my-wrapper"
     >
       <svg width={width} height={height} className="bg-white rounded  ">
-        {/* X Axis */}
+        {/* x axis */}
         <line
           x1={padding}
           y1={height - padding}
@@ -57,19 +56,17 @@ export default function Chart({
           y2={height - padding}
           stroke="#999"
         />
-        {/* <text x={width / 2} y={height - 5} fontSize={12} textAnchor="middle">
-        Days
-      </text> */}
+
         <text
-          x={width - padding / 4} //x={width - padding + 30}
-          y={height - padding} //y={height - padding - 10}
+          x={width - padding / 4}
+          y={height - padding}
           fontSize={12}
           textAnchor="end"
         >
           {aggregation}
         </text>
 
-        {/* Y Axis */}
+        {/* y axis */}
         <line
           x1={padding}
           y1={padding}
@@ -88,6 +85,7 @@ export default function Chart({
           Revenue
         </text>
 
+        {/* y Labels (revenue) with lines */}
         {yValues.map((value, i) => (
           <g key={i}>
             <line
@@ -121,21 +119,14 @@ export default function Chart({
           <text
             key={`label-${i}`}
             x={getX(i)}
-            y={height - 35}
+            y={height - 40}
             fontSize={10}
             textAnchor="middle"
-            transform={`rotate(-90, ${getX(i)}, ${height - 35})`}
+            transform={`rotate(-90, ${getX(i)}, ${height - 40})`}
           >
-            {/* {d.start.toLocaleDateString()} */}
-            {formatDate(d.start, aggregation)}
-            {/* {d.timeLabel} */}
+            {d.start}
           </text>
         ))}
-
-        {/* Y max label */}
-        {/* <text x={padding - 10} y={padding} fontSize={10} textAnchor="end">
-        {maxValue}
-      </text> */}
       </svg>
     </div>
   );
