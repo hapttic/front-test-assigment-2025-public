@@ -2,9 +2,10 @@
 
 import { useDashboardStore } from "./store/useDashboardStore";
 import { useAnalytics } from "./modules/useAnalytics";
-import { AggregationControls } from "./components/AggregationControls";
-import { TimelineChart } from "./components/TimelineChart";
-import { DataGrid } from "./components/DataGrid";
+import { AggregationControls } from "./components/AggregationControls/AggregationControls";
+
+import { DataGrid } from "./components/DataGrid/DataGrid";
+import { TimelineChart } from "./components/TimelineChart/TimelineChart";
 
 export default function Page() {
   const mode = useDashboardStore((s) => s.mode);

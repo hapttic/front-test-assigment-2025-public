@@ -1,4 +1,4 @@
-import { AggregatedRow } from "../lib/types";
+import { AggregatedRow } from "@/app/lib/types";
 import styles from "./TimelineChart.module.css";
 import { formatDateDisplay } from "@/app/lib/formatDate";
 

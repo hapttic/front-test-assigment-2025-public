@@ -2,7 +2,7 @@
 
 
 
-import { useDashboardStore } from "../store/useDashboardStore";
+import { useDashboardStore } from "../../store/useDashboardStore";
 import styles from "./AggregationControls.module.css";
 
 const modes = ["hourly", "daily", "weekly", "monthly"] as const;
