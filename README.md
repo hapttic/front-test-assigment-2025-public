@@ -1,83 +1,90 @@
-# Hapttic Frontend Challenge: Analytics Dashboard
+# React + TypeScript + Vite
 
-## The Mission
-At **Hapttic**, we build high-performance, data-driven applications. We don't just install libraries; we engineer solutions.
+This Project is created with React + Vite with HMR and some ESLint rules.
 
-Your task is to build a **Campaign Analytics Dashboard** from scratch. We are looking for architectural maturity, strict typing, and the ability to process raw data on the client side.
+Prerequisites:
+-- Node.js >= 16.x
+-- npm >= 8.x
 
----
+# Getting Started
 
-## Submission Protocol (Strictly Enforced)
-We evaluate your Git workflow as much as your code.
+1.Clone the repository:
+-- git clone https://github.com/tchkoidze/front-test-assigment-2025-public.git
 
-1.  **FORK this repository** to your personal GitHub account.
-2.  **Create a Feature Branch** (e.g., `feat/campaign-dashboard`).
-3.  **Develop the application.**
-    * *Requirement:* Use **Conventional Commits** (e.g., `feat: implement data aggregator`, `fix: timezone calculation`).
-    * *Requirement:* **Do not squash** your history. We want to see your progress.
-4.  **Open a Pull Request (PR)** to the `main` branch of this repository.
+2.Install dependencies:
+npm install
 
-**⚠️ Direct code uploads or private links will be rejected.**
+3.Start the development server:
+npm run dev
 
----
+Follow these steps to run the project locally:
 
-## The Product Requirements
+Currently, two official plugins are available:
 
-You need to build a dashboard that allows a Marketing Manager to analyze campaign performance over time.
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-### 1. Data Layer (The Core Challenge)
-* We have provided a `data.json` file containing two datasets:
-    1.  `campaigns`: Metadata (ID, Name, Platform).
-    2.  `metrics`: A **time-series** array of hourly data points.
-* **Requirement:** You must fetch this data and **join/merge** it on the client side.
-* **Requirement:** The raw data is **Hourly**. You must write the logic to aggregate this data dynamically based on the user's selection (Daily, Weekly, Monthly).
+## React Compiler
 
-### 2. The Dashboard Features
-The app must include:
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-* **Aggregation Controls:**
-    * A toggle or dropdown to switch the view between: **Hourly**, **Daily**, **Weekly**, **Monthly**.
-    * *Note:* This should update all charts and tables without reloading the page.
+## Expanding the ESLint configuration
 
-* **Timeline Chart (No Chart Libraries):**
-    * Display the performance (Clicks or Revenue) over time based on the selected aggregation.
-    * *Challenge:* Build a simple **SVG Line Chart or Bar Chart** from scratch.
-    * *Why?* We want to see if you can calculate scaling (X/Y axis logic) and map data to SVG elements.
+If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
 
-* **Data Grid (Table):**
-    * Rows should represent the aggregated time slots (e.g., if "Daily" is selected, each row is a Day).
-    * Columns: Date, Campaigns Active, Total Impressions, Total Clicks, Total Revenue.
-    * **Sortable:** Users must be able to sort by Date or Revenue.
+```js
+export default defineConfig([
+  globalIgnores(["dist"]),
+  {
+    files: ["**/*.{ts,tsx}"],
+    extends: [
+      // Other configs...
 
-### 3. Design & UX
-* **UI Frameworks are BANNED.** (No Material UI, AntDesign, Chakra, etc.).
-    * You must write your own layout CSS (Grid/Flexbox).
-    * Utility classes like Tailwind CSS **are allowed**.
-* The design should be modern, clean, and **responsive**.
+      // Remove tseslint.configs.recommended and replace with this
+      tseslint.configs.recommendedTypeChecked,
+      // Alternatively, use this for stricter rules
+      tseslint.configs.strictTypeChecked,
+      // Optionally, add this for stylistic rules
+      tseslint.configs.stylisticTypeChecked,
 
----
+      // Other configs...
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ["./tsconfig.node.json", "./tsconfig.app.json"],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+]);
+```
 
-## 🛠 Technical Stack
-* **React** (Functional Components + Hooks)
-* **TypeScript** (Strict Mode)
-* **Performance:** Processing large arrays can be expensive. Use `useMemo` or Web Workers if necessary to keep the UI snappy.
-* **Styling:** CSS Modules, SCSS, or Tailwind.
+You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
----
+```js
+// eslint.config.js
+import reactX from "eslint-plugin-react-x";
+import reactDom from "eslint-plugin-react-dom";
 
-## Evaluation Criteria
-We will be reviewing:
-1.  **Algorithmic Skill:** How cleanly do you aggregate hourly data into weekly buckets? (Watch out for timezone bugs!).
-2.  **Performance:** Does changing the aggregation level freeze the browser?
-3.  **Code Structure:** Is the data processing logic separated from the UI components?
-4.  **Visual Polish:** Does the custom SVG chart look professional?
-
-## Getting Started
-1.  Fork the repo.
-2.  Initialize your React app (Vite is recommended).
-3.  Use the `data.json` provided below.
-4.  Start coding.
-
-For questions please reach me out on Telegram: `@lukalortk`
-
-Good luck!
+export default defineConfig([
+  globalIgnores(["dist"]),
+  {
+    files: ["**/*.{ts,tsx}"],
+    extends: [
+      // Other configs...
+      // Enable lint rules for React
+      reactX.configs["recommended-typescript"],
+      // Enable lint rules for React DOM
+      reactDom.configs.recommended,
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ["./tsconfig.node.json", "./tsconfig.app.json"],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+]);
+```
