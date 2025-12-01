@@ -12,7 +12,7 @@
  * - Clean, professional styling
  */
 
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import type { AggregatedDataPoint, AggregationLevel, ChartMetric } from '../types';
 import { formatDate } from '../utils/aggregation';
 
@@ -22,7 +22,20 @@ interface TimelineChartProps {
   metric: ChartMetric;
 }
 
+interface TooltipState {
+  visible: boolean;
+  x: number;
+  y: number;
+  data: AggregatedDataPoint | null;
+}
+
 export function TimelineChart({ data, aggregationLevel, metric }: TimelineChartProps) {
+  const [tooltip, setTooltip] = useState<TooltipState>({
+    visible: false,
+    x: 0,
+    y: 0,
+    data: null,
+  });
   /**
    * Chart dimensions and padding
    */
@@ -81,6 +94,46 @@ export function TimelineChart({ data, aggregationLevel, metric }: TimelineChartP
   };
 
   /**
+   * Format number with separators
+   */
+  const formatNumber = (num: number): string => {
+    return num.toLocaleString('en-US');
+  };
+
+  /**
+   * Format currency
+   */
+  const formatCurrency = (amount: number): string => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(amount);
+  };
+
+  /**
+   * Handle mouse enter on bar
+   */
+  const handleMouseEnter = (event: React.MouseEvent<SVGRectElement>, point: AggregatedDataPoint) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    
+    setTooltip({
+      visible: true,
+      x: rect.left + rect.width / 2,
+      y: rect.top,
+      data: point,
+    });
+  };
+
+  /**
+   * Handle mouse leave
+   */
+  const handleMouseLeave = () => {
+    setTooltip({ visible: false, x: 0, y: 0, data: null });
+  };
+
+  /**
    * Format Y-axis labels
    */
   const formatYAxisLabel = (value: number): string => {
@@ -133,7 +186,48 @@ export function TimelineChart({ data, aggregationLevel, metric }: TimelineChartP
   }
 
   return (
-    <div className="w-full overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
+    <div className="w-full relative">
+      {/* Custom Tooltip */}
+      {tooltip.visible && tooltip.data && (
+        <div
+          className="fixed z-50 pointer-events-none"
+          style={{
+            left: `${tooltip.x}px`,
+            top: `${tooltip.y - 10}px`,
+            transform: 'translate(-50%, -100%)',
+          }}
+        >
+          <div className="bg-gray-900 text-white px-3 py-2 rounded-lg shadow-lg text-xs sm:text-sm whitespace-nowrap">
+            <div className="font-semibold mb-1 border-b border-gray-700 pb-1">
+              {formatDate(tooltip.data.date, aggregationLevel)}
+            </div>
+            <div className="space-y-0.5">
+              <div className="flex justify-between gap-4">
+                <span className="text-gray-300">Campaigns:</span>
+                <span className="font-medium">{tooltip.data.campaignsActive}</span>
+              </div>
+              <div className="flex justify-between gap-4">
+                <span className="text-gray-300">Impressions:</span>
+                <span className="font-medium">{formatNumber(tooltip.data.totalImpressions)}</span>
+              </div>
+              <div className="flex justify-between gap-4">
+                <span className="text-gray-300">Clicks:</span>
+                <span className="font-medium">{formatNumber(tooltip.data.totalClicks)}</span>
+              </div>
+              <div className="flex justify-between gap-4 pt-1 border-t border-gray-700">
+                <span className="text-gray-300">Revenue:</span>
+                <span className="font-semibold text-green-400">{formatCurrency(tooltip.data.totalRevenue)}</span>
+              </div>
+            </div>
+            {/* Tooltip arrow */}
+            <div className="absolute left-1/2 bottom-0 transform -translate-x-1/2 translate-y-full">
+              <div className="border-8 border-transparent border-t-gray-900"></div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className="w-full overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
       <svg
         width={width}
         height={height}
@@ -224,13 +318,10 @@ export function TimelineChart({ data, aggregationLevel, metric }: TimelineChartP
                 width={barWidth}
                 height={barHeight}
                 className="fill-blue-500 hover:fill-blue-600 transition-colors cursor-pointer"
-              >
-                <title>
-                  {formatDate(point.date, aggregationLevel)}
-                  {'\n'}
-                  {metric}: {formatValue(value)}
-                </title>
-              </rect>
+                onMouseEnter={(e) => handleMouseEnter(e, point)}
+                onMouseLeave={handleMouseLeave}
+                style={{ zIndex: 1000 }}
+              />
             </g>
           );
         })}
@@ -275,6 +366,7 @@ export function TimelineChart({ data, aggregationLevel, metric }: TimelineChartP
           Time Period
         </text>
       </svg>
+      </div>
     </div>
   );
 }
