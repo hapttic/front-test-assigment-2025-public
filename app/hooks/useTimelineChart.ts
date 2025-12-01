@@ -20,7 +20,7 @@ export function useTimelineChart({
     const simplify = (arr: AggregatedRow[]) => {
       let limit = 200;
 
-      if (mode === "hourly") limit = 200;
+      if (mode === "hourly") limit = 150;
       if (mode === "daily") limit = 200;
       if (mode === "weekly") limit = 200;
       if (mode === "monthly") limit = 100;

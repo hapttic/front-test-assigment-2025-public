@@ -3,10 +3,22 @@
   justify-content: space-between;
   width: 100%;
   margin-top: 30px;
+  align-items: center;
+  flex-wrap: wrap;
 }
+
 .wrapper {
   padding: 30px;
 }
 .DataGrid {
     margin-top: 20px;
+}
+
+@media (max-width: 650px) {
+    .Analytics {
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: column;
+        gap: 8px;
+    }
 }

@@ -1,9 +1,8 @@
-"use client";
-
 import { useState } from "react";
+
+import styles from "./DataGrid.module.css";
 import { AggregatedRow } from "@/app/lib/types";
 import { formatDateDisplay } from "@/app/lib/formatDate";
-import styles from "./DataGrid.module.css";
 
 interface Props {
     rows: AggregatedRow[];
@@ -88,11 +87,11 @@ export function DataGrid({ rows }: Props) {
                 <tbody>
                     {sortedRows.map((row) => (
                         <tr key={`${row.date}-${row.revenue}-${row.clicks}`}>
-                            <td>{formatDateDisplay(row.date)}</td>
-                            <td>{row.campaignsActive}</td>
-                            <td >{row.impressions.toLocaleString()}</td>
-                            <td>{row.clicks.toLocaleString()}</td>
-                            <td className={styles.revenue} >${row.revenue.toFixed(2)}</td>
+                            <td data-label="Date">{formatDateDisplay(row.date)}</td>
+                            <td data-label="Campaigns">{row.campaignsActive}</td>
+                            <td data-label="Impressions">{row.impressions.toLocaleString()}</td>
+                            <td data-label="Clicks">{row.clicks.toLocaleString()}</td>
+                            <td data-label="Revenue" className={styles.revenue}>${row.revenue.toFixed(2)}</td>
                         </tr>
                     ))}
                 </tbody>
