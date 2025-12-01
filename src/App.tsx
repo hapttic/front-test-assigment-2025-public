@@ -3,6 +3,7 @@ import type { AggregationLevel, ChartMetric } from './types';
 import { aggregateData } from './utils/aggregation';
 import { useLoadData } from './hooks/useLoadData';
 import { DataGrid } from './components/DataGrid';
+import { TimelineChart } from './components/TimelineChart';
 
 function App() {
   // State management for user controls
@@ -37,7 +38,7 @@ function App() {
           </h1>
         </div>
       </header>
-      
+
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {error ? (
           <div className="text-center py-12">
@@ -65,11 +66,10 @@ function App() {
                       <button
                         key={level}
                         onClick={() => setAggregationLevel(level)}
-                        className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                          aggregationLevel === level
+                        className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${aggregationLevel === level
                             ? 'bg-blue-600 text-white'
                             : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                        }`}
+                          }`}
                       >
                         {level}
                       </button>
@@ -77,27 +77,7 @@ function App() {
                   </div>
                 </div>
 
-                {/* Chart Metric Controls */}
-                <div className="flex items-center gap-2">
-                  <label className="text-sm font-medium text-gray-700">
-                    Chart Metric:
-                  </label>
-                  <div className="flex gap-2">
-                    {(['Clicks', 'Revenue'] as ChartMetric[]).map((metric) => (
-                      <button
-                        key={metric}
-                        onClick={() => setChartMetric(metric)}
-                        className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                          chartMetric === metric
-                            ? 'bg-green-600 text-white'
-                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                        }`}
-                      >
-                        {metric}
-                      </button>
-                    ))}
-                  </div>
-                </div>
+
               </div>
             </div>
 
@@ -121,14 +101,33 @@ function App() {
               </div>
             </div>
 
-            {/* Placeholder sections for components to be added */}
+            {/* Timeline Chart */}
             <div className="bg-white rounded-lg shadow p-6">
               <h2 className="text-lg font-semibold text-gray-900 mb-4">
-                Timeline Chart ({chartMetric})
+                Timeline Chart
               </h2>
-              <div className="h-64 flex items-center justify-center bg-gray-50 rounded">
-                <p className="text-gray-500">Chart component coming next...</p>
+              {/* Chart Metric Controls */}
+              <div className="flex items-center gap-2">
+                <div className="flex gap-2">
+                  {(['Clicks', 'Revenue'] as ChartMetric[]).map((metric) => (
+                    <button
+                      key={metric}
+                      onClick={() => setChartMetric(metric)}
+                      className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${chartMetric === metric
+                          ? 'bg-green-600 text-white'
+                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                        }`}
+                    >
+                      {metric}
+                    </button>
+                  ))}
+                </div>
               </div>
+              <TimelineChart
+                data={aggregatedData}
+                aggregationLevel={aggregationLevel}
+                metric={chartMetric}
+              />
             </div>
 
             <div className="bg-white rounded-lg shadow p-6">
