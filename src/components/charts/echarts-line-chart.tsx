@@ -16,6 +16,7 @@ type EChartsLineChartProps = {
   height?: string | number;
 };
 
+// I used echarts because it's a canvas based chart library and it's much optimized for performance.
 export const EChartsLineChart = ({
   data,
   title,
@@ -28,7 +29,6 @@ export const EChartsLineChart = ({
   useEffect(() => {
     if (!chartRef.current) return;
 
-    // Initialize chart
     const chart = echarts.init(chartRef.current, undefined, {
       renderer: "canvas",
     });
@@ -39,7 +39,6 @@ export const EChartsLineChart = ({
     };
   }, [data]);
 
-  // Group data by name to create multiple series
   const seriesData = useMemo(() => {
     const grouped = new Map<string, Array<[number | string, number]>>();
 
