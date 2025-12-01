@@ -1,0 +1,12 @@
+.Analytics {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 30px;
+}
+.wrapper {
+  padding: 30px;
+}
+.DataGrid {
+    margin-top: 20px;
+}

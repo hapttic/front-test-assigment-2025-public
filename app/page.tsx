@@ -1,4 +1,5 @@
 "use client";
+import styles from "./page.module.css";
 
 import { useDashboardStore } from "./store/useDashboardStore";
 import { useAnalytics } from "./modules/useAnalytics";
@@ -12,17 +13,19 @@ export default function Page() {
   const { data, loading, error } = useAnalytics(mode);
 
   return (
-    <div style={{ padding: 30 }}>
-      <h1>Test Aggregation Controls</h1>
+    <div className={styles.wrapper}>
+      <div className={styles.Analytics} >
+        <div>
+          <h1>Analytics Dashboard</h1>
+          <p>Track your campaign performance over time</p>
+        </div>
 
-      <AggregationControls />
-
-      <p>
-        Current mode: <strong>{mode}</strong>
-      </p>
-
-      {loading && <p>Loading...</p>}
-      {error && <p>Error: {error}</p>}
+        <div>
+          <AggregationControls />
+          {loading && <p>Loading...</p>}
+          {error && <p>Error: {error}</p>}
+        </div>
+      </div>
 
       {data && (
         <>
@@ -30,9 +33,10 @@ export default function Page() {
           <TimelineChart data={data} mode={mode} metric="revenue" />
         </>
       )}
-      {data && <DataGrid rows={data} />}
-
-
+      <div className={styles.DataGrid} >
+        <h2>Detailed Breakdown</h2>
+        {data && <DataGrid rows={data} />}
+      </div>
     </div>
   );
 }
