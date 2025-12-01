@@ -6,6 +6,7 @@
  * - Sortable columns (Date, Total Revenue)
  * - Formatted numbers for readability
  * - Responsive design
+ * - Pagination controls for navigating large datasets
  */
 
 import { useState, useMemo } from 'react';
@@ -22,6 +23,8 @@ export function DataGrid({ data, aggregationLevel }: DataGridProps) {
     column: null,
     direction: null,
   });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(25);
 
   /**
    * Sorted data based on current sort state
@@ -52,9 +55,32 @@ export function DataGrid({ data, aggregationLevel }: DataGridProps) {
   }, [data, sortState]);
 
   /**
+   * Paginated data based on current page and page size
+   */
+  const paginatedData = useMemo(() => {
+    const startIndex = (currentPage - 1) * pageSize;
+    const endIndex = startIndex + pageSize;
+    return sortedData.slice(startIndex, endIndex);
+  }, [sortedData, currentPage, pageSize]);
+
+  /**
+   * Calculate total pages
+   */
+  const totalPages = Math.ceil(sortedData.length / pageSize);
+
+  /**
+   * Reset to page 1 when page size changes
+   */
+  const handlePageSizeChange = (newPageSize: number) => {
+    setPageSize(newPageSize);
+    setCurrentPage(1);
+  };
+
+  /**
    * Handles column header clicks for sorting
    */
   const handleSort = (column: SortableColumn) => {
+    setCurrentPage(1); // Reset to first page when sorting changes
     setSortState((prev) => {
       // If clicking the same column, cycle through: asc -> desc -> null
       if (prev.column === column) {
@@ -107,8 +133,32 @@ export function DataGrid({ data, aggregationLevel }: DataGridProps) {
   }
 
   return (
-    <div className="overflow-x-auto">
-      <table className="min-w-full divide-y divide-gray-200">
+    <div className="space-y-4">
+      {/* Pagination Controls - Top */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4">
+        <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-700">
+          <span>Show</span>
+          <select
+            value={pageSize}
+            onChange={(e) => handlePageSizeChange(Number(e.target.value))}
+            className="border border-gray-300 rounded px-2 py-1 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value={10}>10</option>
+            <option value={25}>25</option>
+            <option value={50}>50</option>
+            <option value={100}>100</option>
+          </select>
+          <span>rows per page</span>
+        </div>
+        <div className="text-xs sm:text-sm text-gray-700">
+          Showing {sortedData.length === 0 ? 0 : (currentPage - 1) * pageSize + 1} to{' '}
+          {Math.min(currentPage * pageSize, sortedData.length)} of {sortedData.length} entries
+        </div>
+      </div>
+
+      {/* Table */}
+      <div className="overflow-x-auto">
+        <table className="min-w-full divide-y divide-gray-200">
         <thead className="bg-gray-50">
           <tr>
             {/* Date Column - Sortable */}
@@ -157,7 +207,7 @@ export function DataGrid({ data, aggregationLevel }: DataGridProps) {
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
-          {sortedData.map((row, index) => (
+          {paginatedData.map((row, index) => (
             <tr
               key={row.date}
               className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}
@@ -190,6 +240,44 @@ export function DataGrid({ data, aggregationLevel }: DataGridProps) {
           ))}
         </tbody>
       </table>
+      </div>
+
+      {/* Pagination Controls - Bottom */}
+      <div className="flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-4">
+        <div className="text-xs sm:text-sm text-gray-700">
+          Page {currentPage} of {totalPages}
+        </div>
+        <div className="flex gap-2">
+          <button
+            onClick={() => setCurrentPage(1)}
+            disabled={currentPage === 1}
+            className="px-3 py-1.5 text-xs sm:text-sm border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          >
+            First
+          </button>
+          <button
+            onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
+            disabled={currentPage === 1}
+            className="px-3 py-1.5 text-xs sm:text-sm border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          >
+            Previous
+          </button>
+          <button
+            onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
+            disabled={currentPage === totalPages}
+            className="px-3 py-1.5 text-xs sm:text-sm border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          >
+            Next
+          </button>
+          <button
+            onClick={() => setCurrentPage(totalPages)}
+            disabled={currentPage === totalPages}
+            className="px-3 py-1.5 text-xs sm:text-sm border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          >
+            Last
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
