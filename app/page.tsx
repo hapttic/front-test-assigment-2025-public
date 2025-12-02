@@ -34,7 +34,8 @@ export default function Page() {
         </>
       )}
       <div className={styles.DataGrid} >
-        <h2>Detailed Breakdown</h2>
+        <h2>Campaign Performance Dashboard</h2>
+        <p>View and analyze your advertising campaign metrics</p>
         {data && <DataGrid rows={data} />}
       </div>
     </div>
