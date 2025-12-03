@@ -1,0 +1,155 @@
+.wrapper {
+  margin-top: 8px;
+  border-radius: 8px;
+  border: 1px solid hsl(var(--border));
+  background: hsl(var(--card));
+  overflow-x: auto;
+  max-height: 400px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.table {
+  width: 100%;
+  min-width: 800px;
+  border-collapse: collapse;
+}
+
+.table th {
+  text-align: left;
+  padding: 12px 16px;
+  background: #3b82f6;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.table td {
+  padding: 12px 16px;
+  font-size: 16px;
+  border-top: 1px solid #e2e8f0;
+  white-space: nowrap;
+  background: hsl(var(--card));
+}
+
+.table tr:hover td {
+  background: #f3f4f6;
+}
+
+.sortIcon {
+  margin-left: 6px;
+  font-size: 12px;
+  opacity: 0.9;
+}
+
+.revenue {
+  color: #065f46;
+}
+
+@media (max-width: 1024px) {
+  .table {
+    min-width: 700px;
+  }
+
+  .table th,
+  .table td {
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+
+  .wrapper {
+    max-height: 350px;
+  }
+}
+
+@media (max-width: 768px) {
+  .wrapper {
+    margin-top: 6px;
+    border-radius: 6px;
+    max-height: 300px;
+  }
+
+  .table {
+    min-width: 600px;
+  }
+
+  .table th,
+  .table td {
+    padding: 8px 10px;
+    font-size: 13px;
+  }
+
+  .table th {
+    font-size: 12px;
+  }
+
+  .sortIcon {
+    margin-left: 4px;
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 640px) {
+  .wrapper {
+    max-height: 500px;
+    overflow-x: visible;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .table {
+    min-width: 100%;
+    display: block;
+  }
+
+  .table thead {
+    display: none;
+  }
+
+  .table tbody {
+    display: block;
+  }
+
+  .table tr {
+    display: block;
+    margin-bottom: 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    overflow: hidden;
+    background: hsl(var(--card));
+  }
+
+  .table td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 12px;
+    border-top: 1px solid #e2e8f0;
+    font-size: 14px;
+    white-space: normal;
+  }
+
+  .table td:first-child {
+    border-top: none;
+    background: #3b82f6;
+    color: #ffffff;
+    font-weight: 600;
+  }
+
+  .table td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: hsl(var(--muted-foreground));
+    margin-right: 8px;
+  }
+
+  .revenue {
+    color: #065f46;
+    font-weight: 600;
+  }
+}

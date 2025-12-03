@@ -1,0 +1,113 @@
+import { AggregatedRow } from "@/app/lib/types";
+import styles from "./TimelineChart.module.css";
+import { formatDateDisplay } from "@/app/lib/formatDate";
+import { useTimelineChart } from "@/app/hooks/useTimelineChart";
+
+interface Props {
+    data: AggregatedRow[];
+    metric?: "clicks" | "revenue";
+    mode: "hourly" | "daily" | "weekly" | "monthly";
+}
+
+export function TimelineChart({ mode, data, metric = "clicks" }: Props) {
+    const chartData = useTimelineChart({ data, metric, mode });
+
+    if (!chartData) return <p>No data available</p>;
+
+    const {
+        simplified,
+        width,
+        height,
+        padding,
+        chartWidth,
+        chartHeight,
+        xScale,
+        yScale,
+        yTicks,
+        pathData,
+        areaPath,
+        gradientId,
+    } = chartData;
+
+    return (
+        <div className={styles.wrapper}>
+            <svg viewBox={`0 0 ${width} ${height}`} className={styles.chart} preserveAspectRatio="xMidYMid meet">
+                <defs>
+                    <linearGradient id={gradientId} x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" className={styles.gradientStart} />
+                        <stop offset="100%" className={styles.gradientEnd} />
+                    </linearGradient>
+                </defs>
+
+                <g transform={`translate(${padding.left}, ${padding.top})`}>
+                    {yTicks.map((tick, i) => (
+                        <line
+                            key={i}
+                            x1="0"
+                            y1={tick.y}
+                            x2={chartWidth}
+                            y2={tick.y}
+                            className={styles.gridLine}
+                        />
+                    ))}
+
+                    <path d={areaPath} fill={`url(#${gradientId})`} />
+
+                    <path d={pathData} className={styles.line} />
+
+                    {simplified.map((d, i) => (
+                        <g key={i}>
+                            <circle
+                                cx={xScale(i)}
+                                cy={yScale(d[metric])}
+                                r="4"
+                                className={styles.pointOuter}
+                            />
+                            <circle
+                                cx={xScale(i)}
+                                cy={yScale(d[metric])}
+                                r="8"
+                                className={styles.pointHover}
+                            />
+                        </g>
+                    ))}
+
+                    <line x1="0" y1="0" x2="0" y2={chartHeight} className={styles.axis} />
+
+                    <line x1="0" y1={chartHeight} x2={chartWidth} y2={chartHeight} className={styles.axis} />
+
+                    {yTicks.map((tick, i) => (
+                        <text
+                            key={i}
+                            x="-10"
+                            y={tick.y}
+                            textAnchor="end"
+                            dominantBaseline="middle"
+                            className={styles.axisLabel}
+                        >
+                            {Math.round(tick.value).toLocaleString()}
+                        </text>
+                    ))}
+
+                    {simplified.map((d, i) => {
+                        const showEvery = Math.ceil(simplified.length / 6);
+                        if (i % showEvery !== 0 && i !== simplified.length - 1) return null;
+
+                        return (
+                            <text
+                                key={i}
+                                x={xScale(i)}
+                                y={chartHeight + 15}
+                                textAnchor="end"
+                                transform={`rotate(-45, ${xScale(i)}, ${chartHeight + 15})`}
+                                className={styles.axisLabel}
+                            >
+                                {formatDateDisplay(d.date)}
+                            </text>
+                        );
+                    })}
+                </g>
+            </svg>
+        </div>
+    );
+}
